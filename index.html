@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Париж + Стокгольм 2026</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#ffffff;--bg2:#f7f6f3;--bg3:#f0ede8;
+  --text:#1a1a1a;--text2:#555;--text3:#999;
+  --border:#e5e3de;--border2:#ccc;
+  --blue:#0C447C;--blue-bg:#E6F1FB;
+  --green:#3B6D11;--green-bg:#EAF3DE;
+  --pink:#72243E;--pink-bg:#FBEAF0;
+  --amber:#633806;--amber-bg:#FAEEDA;
+  --red:#791F1F;--red-bg:#FCEBEB;
+  --purple:#3C3489;--purple-bg:#EEEDFE;
+  --paid:#2d7a34;--paid-bg:#edf7ee;
+  --warn:#9a6200;--warn-bg:#fef3e2;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+  --text:#f2f2f7;--text2:#aeaeb2;--text3:#636366;
+  --border:#3a3a3c;--border2:#48484a;
+  --blue:#64aaed;--blue-bg:#0a2a4a;
+  --green:#7ec850;--green-bg:#1a3a0a;
+  --pink:#f08aaa;--pink-bg:#3a0a1e;
+  --amber:#f0a030;--amber-bg:#3a2000;
+  --red:#f07070;--red-bg:#3a1010;
+  --purple:#a090e8;--purple-bg:#1e1a40;
+  --paid:#7ec850;--paid-bg:#1a3a0a;
+  --warn:#f0a030;--warn-bg:#3a2000;
+}}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;display:flex;flex-direction:column}
+
+/* TABS — fixed top */
+.tabs{display:flex;overflow-x:auto;padding:8px 10px;gap:6px;border-bottom:0.5px solid var(--border);background:var(--bg);flex-shrink:0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:6px 14px;border:0.5px solid var(--border2);border-radius:20px;font-size:12px;font-weight:500;background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* SCROLL AREA */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* VIEWS */
+.view{display:none;padding:10px 12px 40px}
+.view.active{display:block}
+
+/* PAID BANNER */
+.paid-banner{background:var(--paid-bg);border:0.5px solid var(--paid);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.paid-banner h3{font-size:11px;font-weight:600;color:var(--paid);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.paid-item{font-size:11px;color:var(--paid)}
+.paid-item b{font-weight:600}
+
+/* DAYS */
+.day{border:0.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:8px}
+.day.fl{border-left:3px solid #3a8ade}
+.day.wk{border-left:3px solid #c45070}
+
+/* DAY HEADER */
+.dh{padding:11px 12px;background:var(--bg2);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.dh-left{flex:1;min-width:0}
+.dt{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.ds{font-size:11px;color:var(--text2);margin-top:2px}
+.badge{flex-shrink:0;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:500}
+.b-blue{background:var(--blue-bg);color:var(--blue)}
+.b-pink{background:var(--pink-bg);color:var(--pink)}
+.b-green{background:var(--green-bg);color:var(--green)}
+.b-amber{background:var(--amber-bg);color:var(--amber)}
+.b-red{background:var(--red-bg);color:var(--red)}
+.b-purple{background:var(--purple-bg);color:var(--purple)}
+.chevron{flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:transform .2s;font-size:18px;line-height:1}
+
+/* ROWS */
+.rows{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.rows.open{max-height:9999px}
+.row{display:flex;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border);align-items:flex-start}
+.rt{font-size:10px;color:var(--text3);min-width:44px;padding-top:2px;flex-shrink:0;font-weight:500}
+.rb{flex:1;min-width:0}
+.rn{font-size:13px;font-weight:500;color:var(--text)}
+.rd{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
+.rv{font-size:11px;color:var(--text3);min-width:48px;text-align:right;padding-top:2px;flex-shrink:0}
+.tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:5px;margin-right:2px;margin-bottom:2px;font-weight:600}
+.tf{background:var(--paid-bg);color:var(--paid)}
+.ts{background:var(--blue-bg);color:var(--blue)}
+.tv{background:var(--warn-bg);color:var(--warn)}
+.te{background:var(--red-bg);color:var(--red)}
+.tfl{background:var(--blue-bg);color:var(--blue)}
+.ttr{background:var(--purple-bg);color:var(--purple)}
+.tpd{background:var(--paid-bg);color:var(--paid)}
+
+/* DAY FOOTER */
+.ft{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg2);font-size:11px;color:var(--text2);border-top:0.5px solid var(--border)}
+.ft-t{font-size:12px;font-weight:600;color:var(--text)}
+
+/* SECTION */
+.section{background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:10px}
+.section h3{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.srow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px;gap:8px}
+.srow:last-child{border-bottom:none}
+.srow .sub{font-size:10px;color:var(--text3);margin-top:2px}
+.amt-paid{color:var(--paid);font-weight:600;white-space:nowrap;flex-shrink:0}
+.amt-open{color:var(--warn);white-space:nowrap;flex-shrink:0}
+.urg{color:#c04060;font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
+.ok{color:var(--paid);font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
+.warn-box{background:var(--red-bg);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:8px;line-height:1.4}
+.flight-card{background:var(--blue-bg);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.flight-card.warn{background:var(--warn-bg)}
+.flight-num{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:3px}
+.flight-card.warn .flight-num{color:var(--warn)}
+.flight-route{font-size:11px;color:var(--blue);display:flex;justify-content:space-between}
+.flight-card.warn .flight-route{color:var(--warn)}
+</style>
+</head>
+<body>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" onclick="showView('days',this)">По дням</button>
+  <button class="tab" onclick="showView('budget',this)">Бюджет</button>
+  <button class="tab" onclick="showView('book',this)">Бронировать</button>
+  <button class="tab" onclick="showView('flights',this)">Рейсы</button>
+</div>
+
+<div class="scroll" id="scroll">
+
+<!-- DAYS VIEW -->
+<div id="view-days" class="view active">
+<div class="paid-banner">
+  <h3>Оплачено ✓</h3>
+  <div class="paid-grid">
+    <div class="paid-item">Лувр <b>6 200 ₽</b></div>
+    <div class="paid-item">Этрета транспорт <b>8 581 ₽</b></div>
+    <div class="paid-item">Орсе <b>2 800 ₽</b></div>
+    <div class="paid-item">Оранжери <b>2 400 ₽</b></div>
+    <div class="paid-item">Круиз <b>3 250 ₽</b></div>
+    <div class="paid-item">Диснейленд <b>~€290</b></div>
+  </div>
+</div>
+
+<div class="day fl wk">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">5 июля (вс) — Прилёт</div><div class="ds">ВКО 05:50 → SAW → CDG 16:25</div></div>
+  <span class="badge b-blue">Прилёт</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">05:50МСК</div><div class="rb"><div class="rn">VF278 ВКО→SAW + VF9 SAW→CDG</div><div class="rd"><span class="tag tfl">рейс</span> Пересадка Стамбул ~3ч · прилёт 16:25</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">~17:15</div><div class="rb"><div class="rn">RER B → центр · заселение</div><div class="rd"><span class="tag ttr">транспорт</span> €11 pp · 14 Rue Cadet, 9 arr.</div></div><div class="rv">€22</div></div>
+<div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Прогулка по Елисейским полям</div><div class="rd"><span class="tag tv">прогулка</span></div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">20:30</div><div class="rb"><div class="rn">Ужин: Le Bouillon Chartier</div><div class="rd"><span class="tag tf">еда</span> 7 Rue du Faubourg Montmartre · без брони</div></div><div class="rv">~€35</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€35 · 🚇 €22</span><span class="ft-t">~€57</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">6 июля (пн) — Монмартр + Эмили</div><div class="ds">Kitsuné + Sacré-Cœur + Fotoautomat</div></div>
+  <span class="badge b-pink">Emily</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:00</div><div class="rb"><div class="rn">Завтрак: Café Kitsuné Palais Royal</div><div class="rd"><span class="tag tf">еда</span> 51 Galerie de Montpensier · в арках</div></div><div class="rv">~€15</div></div>
+<div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Rue Crémieux + Place de l'Estrapade</div><div class="rd"><span class="tag te">Эмили</span> Разноцветная улица + дом Эмили</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">11:30</div><div class="rb"><div class="rn">Sacré-Cœur + лестница из заставки</div><div class="rd"><span class="tag te">Эмили</span><span class="tag tv">вид</span></div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">12:15</div><div class="rb"><div class="rn">Fotoautomat — аналоговая фотобудка</div><div class="rd"><span class="tag tv">фото</span> Rue des Trois Frères · ч/б плёнка · ~€4–6</div></div><div class="rv">~€6</div></div>
+<div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Мулен Руж снаружи · фото</div><div class="rd"><span class="tag tv">фото</span> 82 Bvd de Clichy</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Aux Merveilleux de Fred</div><div class="rd"><span class="tag tf">еда</span><span class="tag te">Эмили</span> 2 Rue Lepic</div></div><div class="rv">~€15</div></div>
+<div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Palais Royal + Pont de Bir-Hakeim</div><div class="rd"><span class="tag te">Эмили</span> Офис Savoir → мост из заставки</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Officine Buly</div><div class="rd"><span class="tag ts">шопинг</span> 6 Rue Bonaparte · косметика, парфюм</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Chez Alain Miam Miam</div><div class="rd"><span class="tag tf">еда</span><span class="tag te">Эмили</span> 26 Rue Charlot · Ле Марэ</div></div><div class="rv">~€30</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€60 · фото ~€6 · 🚇 ~€8</span><span class="ft-t">~€74</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">7 июля (вт) — Сен-Жермен + Катакомбы</div><div class="ds">Левый берег · Эмили день 2</div></div>
+  <span class="badge b-pink">Emily</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Café la Procure x Coutume</div><div class="rd"><span class="tag tf">еда</span> 3 Rue de Mézières</div></div><div class="rv">~€10</div></div>
+<div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Café de Flore / Les Deux Magots</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">~€15</div></div>
+<div class="row"><div class="rt">11:15</div><div class="rb"><div class="rn">Шопинг: Sabre + Marin Montagut</div><div class="rd"><span class="tag ts">шопинг</span> Rue des Quatre Vents + Rue Madame</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Обед: Le Relais de l'Entrecôte</div><div class="rd"><span class="tag tf">еда</span> 20 Rue St-Benoît · стейк-фрит</div></div><div class="rv">~€45</div></div>
+<div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">Катакомбы Парижа</div><div class="rd"><span class="tag tv">музей</span> €14 pp · catacombes.paris.fr · билеты откроются позже</div></div><div class="rv">€28</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин в Латинском квартале</div><div class="rd"><span class="tag tf">еда</span> Rue de la Huchette</div></div><div class="rv">~€35</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€105 · катакомбы €28</span><span class="ft-t">~€139</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">8 июля (ср) — Диснейленд</div><div class="ds">Будний — очереди короче!</div></div>
+  <span class="badge b-pink">Disneyland</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">08:30</div><div class="rb"><div class="rn">RER A → Marne-la-Vallée Chessy</div><div class="rd"><span class="tag ttr">транспорт</span> Отдельный билет €8 pp · Navigo не покрывает 5A!</div></div><div class="rv">€16</div></div>
+<div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Disneyland Paris — оба парка</div><div class="rd"><span class="tag tpd">оплачено ✓</span> €290 · Disneyland + Walt Disney Studios</div></div><div class="rv">€290✓</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Plaza Gardens</div><div class="rd"><span class="tag tf">еда</span> ~€35–40 pp</div></div><div class="rv">~€70</div></div>
+<div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Ужин: Bistrot Chez Rémy</div><div class="rd"><span class="tag tf">еда</span> Walt Disney Studios · «Рататуй»!</div></div><div class="rv">~€30</div></div>
+<div class="row"><div class="rt">22:00</div><div class="rb"><div class="rn">RER A обратно в Париж</div><div class="rd"><span class="tag ttr">транспорт</span></div></div><div class="rv">€8 pp</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€100 · Disney✓ · 🚇 €32</span><span class="ft-t">~€132 (+€290✓)</span></div>
+</div>
+
+<div class="day fl">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">9 июля (чт) — Стокгольм</div><div class="ds">⚠️ ORY 13:00 → ARN · летим из Орли!</div></div>
+  <span class="badge b-blue">Стокгольм</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">RER B + OrlyVal → Орли (ORY)</div><div class="rd"><span class="tag ttr">транспорт</span> ⚠️ ORY, не CDG! €14 pp</div></div><div class="rv">€28</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">TO7448 · Transavia · ORY → ARN ~15:40</div><div class="rd"><span class="tag tfl">рейс</span></div></div><div class="rv">ORY→ARN</div></div>
+<div class="row"><div class="rt">~16:30</div><div class="rb"><div class="rn">Arlanda Express → T-Centralen · Scandic Go</div><div class="rd"><span class="tag ttr">транспорт</span> €13 pp · 9 мин пешком до отеля</div></div><div class="rv">€26</div></div>
+<div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">Прогулка по Гамла Стан</div><div class="rd"><span class="tag tv">прогулка</span> Старый город · Королевский дворец</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Den Gyldene Freden</div><div class="rd"><span class="tag tf">еда</span> с 1722г · бронировать!</div></div><div class="rv">~€50</div></div>
+</div>
+<div class="ft"><span>✈️ ORY→ARN · 💰 еда ~€65 · 🚇 €54</span><span class="ft-t">~€119</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">10 июля (пт) — ABBA + Муми + Bad Bunny</div><div class="ds">Djurgården + Strawberry Arena · ранний вылет завтра!</div></div>
+  <span class="badge b-green">Концерт!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Паром → Djurgården</div><div class="rd"><span class="tag ttr">транспорт</span> ~€4</div></div><div class="rv">~€8</div></div>
+<div class="row"><div class="rt">10:00</div><div class="rb"><div class="rn">ABBA The Museum</div><div class="rd"><span class="tag tv">музей</span> €28 pp · бронь онлайн! Только безнал</div></div><div class="rv">€56</div></div>
+<div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Junibacken — Муми-тролли</div><div class="rd"><span class="tag tv">музей</span> 3 мин от ABBA · €18 pp · муми-шоп</div></div><div class="rv">€36</div></div>
+<div class="row"><div class="rt">14:00</div><div class="rb"><div class="rn">Обед: Östermalms Saluhall</div><div class="rd"><span class="tag tf">еда</span> Исторический рынок</div></div><div class="rv">~€35</div></div>
+<div class="row"><div class="rt">15:30</div><div class="rb"><div class="rn">Отдых · будильник на 04:15!</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">T-bana синяя → Solna centrum</div><div class="rd"><span class="tag ttr">транспорт</span> ~15 мин</div></div><div class="rv">~€4</div></div>
+<div class="row"><div class="rt">17:45</div><div class="rb"><div class="rn">Мерч + очередь · ворота ~18:00</div></div><div class="rv">мерч</div></div>
+<div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Bad Bunny — DeBÍ TiRAR MáS FOToS Tour</div><div class="rd"><span class="tag tv">концерт</span> Strawberry Arena · конец ~22:00</div></div><div class="rv">билеты</div></div>
+<div class="row"><div class="rt">~22:30</div><div class="rb"><div class="rn">Метро → отель · спать до 04:15!</div><div class="rd">wake-up call на ресепшне!</div></div><div class="rv">—</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€35 · ABBA €56 + Муми €36 · 🚇 ~€12</span><span class="ft-t">~€139</span></div>
+</div>
+
+<div class="day fl wk">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">11 июля (сб) — ⚡ Ранний вылет + рынок</div><div class="ds">ARN 06:40 → ORY ~09:20 · выходной</div></div>
+  <span class="badge b-red">06:40!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">04:15</div><div class="rb"><div class="rn">Подъём · выйти в 04:25</div><div class="rd">9 мин пешком до T-Centralen</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">04:35</div><div class="rb"><div class="rn">Arlanda Express (первый поезд!)</div><div class="rd"><span class="tag ttr">транспорт</span> прибытие 04:53 · €13 pp</div></div><div class="rv">€26</div></div>
+<div class="row"><div class="rt">06:40</div><div class="rb"><div class="rn">TO7451 · Transavia · ARN → ORY ~09:20</div><div class="rd"><span class="tag tfl">рейс</span></div></div><div class="rv">ARN→ORY</div></div>
+<div class="row"><div class="rt">~10:45</div><div class="rb"><div class="rn">OrlyVal + RER B → Париж</div><div class="rd"><span class="tag ttr">транспорт</span> €14 pp</div></div><div class="rv">€28</div></div>
+<div class="row"><div class="rt">11:30</div><div class="rb"><div class="rn">Завтрак: McDonalds</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">€10</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Секонд-хенд + Landline</div><div class="rd"><span class="tag ts">шопинг</span> 66 Av. de la République + 107 Av. Parmentier</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">15:00</div><div class="rb"><div class="rn">Блошиный рынок (адрес в инстаграме)</div><div class="rd"><span class="tag tv">активность</span> Суббота — лучший день!</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Обед: Chez Louisette</div><div class="rd"><span class="tag tf">еда</span> На рынке · живой шансон</div></div><div class="rv">~€35</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Big Fernand</div><div class="rd"><span class="tag tf">еда</span> Лучший бургер Парижа</div></div><div class="rv">~€30</div></div>
+</div>
+<div class="ft"><span>🛬 ORY ~09:20 · 💰 еда ~€75 · 🚇 €54</span><span class="ft-t">~€129</span></div>
+</div>
+
+<div class="day wk">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">12 июля (вс) — Оранжери + Арка + The Weeknd</div><div class="ds">Версаль отменён · концерт вечером!</div></div>
+  <span class="badge b-green">The Weeknd!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">11:00</div><div class="rb"><div class="rn">Musée de l'Orangerie</div><div class="rd"><span class="tag tpd">оплачено ✓</span> «Кувшинки» Моне · ~1.5ч</div></div><div class="rv">2 400₽✓</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Прогулка + Триумфальная арка</div><div class="rd"><span class="tag tv">место</span> Смотровая ~€16 pp · вид на 12 авеню</div></div><div class="rv">~€32</div></div>
+<div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Обед: Ladurée Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€50</div></div>
+<div class="row"><div class="rt">16:00</div><div class="rb"><div class="rn">Отдых в отеле · переодеться</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">RER B → La Plaine Stade de France</div><div class="rd"><span class="tag ttr">транспорт</span> ~30 мин</div></div><div class="rv">~€5</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Playboi Carti — разогрев</div><div class="rd"><span class="tag tv">концерт</span> ~1ч</div></div><div class="rv">билеты</div></div>
+<div class="row"><div class="rt">21:00</div><div class="rb"><div class="rn">The Weeknd — After Hours Til Dawn Tour</div><div class="rd"><span class="tag tv">концерт</span> Stade de France · ~2ч · конец ~23:00</div></div><div class="rv">билеты</div></div>
+<div class="row"><div class="rt">~23:30</div><div class="rb"><div class="rn">RER B → центр</div><div class="rd"><span class="tag ttr">транспорт</span></div></div><div class="rv">~€5</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€50 · Оранжери✓ + Арка €32 + концерт</span><span class="ft-t">~€82 + билеты</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">13 июля (пн) — Лувр + Фейерверк + Бал</div><div class="ds">Лувр с 12:30 · фейерверк ~23:00 · бал после!</div></div>
+  <span class="badge b-red">Фейерверк!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Лувр</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 6 200₽ · ~1.5ч</div></div><div class="rv">6 200₽✓</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Matsuri Sushi</div><div class="rd"><span class="tag tf">еда</span> 103 Rue La Boétie · работает 12:00–15:00!</div></div><div class="rv">~€30</div></div>
+<div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Galeries Lafayette + Jellycat + Uniqlo</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">Starbucks в Galeries Lafayette</div><div class="rd"><span class="tag tf">кофе</span> Bvd Haussmann 32 · фото!</div></div><div class="rv">~€10</div></div>
+<div class="row"><div class="rt">19:30</div><div class="rb"><div class="rn">Ужин: Bouillon Pigalle</div><div class="rd"><span class="tag tf">еда</span> 22 Bvd de Clichy</div></div><div class="rv">~€40</div></div>
+<div class="row"><div class="rt">21:00</div><div class="rb"><div class="rn">Занять место у Champ de Mars</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">~23:00</div><div class="rb"><div class="rn">Фейерверк с Эйфелевой башни!</div><div class="rd"><span class="tag tv">событие</span> ⚠️ Перенесён с 14/07! ~30 мин</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">~23:45</div><div class="rb"><div class="rn">Бал пожарных — Caserne Montmartre</div><div class="rd"><span class="tag tv">событие</span> 12 Rue Carpeaux · вход свободный · до 4:00!</div></div><div class="rv">€0</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€80 · Лувр✓ · бал бесплатно!</span><span class="ft-t">~€90 + Лувр✓</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">14 июля (вт) — Парад + Sephora + Нотр-Дам</div><div class="ds">Магазины закрыты кроме Sephora</div></div>
+  <span class="badge b-pink">14 juillet</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:00</div><div class="rb"><div class="rn">Военный парад на Champs-Élysées</div><div class="rd"><span class="tag tv">событие</span> Прийти к 09:00 · парад в 10:00</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">12:00</div><div class="rb"><div class="rn">Обед: Ladurée Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€50</div></div>
+<div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Sephora флагман</div><div class="rd"><span class="tag ts">шопинг</span> 70 Av. Champs-Élysées · до 00:00!</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Нотр-Дам де Пари</div><div class="rd"><span class="tag tv">место</span> Открыта 14 июля! Бесплатно · notredamedeparis.fr</div></div><div class="rv">€0</div></div>
+<div class="row"><div class="rt">19:30</div><div class="rb"><div class="rn">Ужин рядом с отелем</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€45</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€95 · Нотр-Дам бесплатно</span><span class="ft-t">~€95</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">15 июля (ср) — Орсе + Dumonet + шопинг</div><div class="ds">Импрессионисты · бистро · Zara H&M Adidas!</div></div>
+  <span class="badge b-amber">Шопинг!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">10:00</div><div class="rb"><div class="rn">Музей Орсе</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 2 800₽ · Ван Гог, Моне, Дега · ~2.5ч</div></div><div class="rv">2 800₽✓</div></div>
+<div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Chez Dumonet</div><div class="rd"><span class="tag tf">еда</span> 117 Rue du Cherche-Midi · утиный конфи · бронировать!</div></div><div class="rv">~€50</div></div>
+<div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Trocadéro + вид на башню</div><div class="rd"><span class="tag te">Эмили</span><span class="tag tv">вид</span> Как в заставке!</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">15:30</div><div class="rb"><div class="rn">Шопинг: Champs-Élysées</div><div class="rd"><span class="tag ts">шопинг</span> Zara (до 21:00) · H&M (до 00:00!) · Adidas · Nike</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">French Abroad + La Bonne Brosse</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">20:30</div><div class="rb"><div class="rn">Ужин: McDo на Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span> Самый красивый McDonald's в мире!</div></div><div class="rv">~€20</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€90 · Орсе✓</span><span class="ft-t">~€90 + Орсе✓</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">16 июля (чт) — Нормандия: Этрета</div><div class="ds">Будний · каучуковые головы!</div></div>
+  <span class="badge b-blue">Пригород</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">07:30</div><div class="rb"><div class="rn">Поезд Gare St-Lazare → Le Havre</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 8 581₽ (транспорт туда-обратно)</div></div><div class="rv">✓</div></div>
+<div class="row"><div class="rt">~10:00</div><div class="rb"><div class="rn">Автобус 24: Le Havre → Étretat</div><div class="rd"><span class="tag ttr">транспорт</span> ~50 мин · ~€2 pp</div></div><div class="rv">€4</div></div>
+<div class="row"><div class="rt">11:00</div><div class="rb"><div class="rn">Les Jardins d'Étretat</div><div class="rd"><span class="tag tv">парк</span> €15 pp · билеты откроются позже · каучуковые головы!</div></div><div class="rv">€30</div></div>
+<div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Обед: Le Galion</div><div class="rd"><span class="tag tf">еда</span> Вид на скалы · морепродукты</div></div><div class="rv">~€35</div></div>
+<div class="row"><div class="rt">15:00</div><div class="rb"><div class="rn">Скалы Фалез д'Аваль + пляж</div><div class="rd"><span class="tag tv">природа</span> Арки Моне · снимали «Люпена»!</div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">17:00</div><div class="rb"><div class="rn">Автобус 24: Étretat → Le Havre</div><div class="rd"><span class="tag ttr">транспорт</span> ~€2 pp</div></div><div class="rv">€4</div></div>
+<div class="row"><div class="rt">~18:00</div><div class="rb"><div class="rn">Поезд Le Havre → Gare St-Lazare</div><div class="rd"><span class="tag tpd">оплачено ✓</span></div></div><div class="rv">✓</div></div>
+<div class="row"><div class="rt">21:00</div><div class="rb"><div class="rn">Ужин: Café de la Paix</div><div class="rd"><span class="tag tf">еда</span> 5 Place de l'Opéra · с 1862г</div></div><div class="rv">~€40</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€75 · сады €30 · транспорт✓</span><span class="ft-t">~€109 + транспорт✓</span></div>
+</div>
+
+<div class="day">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">17 июля (пт) — Марэ + Оранжери + Круиз</div><div class="ds">Предпоследний день · ночной круиз!</div></div>
+  <span class="badge b-purple">Круиз!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Музей Карнавале</div><div class="rd"><span class="tag tv">музей</span> 23 Rue de Sévigné · бесплатно!</div></div><div class="rv">€0</div></div>
+<div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Шопинг: Merci + Fleux + Birkenstock</div><div class="rd"><span class="tag ts">шопинг</span> Ле Марэ</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">12:00</div><div class="rb"><div class="rn">Le Bone Appart — собачий кафе</div><div class="rd"><span class="tag tf">еда</span> 9 Rue de Birague · puppuccino €1</div></div><div class="rv">~€10</div></div>
+<div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Обед: Le Relais de l'Entrecôte</div><div class="rd"><span class="tag tf">еда</span> Последний стейк!</div></div><div class="rv">~€45</div></div>
+<div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Musée de l'Orangerie</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 2 400₽ · «Кувшинки» Моне</div></div><div class="rv">2 400₽✓</div></div>
+<div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Люксембургский сад — Fontaine Médicis</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">—</div></div>
+<div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">La Grande Épicerie de Paris</div><div class="rd"><span class="tag ts">гастро</span> 38 Rue de Sèvres · масло, сыр, вино домой</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Septime или Frenchie</div><div class="rd"><span class="tag tf">еда</span> Бронировать сейчас! septime-resto.fr</div></div><div class="rv">~€120</div></div>
+<div class="row"><div class="rt">22:00</div><div class="rb"><div class="rn">Ночной круиз — Bateaux Parisiens</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 3 250₽ · Port de la Bourdonnais · ~1ч</div></div><div class="rv">3 250₽✓</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€120 · Карнавале €0 · Оранжери✓ + круиз✓</span><span class="ft-t">~€120 + оплачено✓</span></div>
+</div>
+
+<div class="day fl wk">
+<div class="dh" onclick="tgl(this)">
+  <div class="dh-left"><div class="dt">18 июля (сб) — Вылет домой</div><div class="ds">CDG 17:40 → Анкара → ВКО</div></div>
+  <span class="badge b-blue">Вылет!</span>
+  <div class="chevron">›</div>
+</div>
+<div class="rows">
+<div class="row"><div class="rt">09:00</div><div class="rb"><div class="rn">Последний шопинг — суббота!</div><div class="rd"><span class="tag ts">шопинг</span> Всё открыто</div></div><div class="rv">шопинг</div></div>
+<div class="row"><div class="rt">11:30</div><div class="rb"><div class="rn">Прощальный завтрак: Pierre Hermé</div><div class="rd"><span class="tag tf">еда</span> 39 Av. de l'Opéra · финальные макароны</div></div><div class="rv">~€20</div></div>
+<div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">RER B → аэропорт CDG</div><div class="rd"><span class="tag ttr">транспорт</span> €11 pp · за 3ч до рейса</div></div><div class="rv">€22</div></div>
+<div class="row"><div class="rt">17:40</div><div class="rb"><div class="rn">VF516 CDG→ESB + VF587 ESB→ВКО ~01:05МСК</div><div class="rd"><span class="tag tfl">рейс</span> Прибытие Москва 19 июля</div></div><div class="rv">—</div></div>
+</div>
+<div class="ft"><span>💰 еда ~€20 · 🚇 €22</span><span class="ft-t">~€42</span></div>
+</div>
+
+</div>
+
+<!-- BUDGET VIEW -->
+<div id="view-budget" class="view">
+<div class="section">
+  <h3>Оплачено</h3>
+  <div class="srow"><div><div>Лувр (13 июл)</div></div><span class="amt-paid">6 200 ₽ ✓</span></div>
+  <div class="srow"><div><div>Транспорт Этрета (16 июл)</div></div><span class="amt-paid">8 581 ₽ ✓</span></div>
+  <div class="srow"><div><div>Музей Орсе (15 июл)</div></div><span class="amt-paid">2 800 ₽ ✓</span></div>
+  <div class="srow"><div><div>Оранжери (12 и 17 июл)</div></div><span class="amt-paid">2 400 ₽ ✓</span></div>
+  <div class="srow"><div><div>Круиз Bateaux Parisiens (17 июл)</div></div><span class="amt-paid">3 250 ₽ ✓</span></div>
+  <div class="srow"><div><div>Диснейленд (8 июл)</div></div><span class="amt-paid">~€290 ✓</span></div>
+</div>
+<div class="section">
+  <h3>Ещё нужно купить</h3>
+  <div class="srow"><div><div>The Weeknd (12 июл)</div></div><span class="amt-open">от €68.50 pp</span></div>
+  <div class="srow"><div><div>ABBA Museum (10 июл)</div></div><span class="amt-open">€28 pp</span></div>
+  <div class="srow"><div><div>Junibacken (10 июл)</div></div><span class="amt-open">€18 pp</span></div>
+  <div class="srow"><div><div>Триумфальная арка (12 июл)</div></div><span class="amt-open">~€16 pp</span></div>
+  <div class="srow"><div><div>Катакомбы (7 июл)</div><div class="sub">продажи откроются позже</div></div><span class="amt-open">€14 pp</span></div>
+  <div class="srow"><div><div>Сады Этрета (16 июл)</div><div class="sub">продажи откроются позже</div></div><span class="amt-open">€15 pp</span></div>
+  <div class="srow"><div><div>Нотр-Дам (14 июл)</div></div><span class="amt-paid">бесплатно</span></div>
+  <div class="srow"><div><div>Карнавале (17 июл)</div></div><span class="amt-paid">бесплатно</span></div>
+</div>
+<div class="section">
+  <h3>По дням — на 2 человека</h3>
+  <div class="srow"><span>5 июля — прилёт</span><span>~€57</span></div>
+  <div class="srow"><span>6 июля — Монмартр</span><span>~€74</span></div>
+  <div class="srow"><span>7 июля — Катакомбы</span><span>~€139</span></div>
+  <div class="srow"><span>8 июля — Диснейленд</span><span>~€132 + €290✓</span></div>
+  <div class="srow"><span>9 июля — Стокгольм</span><span>~€119</span></div>
+  <div class="srow"><span>10 июля — ABBA + Bad Bunny</span><span>~€139</span></div>
+  <div class="srow"><span>11 июля — рынок</span><span>~€129</span></div>
+  <div class="srow"><span>12 июля — Оранжери + The Weeknd</span><span>~€82 + билеты</span></div>
+  <div class="srow"><span>13 июля — Лувр + фейерверк</span><span>~€90 + Лувр✓</span></div>
+  <div class="srow"><span>14 июля — парад + Нотр-Дам</span><span>~€95</span></div>
+  <div class="srow"><span>15 июля — Орсе + шопинг</span><span>~€90 + Орсе✓</span></div>
+  <div class="srow"><span>16 июля — Этрета</span><span>~€109 + транспорт✓</span></div>
+  <div class="srow"><span>17 июля — Марэ + круиз</span><span>~€120 + оплачено✓</span></div>
+  <div class="srow"><span>18 июля — отъезд</span><span>~€42</span></div>
+</div>
+</div>
+
+<!-- BOOK VIEW -->
+<div id="view-book" class="view">
+<div class="warn-box">⚠️ 9 июля: летим из Орли (ORY), не CDG! RER B + OrlyVal</div>
+<div class="warn-box">⚠️ 13 июля: фейерверк перенесён с 14/07! ~23:00 Champ de Mars</div>
+<div class="warn-box">⚠️ Matsuri (13 июл): работает только 12:00–15:00!</div>
+<div class="section">
+  <h3>Срочно!</h3>
+  <div class="srow"><div><div>The Weeknd (12 июл)</div><div class="sub">stadefrance.com / Ticketmaster · от €68.50 pp</div></div><span class="urg">срочно!</span></div>
+  <div class="srow"><div><div>ABBA Museum (10 июл)</div><div class="sub">abbathemuseum.com · €28 pp · только безнал!</div></div><span class="urg">срочно!</span></div>
+  <div class="srow"><div><div>Septime / Frenchie (17 июл)</div><div class="sub">septime-resto.fr · за 2–3 недели!</div></div><span class="urg">срочно!</span></div>
+  <div class="srow"><div><div>Chez Dumonet (15 июл)</div><div class="sub">TheFork или по телефону</div></div><span class="urg">срочно!</span></div>
+</div>
+<div class="section">
+  <h3>За 1–2 недели</h3>
+  <div class="srow"><div><div>Junibacken (10 июл)</div><div class="sub">junibacken.se · €18 pp</div></div></div>
+  <div class="srow"><div><div>Катакомбы (7 июл)</div><div class="sub">catacombes.paris.fr · €14 pp · открытие позже</div></div></div>
+  <div class="srow"><div><div>Сады Этрета (16 июл)</div><div class="sub">lesjardinsdetretat.fr · €15 pp · открытие позже</div></div></div>
+  <div class="srow"><div><div>Нотр-Дам (14 июл)</div><div class="sub">notredamedeparis.fr · бесплатно · нужна бронь слота</div></div></div>
+  <div class="srow"><div><div>Den Gyldene Freden (9 июл)</div><div class="sub">Ресторан с 1722г · Стокгольм</div></div></div>
+  <div class="srow"><div><div>Le Bone Appart (17 июл)</div><div class="sub">leboneappart.com</div></div></div>
+</div>
+</div>
+
+<!-- FLIGHTS VIEW -->
+<div id="view-flights" class="view">
+<div class="flight-card">
+  <div class="flight-num">VF278 · AJet — ВКО → SAW</div>
+  <div class="flight-route"><span>5 июля · 05:50 МСК</span><span>→ ~09:05 Стамбул</span></div>
+</div>
+<div class="flight-card">
+  <div class="flight-num">VF9 · AJet — SAW → CDG</div>
+  <div class="flight-route"><span>5 июля · ~12:00 Стамбул</span><span>→ 16:25 Париж CDG</span></div>
+</div>
+<div class="flight-card warn">
+  <div class="flight-num">TO7448 · Transavia — ORY → ARN ⚠️</div>
+  <div class="flight-route"><span>9 июля · 13:00 Орли (ORY!)</span><span>→ ~15:40 Стокгольм</span></div>
+</div>
+<div class="flight-card warn">
+  <div class="flight-num">TO7451 · Transavia — ARN → ORY ⚡</div>
+  <div class="flight-route"><span>11 июля · 06:40 Стокгольм</span><span>→ ~09:20 Париж Орли</span></div>
+</div>
+<div class="flight-card">
+  <div class="flight-num">VF516 · AJet — CDG → ESB</div>
+  <div class="flight-route"><span>18 июля · 17:40 Париж CDG</span><span>→ ~21:25 Анкара</span></div>
+</div>
+<div class="flight-card">
+  <div class="flight-num">VF587 · AJet — ESB → ВКО</div>
+  <div class="flight-route"><span>18 июля · ~22:50 Анкара</span><span>→ ~01:05 МСК (19 июля)</span></div>
+</div>
+<div class="section" style="margin-top:10px">
+  <h3>Отели</h3>
+  <div class="srow"><div><div style="font-weight:600">Париж</div><div class="sub">14 Rue Cadet, 9 arr. · 5–18 июля</div></div></div>
+  <div class="srow"><div><div style="font-weight:600">Стокгольм — Scandic Go</div><div class="sub">Upplandsgatan 4 · 9–11 июля · 9 мин до T-Centralen</div></div></div>
+</div>
+<div class="section">
+  <h3>Прачечная</h3>
+  <div class="srow"><div><div style="font-weight:600">E.L.A</div><div class="sub">7 Rue Maubeuge · 5 мин от отеля · 7:00–22:00</div></div></div>
+</div>
+</div>
+
+</div>
+
+<script>
+if(window.Telegram&&window.Telegram.WebApp){
+  const tg=window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+  if(tg.colorScheme==='dark'){
+    document.documentElement.style.setProperty('--bg',tg.themeParams.bg_color||'#1c1c1e');
+    document.documentElement.style.setProperty('--bg2',tg.themeParams.secondary_bg_color||'#2c2c2e');
+    document.documentElement.style.setProperty('--text',tg.themeParams.text_color||'#f2f2f7');
+    document.documentElement.style.setProperty('--text2',tg.themeParams.hint_color||'#aeaeb2');
+  }
+}
+function tgl(dh){
+  const rows=dh.nextElementSibling;
+  const ch=dh.querySelector('.chevron');
+  const isOpen=rows.classList.contains('open');
+  rows.classList.toggle('open');
+  ch.style.transform=isOpen?'':'rotate(90deg)';
+}
+function showView(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.getElementById('scroll').scrollTop=0;
+}
+</script>
+</body>
+</html>
