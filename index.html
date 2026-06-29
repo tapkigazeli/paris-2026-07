@@ -54,7 +54,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rate-upd{font-size:10px;color:var(--text3);margin-top:1px}
 .rate-refresh{background:none;border:0.5px solid var(--border2);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text2);cursor:pointer}
 
-/* Category cards */
 .cat-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
 .cat-card{background:var(--bg2);border-radius:12px;padding:12px 14px;border:0.5px solid var(--border)}
 .cat-card.over{border-color:var(--danger);background:var(--danger-bg)}
@@ -75,7 +74,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .progress-fill.over-fill{background:var(--danger)}
 .cat-add{width:100%;padding:8px;background:var(--bg);border:0.5px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text2);cursor:pointer;text-align:center}
 
-/* Total summary */
 .total-card{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:14px}
 .total-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
 .total-row:last-child{border-bottom:none;font-weight:600;font-size:14px;padding-top:9px}
@@ -113,7 +111,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .exp-del{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;font-size:16px;flex-shrink:0}
 .empty-state{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
 
-/* DAYS TAB — same as before */
+/* DAYS TAB */
 .paid-banner{background:var(--accent-bg);border:0.5px solid var(--accent);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .paid-banner h3{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
@@ -141,7 +139,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rb{flex:1;min-width:0}
 .rn{font-size:13px;font-weight:500;color:var(--text)}
 .rd{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
-.rv{font-size:11px;color:var(--text3);min-width:48px;text-align:right;padding-top:2px;flex-shrink:0}
+.rv{font-size:11px;color:var(--text3);min-width:36px;text-align:right;padding-top:2px;flex-shrink:0}
 .tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:5px;margin-right:2px;margin-bottom:2px;font-weight:600}
 .tf{background:var(--accent-bg);color:var(--accent)}
 .ts{background:var(--blue-bg);color:var(--blue)}
@@ -170,6 +168,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .flight-card.warn-f .flight-route{color:var(--warn)}
 .gift-label{font-size:13px;color:var(--text);transition:color .2s}
 .gift-done .gift-label{color:var(--text3);text-decoration:line-through}
+
+/* ===== EVENT EDIT ===== */
+.ev-edit-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 4px;font-size:12px;flex-shrink:0;opacity:0.4;line-height:1}
+.ev-edit-btn:active{opacity:1}
+.add-event-btn{width:100%;padding:10px;background:none;border:none;border-top:0.5px solid var(--border);font-size:12px;color:var(--accent);cursor:pointer;text-align:center;font-weight:500}
+.ev-del-btn{width:100%;padding:13px;background:none;border:1.5px solid var(--danger);border-radius:12px;font-size:15px;font-weight:600;color:var(--danger);cursor:pointer;margin-top:8px}
+.tag-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tag-opt{padding:8px 10px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.tag-opt.sel{border-color:var(--accent);background:var(--accent-bg)}
 </style>
 </head>
 <body>
@@ -196,7 +203,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="rate-upd" id="rate-time">нажмите ✏️ чтобы изменить</div>
     </div>
   </div>
-  <div id="rate-edit-box" style="display:none;background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:10px;display:none">
+  <div id="rate-edit-box" style="display:none;background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:10px">
     <div style="font-size:12px;color:var(--text2);margin-bottom:6px">Введите курс вручную (₽ за €1)</div>
     <div style="display:flex;gap:8px">
       <input id="rate-manual-input" type="number" inputmode="decimal" step="0.01" placeholder="93.50"
@@ -206,13 +213,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="cat-cards" id="cat-cards"></div>
-
   <div class="total-card" id="total-card"></div>
 
   <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">История трат</div>
   <div id="exp-list"></div>
 
-  <!-- Sync status bar -->
   <div style="margin-top:12px;background:var(--bg2);border-radius:10px;padding:10px 14px;border:0.5px solid var(--border);display:flex;align-items:center;gap:8px">
     <div style="font-size:12px;color:var(--text2)" id="sync-status-bar">🟡 подключение...</div>
     <button onclick="manualRefresh()" style="margin-left:auto;background:none;border:0.5px solid var(--border2);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer">↻ обновить</button>
@@ -222,37 +227,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- ===== DAYS VIEW ===== -->
 <div id="view-days" class="view">
-<div class="warn-box">⚠️ 9 июля: летим из Орли (ORY), не CDG!</div>
-<div class="warn-box">⚠️ 13 июля: фейерверк перенесён с 14/07! ~23:00</div>
-<div class="warn-box">⚠️ Matsuri (13 июл): только 12:00–15:00!</div>
-
-<div class="day fl wk"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">5 июля (вс) — Прилёт</div><div class="ds">ВКО 05:50 → SAW → CDG 16:25</div></div><span class="badge b-blue">Прилёт</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">05:50МСК</div><div class="rb"><div class="rn">VF278 ВКО→SAW + VF9 SAW→CDG</div><div class="rd"><span class="tag tfl">рейс</span> Пересадка Стамбул ~3ч · прилёт 16:25</div></div><div class="rv">—</div></div><div class="row"><div class="rt">~17:15</div><div class="rb"><div class="rn">RER B → центр · заселение</div><div class="rd"><span class="tag ttr">транспорт</span> €11 pp · 14 Rue Cadet, 9 arr.</div></div><div class="rv">€22</div></div><div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Прогулка по Елисейским полям</div><div class="rd"><span class="tag tv">прогулка</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">20:30</div><div class="rb"><div class="rn">Ужин: Le Bouillon Chartier</div><div class="rd"><span class="tag tf">еда</span> 7 Rue du Faubourg Montmartre · без брони</div></div><div class="rv">~€35</div></div></div><div class="ft"><span>💰 еда ~€35 · 🚇 €22</span><span class="ft-t">~€57</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">6 июля (пн) — Монмартр + Эмили</div><div class="ds">Kitsuné + Sacré-Cœur + Fotoautomat</div></div><span class="badge b-pink">Emily</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">09:00</div><div class="rb"><div class="rn">Завтрак: Café Kitsuné Palais Royal</div><div class="rd"><span class="tag tf">еда</span> 51 Galerie de Montpensier</div></div><div class="rv">~€15</div></div><div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Rue Crémieux + Place de l'Estrapade</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">11:30</div><div class="rb"><div class="rn">Sacré-Cœur + лестница из заставки</div><div class="rd"><span class="tag te">Эмили</span><span class="tag tv">вид</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">12:15</div><div class="rb"><div class="rn">Fotoautomat — аналоговая фотобудка</div><div class="rd"><span class="tag tv">фото</span> Rue des Trois Frères · ~€4–6</div></div><div class="rv">~€6</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Aux Merveilleux de Fred</div><div class="rd"><span class="tag tf">еда</span><span class="tag te">Эмили</span> 2 Rue Lepic</div></div><div class="rv">~€15</div></div><div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Palais Royal + Pont de Bir-Hakeim</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Officine Buly</div><div class="rd"><span class="tag ts">шопинг</span> 6 Rue Bonaparte</div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Chez Alain Miam Miam</div><div class="rd"><span class="tag tf">еда</span><span class="tag te">Эмили</span> 26 Rue Charlot</div></div><div class="rv">~€30</div></div></div><div class="ft"><span>💰 еда ~€60 · фото ~€6 · 🚇 ~€8</span><span class="ft-t">~€74</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">7 июля (вт) — Сен-Жермен + Катакомбы</div><div class="ds">Левый берег · Эмили день 2</div></div><span class="badge b-pink">Emily</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Café la Procure x Coutume</div><div class="rd"><span class="tag tf">еда</span> 3 Rue de Mézières</div></div><div class="rv">~€10</div></div><div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Café de Flore / Les Deux Magots</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">~€15</div></div><div class="row"><div class="rt">11:15</div><div class="rb"><div class="rn">Шопинг: Sabre + Marin Montagut</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Обед: Le Relais de l'Entrecôte</div><div class="rd"><span class="tag tf">еда</span> 20 Rue St-Benoît · стейк-фрит</div></div><div class="rv">~€45</div></div><div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">Катакомбы Парижа</div><div class="rd"><span class="tag tv">музей</span> €14 pp · catacombes.paris.fr</div></div><div class="rv">€28</div></div><div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин в Латинском квартале</div><div class="rd"><span class="tag tf">еда</span> Rue de la Huchette</div></div><div class="rv">~€35</div></div></div><div class="ft"><span>💰 еда ~€105 · катакомбы €28</span><span class="ft-t">~€139</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">8 июля (ср) — Диснейленд</div><div class="ds">Будний — очереди короче!</div></div><span class="badge b-pink">Disneyland</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">08:30</div><div class="rb"><div class="rn">RER A → Marne-la-Vallée Chessy</div><div class="rd"><span class="tag ttr">транспорт</span> €8 pp · Navigo не покрывает 5A!</div></div><div class="rv">€16</div></div><div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Disneyland Paris — оба парка</div><div class="rd"><span class="tag tpd">оплачено ✓</span> €290</div></div><div class="rv">€290✓</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Plaza Gardens</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€70</div></div><div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Ужин: Bistrot Chez Rémy</div><div class="rd"><span class="tag tf">еда</span> «Рататуй»!</div></div><div class="rv">~€30</div></div></div><div class="ft"><span>💰 еда ~€100 · Disney✓ · 🚇 €32</span><span class="ft-t">~€132 (+€290✓)</span></div></div>
-
-<div class="day fl"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">9 июля (чт) — Стокгольм</div><div class="ds">⚠️ ORY 13:00 → ARN · летим из Орли!</div></div><span class="badge b-blue">Стокгольм</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">RER B + OrlyVal → Орли (ORY)</div><div class="rd"><span class="tag ttr">транспорт</span> ⚠️ ORY, не CDG! €14 pp</div></div><div class="rv">€28</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">TO7448 · Transavia · ORY → ARN ~15:40</div><div class="rd"><span class="tag tfl">рейс</span></div></div><div class="rv">ORY→ARN</div></div><div class="row"><div class="rt">~16:30</div><div class="rb"><div class="rn">Arlanda Express → T-Centralen · Scandic Go</div><div class="rd"><span class="tag ttr">транспорт</span> €13 pp · 9 мин пешком</div></div><div class="rv">€26</div></div><div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">Прогулка по Гамла Стан</div><div class="rd"><span class="tag tv">прогулка</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Den Gyldene Freden</div><div class="rd"><span class="tag tf">еда</span> с 1722г · бронировать!</div></div><div class="rv">~€50</div></div></div><div class="ft"><span>✈️ ORY→ARN · 💰 еда ~€65 · 🚇 €54</span><span class="ft-t">~€119</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">10 июля (пт) — ABBA + Муми + Bad Bunny</div><div class="ds">Djurgården + Strawberry Arena · ранний вылет завтра!</div></div><span class="badge b-green">Концерт!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Паром → Djurgården</div><div class="rd"><span class="tag ttr">транспорт</span></div></div><div class="rv">~€8</div></div><div class="row"><div class="rt">10:00</div><div class="rb"><div class="rn">ABBA The Museum</div><div class="rd"><span class="tag tv">музей</span> €28 pp · только безнал!</div></div><div class="rv">€56</div></div><div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Junibacken — Муми-тролли</div><div class="rd"><span class="tag tv">музей</span> 3 мин от ABBA · €18 pp</div></div><div class="rv">€36</div></div><div class="row"><div class="rt">14:00</div><div class="rb"><div class="rn">Обед: Östermalms Saluhall</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€35</div></div><div class="row"><div class="rt">19:00</div><div class="rb"><div class="rn">Bad Bunny — DeBÍ TiRAR MáS FOToS Tour</div><div class="rd"><span class="tag tv">концерт</span> Strawberry Arena · конец ~22:00</div></div><div class="rv">билеты</div></div><div class="row"><div class="rt">~22:30</div><div class="rb"><div class="rn">Метро → отель · будильник 04:15!</div></div><div class="rv">—</div></div></div><div class="ft"><span>💰 еда ~€35 · ABBA €56 + Муми €36</span><span class="ft-t">~€139</span></div></div>
-
-<div class="day fl wk"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">11 июля (сб) — ⚡ Ранний вылет + рынок</div><div class="ds">ARN 06:40 → ORY ~09:20</div></div><span class="badge b-red">06:40!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">04:15</div><div class="rb"><div class="rn">Подъём · выйти в 04:25 · 9 мин до T-Centralen</div></div><div class="rv">—</div></div><div class="row"><div class="rt">04:35</div><div class="rb"><div class="rn">Arlanda Express (первый поезд!)</div><div class="rd"><span class="tag ttr">транспорт</span> €13 pp</div></div><div class="rv">€26</div></div><div class="row"><div class="rt">06:40</div><div class="rb"><div class="rn">TO7451 · Transavia · ARN → ORY ~09:20</div><div class="rd"><span class="tag tfl">рейс</span></div></div><div class="rv">ARN→ORY</div></div><div class="row"><div class="rt">~10:45</div><div class="rb"><div class="rn">OrlyVal + RER B → Париж</div><div class="rd"><span class="tag ttr">транспорт</span> €14 pp</div></div><div class="rv">€28</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Секонд-хенд + Landline</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">15:00</div><div class="rb"><div class="rn">Блошиный рынок</div><div class="rd"><span class="tag tv">активность</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Обед: Chez Louisette</div><div class="rd"><span class="tag tf">еда</span> Живой шансон</div></div><div class="rv">~€35</div></div><div class="row"><div class="rt">20:00</div><div class="rb"><div class="rn">Ужин: Big Fernand</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€30</div></div></div><div class="ft"><span>🛬 ORY ~09:20 · 💰 еда ~€75 · 🚇 €54</span><span class="ft-t">~€129</span></div></div>
-
-<div class="day wk"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">12 июля (вс) — Оранжери + Арка + The Weeknd</div><div class="ds">Версаль отменён · концерт вечером!</div></div><span class="badge b-green">The Weeknd!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">11:00</div><div class="rb"><div class="rn">Musée de l'Orangerie</div><div class="rd"><span class="tag tpd">оплачено ✓</span> «Кувшинки» Моне · ~1.5ч</div></div><div class="rv">2 400₽✓</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Прогулка + Триумфальная арка</div><div class="rd"><span class="tag tv">место</span> Смотровая ~€16 pp</div></div><div class="rv">~€32</div></div><div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Обед: Ladurée Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€50</div></div><div class="row"><div class="rt">17:30</div><div class="rb"><div class="rn">RER B → La Plaine Stade de France</div><div class="rd"><span class="tag ttr">транспорт</span></div></div><div class="rv">~€5</div></div><div class="row"><div class="rt">21:00</div><div class="rb"><div class="rn">The Weeknd — After Hours Til Dawn Tour</div><div class="rd"><span class="tag tv">концерт</span> Stade de France · ~2ч</div></div><div class="rv">билеты</div></div></div><div class="ft"><span>💰 еда ~€50 · Оранжери✓ + Арка €32 + концерт</span><span class="ft-t">~€82 + билеты</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">13 июля (пн) — Лувр + Фейерверк + Бал</div><div class="ds">Лувр с 12:30 · фейерверк ~23:00 · бал после!</div></div><span class="badge b-red">Фейерверк!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Лувр</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 6 200₽</div></div><div class="rv">6 200₽✓</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Matsuri Sushi</div><div class="rd"><span class="tag tf">еда</span> 103 Rue La Boétie · 12:00–15:00!</div></div><div class="rv">~€30</div></div><div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Galeries Lafayette + Jellycat + Uniqlo</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">19:30</div><div class="rb"><div class="rn">Ужин: Bouillon Chartier</div><div class="rd"><span class="tag tf">еда</span> 7 Rue du Faubourg Montmartre · без брони</div></div><div class="rv">~€40</div></div><div class="row"><div class="rt">~23:00</div><div class="rb"><div class="rn">Фейерверк с Эйфелевой башни!</div><div class="rd"><span class="tag tv">событие</span> ⚠️ Перенесён с 14/07!</div></div><div class="rv">—</div></div><div class="row"><div class="rt">~23:45</div><div class="rb"><div class="rn">Бал пожарных — Caserne Montmartre</div><div class="rd"><span class="tag tv">событие</span> 12 Rue Carpeaux · до 4:00!</div></div><div class="rv">€0</div></div></div><div class="ft"><span>💰 еда ~€80 · Лувр✓ · бал бесплатно!</span><span class="ft-t">~€90 + Лувр✓</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">14 июля (вт) — Парад + Sephora + Нотр-Дам</div><div class="ds">Магазины закрыты кроме Sephora</div></div><span class="badge b-pink">14 juillet</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">09:00</div><div class="rb"><div class="rn">Военный парад на Champs-Élysées</div><div class="rd"><span class="tag tv">событие</span> Парад в 10:00</div></div><div class="rv">—</div></div><div class="row"><div class="rt">12:00</div><div class="rb"><div class="rn">Обед: Ladurée Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€50</div></div><div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Sephora флагман</div><div class="rd"><span class="tag ts">шопинг</span> 70 Av. · до 00:00!</div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">Нотр-Дам де Пари</div><div class="rd"><span class="tag tv">место</span> Открыта! Бесплатно</div></div><div class="rv">€0</div></div></div><div class="ft"><span>💰 еда ~€95 · Нотр-Дам бесплатно</span><span class="ft-t">~€95</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">15 июля (ср) — Орсе + Dumonet + шопинг</div><div class="ds">Импрессионисты · бистро · Zara H&M Adidas!</div></div><span class="badge b-amber">Шопинг!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">10:00</div><div class="rb"><div class="rn">Музей Орсе</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 2 800₽</div></div><div class="rv">2 800₽✓</div></div><div class="row"><div class="rt">13:00</div><div class="rb"><div class="rn">Обед: Chez Dumonet</div><div class="rd"><span class="tag tf">еда</span> 117 Rue du Cherche-Midi · бронировать!</div></div><div class="rv">~€50</div></div><div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Trocadéro + вид на башню</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">15:30</div><div class="rb"><div class="rn">Шопинг: Champs-Élysées</div><div class="rd"><span class="tag ts">шопинг</span> Zara · H&M (до 00:00!) · Adidas · Nike</div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">French Abroad + La Bonne Brosse</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">20:30</div><div class="rb"><div class="rn">Ужин: McDo на Champs-Élysées</div><div class="rd"><span class="tag tf">еда</span></div></div><div class="rv">~€20</div></div></div><div class="ft"><span>💰 еда ~€90 · Орсе✓</span><span class="ft-t">~€90 + Орсе✓</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">16 июля (чт) — Нормандия: Этрета</div><div class="ds">Будний · каучуковые головы!</div></div><span class="badge b-blue">Пригород</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">07:30</div><div class="rb"><div class="rn">Поезд Gare St-Lazare → Le Havre</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 8 581₽</div></div><div class="rv">✓</div></div><div class="row"><div class="rt">~10:00</div><div class="rb"><div class="rn">Автобус 24: Le Havre → Étretat</div><div class="rd"><span class="tag ttr">транспорт</span> ~€2 pp</div></div><div class="rv">€4</div></div><div class="row"><div class="rt">11:00</div><div class="rb"><div class="rn">Les Jardins d'Étretat</div><div class="rd"><span class="tag tv">парк</span> €15 pp · билеты откроются позже</div></div><div class="rv">€30</div></div><div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">Обед: Le Galion</div><div class="rd"><span class="tag tf">еда</span> Морепродукты · вид на скалы</div></div><div class="rv">~€35</div></div><div class="row"><div class="rt">15:00</div><div class="rb"><div class="rn">Скалы Фалез д'Аваль + пляж</div><div class="rd"><span class="tag tv">природа</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">~18:00</div><div class="rb"><div class="rn">Поезд Le Havre → Gare St-Lazare</div><div class="rd"><span class="tag tpd">оплачено ✓</span></div></div><div class="rv">✓</div></div><div class="row"><div class="rt">21:00</div><div class="rb"><div class="rn">Ужин: Café de la Paix</div><div class="rd"><span class="tag tf">еда</span> с 1862г</div></div><div class="rv">~€40</div></div></div><div class="ft"><span>💰 еда ~€75 · сады €30 · транспорт✓</span><span class="ft-t">~€109 + транспорт✓</span></div></div>
-
-<div class="day"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">17 июля (пт) — Марэ + Круиз</div><div class="ds">Предпоследний день · ночной круиз!</div></div><span class="badge b-purple">Круиз!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">09:30</div><div class="rb"><div class="rn">Музей Карнавале</div><div class="rd"><span class="tag tv">музей</span> Бесплатно!</div></div><div class="rv">€0</div></div><div class="row"><div class="rt">10:30</div><div class="rb"><div class="rn">Шопинг: Merci + Fleux + Birkenstock</div><div class="rd"><span class="tag ts">шопинг</span></div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">12:00</div><div class="rb"><div class="rn">Le Bone Appart — собачий кафе</div><div class="rd"><span class="tag tf">еда</span> puppuccino €1</div></div><div class="rv">~€10</div></div><div class="row"><div class="rt">12:30</div><div class="rb"><div class="rn">Обед: Le Relais de l'Entrecôte</div><div class="rd"><span class="tag tf">еда</span> Последний стейк!</div></div><div class="rv">~€45</div></div><div class="row"><div class="rt">14:30</div><div class="rb"><div class="rn">Люксембургский сад — Fontaine Médicis</div><div class="rd"><span class="tag te">Эмили</span></div></div><div class="rv">—</div></div><div class="row"><div class="rt">16:30</div><div class="rb"><div class="rn">La Grande Épicerie de Paris</div><div class="rd"><span class="tag ts">гастро</span> масло, сыр, вино домой</div></div><div class="rv">шопинг</div></div><div class="row"><div class="rt">18:30</div><div class="rb"><div class="rn">Ужин: Septime или Frenchie</div><div class="rd"><span class="tag tf">еда</span> Бронировать сейчас!</div></div><div class="rv">~€120</div></div><div class="row"><div class="rt">22:00</div><div class="rb"><div class="rn">Ночной круиз — Bateaux Parisiens</div><div class="rd"><span class="tag tpd">оплачено ✓</span> 3 250₽ · ~1ч</div></div><div class="rv">3 250₽✓</div></div></div><div class="ft"><span>💰 еда ~€120 · круиз✓</span><span class="ft-t">~€120 + оплачено✓</span></div></div>
-
-<div class="day fl wk"><div class="dh" onclick="tgl(this)"><div class="dh-left"><div class="dt">18 июля (сб) — Вылет домой</div><div class="ds">CDG 17:40 → Анкара → ВКО</div></div><span class="badge b-blue">Вылет!</span><div class="chevron">›</div></div><div class="rows"><div class="row"><div class="rt">11:30</div><div class="rb"><div class="rn">Прощальный завтрак: Pierre Hermé</div><div class="rd"><span class="tag tf">еда</span> 39 Av. de l'Opéra</div></div><div class="rv">~€20</div></div><div class="row"><div class="rt">13:30</div><div class="rb"><div class="rn">RER B → CDG</div><div class="rd"><span class="tag ttr">транспорт</span> €11 pp · за 3ч до рейса</div></div><div class="rv">€22</div></div><div class="row"><div class="rt">17:40</div><div class="rb"><div class="rn">VF516 CDG→ESB + VF587 ESB→ВКО</div><div class="rd"><span class="tag tfl">рейс</span> Прибытие Москва 19 июля ~01:05</div></div><div class="rv">—</div></div></div><div class="ft"><span>💰 еда ~€20 · 🚇 €22</span><span class="ft-t">~€42</span></div></div>
+  <div class="warn-box">⚠️ 9 июля: летим из Орли (ORY), не CDG!</div>
+  <div class="warn-box">⚠️ 13 июля: фейерверк перенесён с 14/07! ~23:00</div>
+  <div class="warn-box">⚠️ Matsuri (13 июл): только 12:00–15:00!</div>
+  <div id="days-container"></div>
 </div>
 
 <!-- ===== BOOK VIEW ===== -->
@@ -300,7 +278,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-
 <div class="section"><h3>🍽️ Где можно поесть</h3>
 <div class="srow"><div><div style="font-weight:600">Crêperie de Pont-Aven</div><div class="sub">Блины по-бретонски</div></div><a href="https://maps.google.com/?q=Creperie+de+Pont-Aven+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
 <div class="srow"><div><div style="font-weight:600">Crêperie Plougastel</div><div class="sub">Блины</div></div><a href="https://maps.google.com/?q=Creperie+Plougastel+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
@@ -343,8 +320,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="srow"><div><div style="font-weight:600">Стокгольм — Scandic Go</div><div class="sub">Upplandsgatan 4 · 9–11 июля · 9 мин до T-Centralen</div></div><a href="https://maps.google.com/?q=Scandic+Go+Stockholm+Upplandsgatan+4" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
 </div>
 
-
-
 <div class="section">
   <h3>Супермаркеты рядом с квартирой</h3>
   <div class="srow"><div><div style="font-weight:600">Monop' 🛒</div><div class="sub">16 Rue du Faubourg Montmartre · 4 мин · 8:00–23:50 ежедневно</div></div><a href="https://maps.google.com/?q=Monop+16+Rue+du+Faubourg+Montmartre+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
@@ -369,7 +344,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       🏟️ Стадион в 5 мин пешком от станции<br>
       ⏰ Выйти в 17:15 · ворота открываются 18:00
     </div>
-    <a href="https://www.google.com/maps/dir/Upplandsgatan+4,+Stockholm/Strawberry+Arena,+Solna/@59.3553,18.0286,13z/am=t/data=!4m14!4m13!1m5!1m1!1s0x465f9d3d8a0f2e7b:0x1!2m2!1d18.0590!2d59.3443!1m5!1m1!1s0x465f9e2d7c8b3a5d:0x1!2m2!1d18.0042!2d59.3726!3e3" target="_blank" style="display:inline-block;margin-top:8px;color:var(--green);font-size:11px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
   </div>
   <div style="background:var(--purple-bg);border-radius:8px;padding:10px 11px">
     <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px">The Weeknd — 12 июля · Stade de France, Сен-Дени</div>
@@ -381,7 +355,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       ⏰ Выйти в 17:30 · ворота открываются 19:00<br>
       🚇 Обратно: RER B или RER D, последние поезда ~01:00
     </div>
-    <a href="https://www.google.com/maps/dir/14+Rue+Cadet,+Paris/Stade+de+France,+Saint-Denis/@48.9018,2.3364,13z/am=t/data=!4m14!4m13!1m5!1m1!1s0x47e66e3d7b3b3b3b:0x1!2m2!1d2.3469!2d48.8744!1m5!1m1!1s0x47e66f2a3b4b4b4b:0x1!2m2!1d2.3601!2d48.9244!3e3" target="_blank" style="display:inline-block;margin-top:8px;color:var(--purple);font-size:11px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
   </div>
 </div>
 
@@ -399,7 +372,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       🚌 <b>CAR NOMAD no. 88051</b> · Отправление <b>10:50</b><br>
       &nbsp;&nbsp;&nbsp;&nbsp;Bréauté → <b>Étretat 11:26</b> · 36 мин
     </div>
-    <a href="https://www.google.com/maps/dir/14+Rue+Cadet,+Paris/Gare+Saint-Lazare,+Paris/Etretat,+Seine-Maritime/@49.5,0.8,9z/am=t/data=!4m20!4m19!1m5!1m1!1s0x47e66e3d7b3b3b3b:0x1!2m2!1d2.3469!2d48.8744!1m5!1m1!1s0x47e66f2a3b4b4b4b:0x1!2m2!1d2.3245!2d48.8752!1m5!1m1!1s0x47e0d9b1b2b2b2b2:0x1!2m2!1d0.2057!2d49.7073!3e3" target="_blank" style="display:inline-block;margin-top:8px;color:var(--blue);font-size:11px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
   </div>
   <div style="background:var(--purple-bg);border-radius:8px;padding:10px 11px">
     <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px">🚌 Обратно · 16 июля</div>
@@ -411,7 +383,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       &nbsp;&nbsp;&nbsp;&nbsp;Вагон 4 · Место 72 (коридор) + Место 71 (окно)<br>
       🚇 От Saint-Lazare метро → отель ~15 мин
     </div>
-    <a href="https://www.google.com/maps/dir/Etretat,+Seine-Maritime/Gare+Saint-Lazare,+Paris/14+Rue+Cadet,+Paris/@49.5,0.8,9z/am=t/data=!4m20!4m19!1m5!1m1!1s0x47e0d9b1b2b2b2b2:0x1!2m2!1d0.2057!2d49.7073!1m5!1m1!1s0x47e66f2a3b4b4b4b:0x1!2m2!1d2.3245!2d48.8752!1m5!1m1!1s0x47e66e3d7b3b3b3b:0x1!2m2!1d2.3469!2d48.8744!3e3" target="_blank" style="display:inline-block;margin-top:8px;color:var(--purple);font-size:11px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
   </div>
 </div>
 
@@ -456,6 +427,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+<!-- ===== EVENT EDIT MODAL ===== -->
+<div class="form-overlay" id="event-modal" onclick="closeEventModal(event)">
+  <div class="form-sheet" onclick="event.stopPropagation()">
+    <div class="form-title">
+      <span id="ev-modal-title">Событие</span>
+      <button class="form-close" onclick="document.getElementById('event-modal').classList.remove('open')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Время (необязательно)</label>
+      <input class="form-input" id="ev-time" type="time">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Название</label>
+      <input class="form-input" id="ev-name" type="text" placeholder="Название события">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Описание</label>
+      <input class="form-input" id="ev-desc" type="text" placeholder="Адрес, детали...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Стоимость (€)</label>
+      <input class="form-input" id="ev-cost" type="number" inputmode="decimal" placeholder="оставьте пустым если бесплатно или неизвестно" min="0" step="0.5">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Тег</label>
+      <div class="tag-grid" id="ev-tags-grid"></div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <input class="form-input" id="new-tag-input" type="text" placeholder="Новый тег..." style="font-size:12px;padding:7px 10px" maxlength="20">
+        <button onclick="addCustomTag()" style="flex-shrink:0;padding:7px 14px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:10px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap">+ Создать</button>
+      </div>
+    </div>
+    <button class="form-submit" onclick="saveEvent()">Сохранить</button>
+    <button class="ev-del-btn" id="ev-delete-btn" onclick="deleteEventConfirm()">Удалить событие</button>
+  </div>
+</div>
+
 <!-- FAB -->
 <button onclick="openForm()" style="position:fixed;bottom:20px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:50;display:flex;align-items:center;justify-content:center;line-height:1" id="fab">+</button>
 
@@ -479,7 +486,6 @@ async function fetchRate(){
     const rows = await sbFetch('/rest/v1/settings?key=eq.eur_rate&select=value');
     if(rows && rows[0]) rate = parseFloat(rows[0].value) || 93.5;
   } catch(e){
-    // fallback localStorage
     try {
       const cached = JSON.parse(localStorage.getItem('paris_eur_rate')||'null');
       if(cached && cached.rate) rate = cached.rate;
@@ -507,13 +513,11 @@ function applyManualRate(){
   document.getElementById('rate-time').textContent = 'введён вручную';
   document.getElementById('rate-edit-box').style.display = 'none';
   renderBudget();
-  // сохраняем в Supabase в фоне
   sbFetch('/rest/v1/settings?key=eq.eur_rate', {
     method: 'PATCH',
     body: JSON.stringify({ value: String(val) }),
     headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' }
   }).catch(e => console.warn('rate save failed', e));
-  // fallback localStorage
   localStorage.setItem('paris_eur_rate', JSON.stringify({rate, ts: Date.now()}));
 }
 
@@ -526,40 +530,24 @@ let realtimeWs = null;
 
 async function sbFetch(path, opts={}){
   const url = SB_URL + path;
-  console.log('sbFetch →', url);
   try {
     const res = await fetch(url, { headers: SB_HEADERS, ...opts });
-    console.log('sbFetch status:', res.status, res.url);
-    if(!res.ok){
-      const txt = await res.text();
-      console.error('sbFetch error body:', txt);
-      throw new Error(txt);
-    }
+    if(!res.ok){ const txt = await res.text(); throw new Error(txt); }
     return res.status === 204 ? null : res.json();
-  } catch(e){
-    console.error('sbFetch threw:', e.name, e.message);
-    throw e;
-  }
+  } catch(e){ throw e; }
 }
 
 // ===== STORAGE =====
 async function loadExpenses(){
   try {
     const rows = await sbFetch('/rest/v1/expenses?select=*&order=ts.desc');
-    expenses = rows.map(r => ({
-      id: r.id, cat: r.cat, eur: parseFloat(r.eur),
-      comment: r.comment||'', date: r.date||'', ts: r.ts
-    }));
+    expenses = rows.map(r => ({ id: r.id, cat: r.cat, eur: parseFloat(r.eur), comment: r.comment||'', date: r.date||'', ts: r.ts }));
   } catch(e){
-    console.warn('Supabase load failed, using localStorage', e);
     try { expenses = JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); } catch(e2){ expenses = []; }
   }
 }
 
-async function saveExpenses(){
-  // fallback — used only if Supabase unavailable
-  localStorage.setItem(STORE_KEY, JSON.stringify(expenses));
-}
+async function saveExpenses(){ localStorage.setItem(STORE_KEY, JSON.stringify(expenses)); }
 
 async function sbInsert(exp){
   try {
@@ -569,14 +557,12 @@ async function sbInsert(exp){
       headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' }
     });
     return true;
-  } catch(e){ console.warn('sbInsert failed', e); return false; }
+  } catch(e){ return false; }
 }
 
 async function sbDelete(id){
-  try {
-    await sbFetch('/rest/v1/expenses?id=eq.' + encodeURIComponent(id), { method: 'DELETE' });
-    return true;
-  } catch(e){ console.warn('sbDelete failed', e); return false; }
+  try { await sbFetch('/rest/v1/expenses?id=eq.' + encodeURIComponent(id), { method: 'DELETE' }); return true; }
+  catch(e){ return false; }
 }
 
 // ===== REALTIME =====
@@ -585,14 +571,12 @@ function connectRealtime(){
     if(realtimeWs) realtimeWs.close();
     const wsUrl = SB_URL.replace('https://', 'wss://') + '/realtime/v1/websocket?apikey=' + SB_KEY + '&vsn=1.0.0';
     realtimeWs = new WebSocket(wsUrl);
-
     realtimeWs.onopen = () => {
       realtimeWs.send(JSON.stringify({ topic:'realtime:public:expenses', event:'phx_join', payload:{}, ref:'1' }));
       realtimeWs.send(JSON.stringify({ topic:'realtime:public:gifts',    event:'phx_join', payload:{}, ref:'2' }));
       realtimeWs.send(JSON.stringify({ topic:'realtime:public:settings', event:'phx_join', payload:{}, ref:'3' }));
       setSyncStatus('🟢 онлайн · синхронизация активна');
     };
-
     realtimeWs.onmessage = async (msg) => {
       try {
         const data = JSON.parse(msg.data);
@@ -600,241 +584,89 @@ function connectRealtime(){
         if(data.event !== 'INSERT' && data.event !== 'DELETE' && data.event !== 'UPDATE') return;
         const rec = data.payload?.record || data.payload?.old_record;
         if(!rec) return;
-
-        // expenses
         if(data.topic === 'realtime:public:expenses'){
-          if(data.event === 'INSERT'){
-            const exists = expenses.find(e => e.id === rec.id);
-            if(!exists){
-              expenses.unshift({ id: rec.id, cat: rec.cat, eur: parseFloat(rec.eur), comment: rec.comment||'', date: rec.date||'', ts: rec.ts });
-              expenses.sort((a,b) => new Date(b.ts) - new Date(a.ts));
-              renderBudget();
-              setSyncStatus('🟢 новая трата от партнёра!');
-              setTimeout(() => setSyncStatus('🟢 онлайн · синхронизация активна'), 3000);
-            }
-          }
-          if(data.event === 'DELETE'){
-            expenses = expenses.filter(e => e.id !== rec.id);
-            renderBudget();
-          }
+          if(data.event === 'INSERT'){ const exists = expenses.find(e => e.id === rec.id); if(!exists){ expenses.unshift({ id: rec.id, cat: rec.cat, eur: parseFloat(rec.eur), comment: rec.comment||'', date: rec.date||'', ts: rec.ts }); expenses.sort((a,b) => new Date(b.ts) - new Date(a.ts)); renderBudget(); setSyncStatus('🟢 новая трата от партнёра!'); setTimeout(() => setSyncStatus('🟢 онлайн · синхронизация активна'), 3000); } }
+          if(data.event === 'DELETE'){ expenses = expenses.filter(e => e.id !== rec.id); renderBudget(); }
         }
-
-        // settings (курс евро)
-        if(data.topic === 'realtime:public:settings'){
-          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'eur_rate'){
-            const newRate = parseFloat(rec.value);
-            if(newRate && newRate !== rate){
-              rate = newRate;
-              document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽';
-              document.getElementById('rate-time').textContent = 'введён вручную';
-              renderBudget();
-            }
-          }
-        }
-
-        // gifts
+        if(data.topic === 'realtime:public:settings'){ if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'eur_rate'){ const newRate = parseFloat(rec.value); if(newRate && newRate !== rate){ rate = newRate; document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽'; document.getElementById('rate-time').textContent = 'введён вручную'; renderBudget(); } } }
         if(data.topic === 'realtime:public:gifts'){
-          if(data.event === 'INSERT'){
-            if(!giftItems.find(g => g.id === rec.id)){
-              giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 });
-              giftItems.sort((a,b) => a.sort_order - b.sort_order);
-              renderGifts();
-            }
-          }
-          if(data.event === 'UPDATE'){
-            const idx = giftItems.findIndex(g => g.id === rec.id);
-            if(idx !== -1){ giftItems[idx].done = rec.done; renderGifts(); }
-          }
-          if(data.event === 'DELETE'){
-            giftItems = giftItems.filter(g => g.id !== rec.id);
-            renderGifts();
-          }
+          if(data.event === 'INSERT'){ if(!giftItems.find(g => g.id === rec.id)){ giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 }); giftItems.sort((a,b) => a.sort_order - b.sort_order); renderGifts(); } }
+          if(data.event === 'UPDATE'){ const idx = giftItems.findIndex(g => g.id === rec.id); if(idx !== -1){ giftItems[idx].done = rec.done; renderGifts(); } }
+          if(data.event === 'DELETE'){ giftItems = giftItems.filter(g => g.id !== rec.id); renderGifts(); }
         }
       } catch(e){}
     };
-
     realtimeWs.onerror = () => setSyncStatus('🔴 ошибка соединения');
-    realtimeWs.onclose = () => {
-      setSyncStatus('🟡 переподключение...');
-      setTimeout(connectRealtime, 3000);
-    };
-
-    // heartbeat
-    setInterval(() => {
-      if(realtimeWs && realtimeWs.readyState === 1)
-        realtimeWs.send(JSON.stringify({ topic:'phoenix', event:'heartbeat', payload:{}, ref:'hb' }));
-    }, 25000);
+    realtimeWs.onclose = () => { setSyncStatus('🟡 переподключение...'); setTimeout(connectRealtime, 3000); };
+    setInterval(() => { if(realtimeWs && realtimeWs.readyState === 1) realtimeWs.send(JSON.stringify({ topic:'phoenix', event:'heartbeat', payload:{}, ref:'hb' })); }, 25000);
   } catch(e){ setSyncStatus('🔴 нет соединения'); }
 }
 
-function setSyncStatus(text){
-  const el = document.getElementById('sync-status-bar');
-  if(el) el.textContent = text;
-}
+function setSyncStatus(text){ const el = document.getElementById('sync-status-bar'); if(el) el.textContent = text; }
 
-// ===== RENDER =====
-function catColor(cat){
-  const m = {food:'var(--accent-bg)',transport:'var(--blue-bg)',shopping:'var(--purple-bg)',museums:'var(--amber-bg)'};
-  return m[cat]||'var(--bg3)';
-}
+// ===== RENDER BUDGET =====
+function catColor(cat){ const m = {food:'var(--accent-bg)',transport:'var(--blue-bg)',shopping:'var(--purple-bg)',museums:'var(--amber-bg)'}; return m[cat]||'var(--bg3)'; }
 
 function renderBudget(){
   if(!rate) rate = 93.5;
   const totals = {food:0,transport:0,shopping:0,museums:0};
   expenses.forEach(e => { if(totals[e.cat]!==undefined) totals[e.cat]+=e.eur; });
-
   let html = '';
   Object.entries(LIMITS).forEach(([key, cfg])=>{
-    const spent = totals[key]||0;
-    const limit = cfg.limit;
-    const left = limit - spent;
-    const pct = Math.min(spent/limit*100,100);
-    const over = spent > limit;
-    const warn = !over && pct > 75;
-    html += `<div class="cat-card${over?' over':warn?' warn-cat':''}">
-      <div class="cat-top">
-        <div><div class="cat-name">${cfg.emoji} ${cfg.label}</div></div>
-        <div class="cat-nums">
-          <div class="cat-spent">€${spent.toFixed(0)} <span style="font-weight:400;font-size:11px;color:var(--text3)">/ €${limit}</span></div>
-          <div class="cat-limit">${(spent*rate).toFixed(0)} ₽ потрачено</div>
-          <div class="cat-left ${over?'over':left<limit*0.25?'low':'ok'}">${over?'перерасход €'+Math.abs(left).toFixed(0):'осталось €'+left.toFixed(0)}</div>
-        </div>
-      </div>
-      <div class="progress"><div class="progress-fill${over?' over-fill':warn?' warn-fill':''}" style="width:${pct}%"></div></div>
-      <button class="cat-add" onclick="openFormCat('${key}')">+ добавить трату</button>
-    </div>`;
+    const spent = totals[key]||0; const limit = cfg.limit; const left = limit - spent; const pct = Math.min(spent/limit*100,100); const over = spent > limit; const warn = !over && pct > 75;
+    html += `<div class="cat-card${over?' over':warn?' warn-cat':''}"><div class="cat-top"><div><div class="cat-name">${cfg.emoji} ${cfg.label}</div></div><div class="cat-nums"><div class="cat-spent">€${spent.toFixed(0)} <span style="font-weight:400;font-size:11px;color:var(--text3)">/ €${limit}</span></div><div class="cat-limit">${(spent*rate).toFixed(0)} ₽ потрачено</div><div class="cat-left ${over?'over':left<limit*0.25?'low':'ok'}">${over?'перерасход €'+Math.abs(left).toFixed(0):'осталось €'+left.toFixed(0)}</div></div></div><div class="progress"><div class="progress-fill${over?' over-fill':warn?' warn-fill':''}" style="width:${pct}%"></div></div><button class="cat-add" onclick="openFormCat('${key}')">+ добавить трату</button></div>`;
   });
   document.getElementById('cat-cards').innerHTML = html;
-
   const totalSpent = Object.values(totals).reduce((a,b)=>a+b,0);
   const totalLimit = Object.values(LIMITS).reduce((a,c)=>a+c.limit,0);
-  document.getElementById('total-card').innerHTML = `
-    <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Итого по поездке</div>
-    <div class="total-row"><span class="lbl">Потрачено (трекер)</span><span class="val">€${totalSpent.toFixed(0)} · ${(totalSpent*rate).toFixed(0)} ₽</span></div>
-    <div class="total-row"><span class="lbl">Лимит на категории</span><span class="val">€${totalLimit}</span></div>
-    <div class="total-row"><span class="lbl">Курс EUR/RUB</span><span class="val">${rate.toFixed(2)} ₽</span></div>
-  `;
-
+  document.getElementById('total-card').innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Итого по поездке</div><div class="total-row"><span class="lbl">Потрачено (трекер)</span><span class="val">€${totalSpent.toFixed(0)} · ${(totalSpent*rate).toFixed(0)} ₽</span></div><div class="total-row"><span class="lbl">Лимит на категории</span><span class="val">€${totalLimit}</span></div><div class="total-row"><span class="lbl">Курс EUR/RUB</span><span class="val">${rate.toFixed(2)} ₽</span></div>`;
   renderExpenses();
 }
 
 function renderExpenses(){
   const el = document.getElementById('exp-list');
-  if(!expenses.length){
-    el.innerHTML = '<div class="empty-state">Трат пока нет.<br>Нажми + чтобы добавить</div>';
-    return;
-  }
+  if(!expenses.length){ el.innerHTML = '<div class="empty-state">Трат пока нет.<br>Нажми + чтобы добавить</div>'; return; }
   const byDate = {};
-  expenses.forEach(e => {
-    const d = e.date||'Сегодня';
-    if(!byDate[d]) byDate[d]=[];
-    byDate[d].push(e);
-  });
+  expenses.forEach(e => { const d = e.date||'Сегодня'; if(!byDate[d]) byDate[d]=[]; byDate[d].push(e); });
   let html = '';
   Object.entries(byDate).forEach(([date, exps])=>{
     html += `<div class="exp-day">${date}</div>`;
-    exps.forEach(e=>{
-      const cfg = LIMITS[e.cat]||{emoji:'💳',label:e.cat};
-      html += `<div class="exp-item">
-        <div class="exp-icon" style="background:${catColor(e.cat)}">${cfg.emoji}</div>
-        <div class="exp-body">
-          <div class="exp-name">${e.comment||cfg.label}</div>
-          <div class="exp-meta">${cfg.label} · ${new Date(e.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div>
-        </div>
-        <div class="exp-amt">
-          <div class="exp-eur">€${e.eur.toFixed(2)}</div>
-          <div class="exp-rub">${(e.eur*rate).toFixed(0)} ₽</div>
-        </div>
-        <button class="exp-del" onclick="deleteExp('${e.id}')">×</button>
-      </div>`;
-    });
+    exps.forEach(e=>{ const cfg = LIMITS[e.cat]||{emoji:'💳',label:e.cat}; html += `<div class="exp-item"><div class="exp-icon" style="background:${catColor(e.cat)}">${cfg.emoji}</div><div class="exp-body"><div class="exp-name">${e.comment||cfg.label}</div><div class="exp-meta">${cfg.label} · ${new Date(e.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="exp-amt"><div class="exp-eur">€${e.eur.toFixed(2)}</div><div class="exp-rub">${(e.eur*rate).toFixed(0)} ₽</div></div><button class="exp-del" onclick="deleteExp('${e.id}')">×</button></div>`; });
   });
   el.innerHTML = html;
 }
 
-// ===== FORM =====
-function openForm(){
-  document.getElementById('form-overlay').classList.add('open');
-}
+// ===== EXPENSE FORM =====
+function openForm(){ document.getElementById('form-overlay').classList.add('open'); }
 function openFormCat(cat){
   selCategory = cat;
-  document.querySelectorAll('.form-cat').forEach(el => {
-    el.classList.remove('sel');
-  });
+  document.querySelectorAll('.form-cat').forEach(el => el.classList.remove('sel'));
   const catLabels = {food:'Еда',transport:'Транспорт',shopping:'Шопинг',museums:'Музеи'};
-  document.querySelectorAll('.form-cat').forEach(el => {
-    if(el.textContent.includes(catLabels[cat])) el.classList.add('sel');
-  });
+  document.querySelectorAll('.form-cat').forEach(el => { if(el.textContent.includes(catLabels[cat])) el.classList.add('sel'); });
   openForm();
 }
 function closeForm(e){ if(e.target===document.getElementById('form-overlay')) closeFormDirect(); }
-function closeFormDirect(){
-  document.getElementById('form-overlay').classList.remove('open');
-  document.getElementById('f-amount').value='';
-  document.getElementById('f-comment').value='';
-}
-function selCat(cat, el){
-  selCategory = cat;
-  document.querySelectorAll('.form-cat').forEach(e=>e.classList.remove('sel'));
-  el.classList.add('sel');
-}
+function closeFormDirect(){ document.getElementById('form-overlay').classList.remove('open'); document.getElementById('f-amount').value=''; document.getElementById('f-comment').value=''; }
+function selCat(cat, el){ selCategory = cat; document.querySelectorAll('.form-cat').forEach(e=>e.classList.remove('sel')); el.classList.add('sel'); }
 
 async function submitExpense(){
   const amt = parseFloat(document.getElementById('f-amount').value);
   if(!amt||amt<=0) return;
   const comment = document.getElementById('f-comment').value.trim();
   const now = new Date();
-  const exp = {
-    id: Date.now()+'_'+Math.random().toString(36).slice(2),
-    cat: selCategory,
-    eur: amt,
-    comment,
-    date: now.toLocaleDateString('ru',{day:'numeric',month:'long'}),
-    ts: now.toISOString(),
-  };
-
+  const exp = { id: Date.now()+'_'+Math.random().toString(36).slice(2), cat: selCategory, eur: amt, comment, date: now.toLocaleDateString('ru',{day:'numeric',month:'long'}), ts: now.toISOString() };
   const btn = document.getElementById('f-submit');
-  btn.disabled = true;
-  btn.textContent = 'Сохраняю...';
-
+  btn.disabled = true; btn.textContent = 'Сохраняю...';
   const ok = await sbInsert(exp);
-  if(ok){
-    // realtime подхватит через WebSocket, но добавим локально сразу для скорости
-    if(!expenses.find(e=>e.id===exp.id)) expenses.unshift(exp);
-    await saveExpenses();
-  } else {
-    // fallback если Supabase недоступен
-    expenses.unshift(exp);
-    await saveExpenses();
-  }
+  if(ok){ if(!expenses.find(e=>e.id===exp.id)) expenses.unshift(exp); await saveExpenses(); }
+  else { expenses.unshift(exp); await saveExpenses(); }
   renderBudget();
-  btn.disabled = false;
-  btn.textContent = 'Добавить';
+  btn.disabled = false; btn.textContent = 'Добавить';
   closeFormDirect();
 }
 
-async function deleteExp(id){
-  expenses = expenses.filter(e=>e.id!==id);
-  await sbDelete(id);
-  await saveExpenses();
-  renderBudget();
-}
-
-async function manualRefresh(){
-  setSyncStatus('🟡 загружаю...');
-  await loadExpenses();
-  renderBudget();
-  setSyncStatus('🟢 обновлено · ' + new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}));
-}
-
-// ===== DAYS TOGGLE =====
-function tgl(dh){
-  const rows = dh.nextElementSibling;
-  const ch = dh.querySelector('.chevron');
-  const isOpen = rows.classList.contains('open');
-  rows.classList.toggle('open');
-  ch.style.transform = isOpen ? '' : 'rotate(90deg)';
-}
+async function deleteExp(id){ expenses = expenses.filter(e=>e.id!==id); await sbDelete(id); await saveExpenses(); renderBudget(); }
+async function manualRefresh(){ setSyncStatus('🟡 загружаю...'); await loadExpenses(); renderBudget(); setSyncStatus('🟢 обновлено · ' + new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})); }
 
 // ===== VIEW SWITCH =====
 function showView(name, btn){
@@ -846,193 +678,443 @@ function showView(name, btn){
   document.getElementById('fab').style.display = name==='budget' ? 'flex' : 'none';
 }
 
+// ===== DAYS DATA =====
+const DAYS_KEY = 'paris2026_days_v1';
+
+const ALL_TAGS = [
+  {label:'еда',         cls:'tf'},
+  {label:'шопинг',      cls:'ts'},
+  {label:'гастро',      cls:'ts'},
+  {label:'прогулка',    cls:'tv'},
+  {label:'фото',        cls:'tv'},
+  {label:'музей',       cls:'tv'},
+  {label:'событие',     cls:'tv'},
+  {label:'место',       cls:'tv'},
+  {label:'концерт',     cls:'tv'},
+  {label:'природа',     cls:'tv'},
+  {label:'парк',        cls:'tv'},
+  {label:'активность',  cls:'tv'},
+  {label:'вид',         cls:'tv'},
+  {label:'Эмили',       cls:'te'},
+  {label:'рейс',        cls:'tfl'},
+  {label:'транспорт',   cls:'ttr'},
+  {label:'оплачено ✓',  cls:'tpd'},
+];
+const TAG_MAP = {};
+ALL_TAGS.forEach(t => TAG_MAP[t.label] = t.cls);
+
+// Custom tags: [{label, bg, color}]
+const CUSTOM_TAGS_KEY = 'paris2026_custom_tags_v1';
+let customTags = [];
+function loadCustomTags(){ try { customTags = JSON.parse(localStorage.getItem(CUSTOM_TAGS_KEY)||'[]'); } catch(e){ customTags = []; } }
+function saveCustomTags(){ localStorage.setItem(CUSTOM_TAGS_KEY, JSON.stringify(customTags)); }
+
+const TAG_HUES = [0,25,50,80,150,180,200,230,260,290,320];
+function randomTagColor(){
+  const h = TAG_HUES[Math.floor(Math.random() * TAG_HUES.length)];
+  return { bg: `hsl(${h},60%,88%)`, color: `hsl(${h},55%,30%)` };
+}
+
+function renderTagSpan(label){
+  if(TAG_MAP[label]) return `<span class="tag ${TAG_MAP[label]}">${label}</span>`;
+  const c = customTags.find(t => t.label === label);
+  if(c) return `<span class="tag" style="background:${c.bg};color:${c.color}">${label}</span>`;
+  return `<span class="tag tv">${label}</span>`;
+}
+
+function timeToMinutes(t){
+  if(!t) return Infinity;
+  const m = t.match(/(\d{1,2}):(\d{2})/);
+  if(!m) return Infinity;
+  return parseInt(m[1])*60 + parseInt(m[2]);
+}
+function sortEventsByTime(events){
+  events.sort((a,b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+}
+function extractHHMM(timeStr){
+  if(!timeStr) return '';
+  const m = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if(!m) return '';
+  return m[1].padStart(2,'0') + ':' + m[2];
+}
+
+const DEFAULT_DAYS = [
+  { id:'day_05', date:'5 июля (вс) — Прилёт', subtitle:'ВКО 05:50 → SAW → CDG 16:25', badge:'Прилёт', badgeCls:'b-blue', classes:'fl wk', footer:'💰 еда ~€35 · 🚇 €22',
+    events:[
+      {id:'e_05_1',time:'05:50МСК',name:'VF278 ВКО→SAW + VF9 SAW→CDG',desc:'Пересадка Стамбул ~3ч · прилёт 16:25',cost:null,tags:['рейс']},
+      {id:'e_05_2',time:'~17:15',name:'RER B → центр · заселение',desc:'€11 pp · 14 Rue Cadet, 9 arr.',cost:22,tags:['транспорт']},
+      {id:'e_05_3',time:'19:00',name:'Прогулка по Елисейским полям',desc:'',cost:null,tags:['прогулка']},
+      {id:'e_05_4',time:'20:30',name:'Ужин: Le Bouillon Chartier',desc:'7 Rue du Faubourg Montmartre · без брони',cost:35,tags:['еда']},
+    ]},
+  { id:'day_06', date:'6 июля (пн) — Монмартр + Эмили', subtitle:'Kitsuné + Sacré-Cœur + Fotoautomat', badge:'Emily', badgeCls:'b-pink', classes:'', footer:'💰 еда ~€60 · фото ~€6 · 🚇 ~€8',
+    events:[
+      {id:'e_06_1',time:'09:00',name:'Завтрак: Café Kitsuné Palais Royal',desc:'51 Galerie de Montpensier',cost:15,tags:['еда']},
+      {id:'e_06_2',time:'10:30',name:'Rue Crémieux + Place de l\'Estrapade',desc:'',cost:null,tags:['Эмили']},
+      {id:'e_06_3',time:'11:30',name:'Sacré-Cœur + лестница из заставки',desc:'',cost:null,tags:['Эмили','вид']},
+      {id:'e_06_4',time:'12:15',name:'Fotoautomat — аналоговая фотобудка',desc:'Rue des Trois Frères · ~€4–6',cost:6,tags:['фото']},
+      {id:'e_06_5',time:'13:00',name:'Обед: Aux Merveilleux de Fred',desc:'2 Rue Lepic',cost:15,tags:['еда','Эмили']},
+      {id:'e_06_6',time:'14:30',name:'Palais Royal + Pont de Bir-Hakeim',desc:'',cost:null,tags:['Эмили']},
+      {id:'e_06_7',time:'16:30',name:'Officine Buly',desc:'6 Rue Bonaparte',cost:null,tags:['шопинг']},
+      {id:'e_06_8',time:'20:00',name:'Ужин: Chez Alain Miam Miam',desc:'26 Rue Charlot',cost:30,tags:['еда','Эмили']},
+    ]},
+  { id:'day_07', date:'7 июля (вт) — Сен-Жермен + Катакомбы', subtitle:'Левый берег · Эмили день 2', badge:'Emily', badgeCls:'b-pink', classes:'', footer:'💰 еда ~€105 · катакомбы €28',
+    events:[
+      {id:'e_07_1',time:'09:30',name:'Café la Procure x Coutume',desc:'3 Rue de Mézières',cost:10,tags:['еда']},
+      {id:'e_07_2',time:'10:30',name:'Café de Flore / Les Deux Magots',desc:'',cost:15,tags:['Эмили']},
+      {id:'e_07_3',time:'11:15',name:'Шопинг: Sabre + Marin Montagut',desc:'',cost:null,tags:['шопинг']},
+      {id:'e_07_4',time:'13:30',name:'Обед: Le Relais de l\'Entrecôte',desc:'20 Rue St-Benoît · стейк-фрит',cost:45,tags:['еда']},
+      {id:'e_07_5',time:'17:30',name:'Катакомбы Парижа',desc:'€14 pp · catacombes.paris.fr',cost:28,tags:['музей']},
+      {id:'e_07_6',time:'20:00',name:'Ужин в Латинском квартале',desc:'Rue de la Huchette',cost:35,tags:['еда']},
+    ]},
+  { id:'day_08', date:'8 июля (ср) — Диснейленд', subtitle:'Будний — очереди короче!', badge:'Disneyland', badgeCls:'b-pink', classes:'', footer:'💰 еда ~€100 · Disney✓ · 🚇 €32',
+    events:[
+      {id:'e_08_1',time:'08:30',name:'RER A → Marne-la-Vallée Chessy',desc:'€8 pp · Navigo не покрывает 5A!',cost:16,tags:['транспорт']},
+      {id:'e_08_2',time:'09:30',name:'Disneyland Paris — оба парка',desc:'',cost:290,tags:['оплачено ✓']},
+      {id:'e_08_3',time:'13:00',name:'Обед: Plaza Gardens',desc:'',cost:70,tags:['еда']},
+      {id:'e_08_4',time:'19:00',name:'Ужин: Bistrot Chez Rémy',desc:'«Рататуй»!',cost:30,tags:['еда']},
+    ]},
+  { id:'day_09', date:'9 июля (чт) — Стокгольм', subtitle:'⚠️ ORY 13:00 → ARN · летим из Орли!', badge:'Стокгольм', badgeCls:'b-blue', classes:'fl', footer:'✈️ ORY→ARN · 💰 еда ~€65 · 🚇 €54',
+    events:[
+      {id:'e_09_1',time:'10:30',name:'RER B + OrlyVal → Орли (ORY)',desc:'⚠️ ORY, не CDG! €14 pp',cost:28,tags:['транспорт']},
+      {id:'e_09_2',time:'13:00',name:'TO7448 · Transavia · ORY → ARN ~15:40',desc:'',cost:null,tags:['рейс']},
+      {id:'e_09_3',time:'~16:30',name:'Arlanda Express → T-Centralen · Scandic Go',desc:'€13 pp · 9 мин пешком',cost:26,tags:['транспорт']},
+      {id:'e_09_4',time:'18:30',name:'Прогулка по Гамла Стан',desc:'',cost:null,tags:['прогулка']},
+      {id:'e_09_5',time:'20:00',name:'Ужин: Den Gyldene Freden',desc:'с 1722г · бронировать!',cost:50,tags:['еда']},
+    ]},
+  { id:'day_10', date:'10 июля (пт) — ABBA + Муми + Bad Bunny', subtitle:'Djurgården + Strawberry Arena · ранний вылет завтра!', badge:'Концерт!', badgeCls:'b-green', classes:'', footer:'💰 еда ~€35 · ABBA €56 + Муми €36',
+    events:[
+      {id:'e_10_1',time:'09:30',name:'Паром → Djurgården',desc:'',cost:8,tags:['транспорт']},
+      {id:'e_10_2',time:'10:00',name:'ABBA The Museum',desc:'€28 pp · только безнал!',cost:56,tags:['музей']},
+      {id:'e_10_3',time:'12:30',name:'Junibacken — Муми-тролли',desc:'3 мин от ABBA · €18 pp',cost:36,tags:['музей']},
+      {id:'e_10_4',time:'14:00',name:'Обед: Östermalms Saluhall',desc:'',cost:35,tags:['еда']},
+      {id:'e_10_5',time:'19:00',name:'Bad Bunny — DeBÍ TiRAR MáS FOToS Tour',desc:'Strawberry Arena · конец ~22:00',cost:null,tags:['концерт']},
+      {id:'e_10_6',time:'~22:30',name:'Метро → отель · будильник 04:15!',desc:'',cost:null,tags:[]},
+    ]},
+  { id:'day_11', date:'11 июля (сб) — ⚡ Ранний вылет + рынок', subtitle:'ARN 06:40 → ORY ~09:20', badge:'06:40!', badgeCls:'b-red', classes:'fl wk', footer:'🛬 ORY ~09:20 · 💰 еда ~€75 · 🚇 €54',
+    events:[
+      {id:'e_11_1',time:'04:15',name:'Подъём · выйти в 04:25 · 9 мин до T-Centralen',desc:'',cost:null,tags:[]},
+      {id:'e_11_2',time:'04:35',name:'Arlanda Express (первый поезд!)',desc:'€13 pp',cost:26,tags:['транспорт']},
+      {id:'e_11_3',time:'06:40',name:'TO7451 · Transavia · ARN → ORY ~09:20',desc:'',cost:null,tags:['рейс']},
+      {id:'e_11_4',time:'~10:45',name:'OrlyVal + RER B → Париж',desc:'€14 pp',cost:28,tags:['транспорт']},
+      {id:'e_11_5',time:'13:00',name:'Секонд-хенд + Landline',desc:'',cost:null,tags:['шопинг']},
+      {id:'e_11_6',time:'15:00',name:'Блошиный рынок',desc:'',cost:null,tags:['активность']},
+      {id:'e_11_7',time:'16:30',name:'Обед: Chez Louisette',desc:'Живой шансон',cost:35,tags:['еда']},
+      {id:'e_11_8',time:'20:00',name:'Ужин: Big Fernand',desc:'',cost:30,tags:['еда']},
+    ]},
+  { id:'day_12', date:'12 июля (вс) — Оранжери + Арка + The Weeknd', subtitle:'Версаль отменён · концерт вечером!', badge:'The Weeknd!', badgeCls:'b-green', classes:'wk', footer:'💰 еда ~€50 · Оранжери✓ + Арка €32 + концерт',
+    events:[
+      {id:'e_12_1',time:'11:00',name:'Musée de l\'Orangerie',desc:'«Кувшинки» Моне · ~1.5ч',cost:null,tags:['оплачено ✓']},
+      {id:'e_12_2',time:'13:00',name:'Прогулка + Триумфальная арка',desc:'Смотровая ~€16 pp',cost:32,tags:['место']},
+      {id:'e_12_3',time:'14:30',name:'Обед: Ladurée Champs-Élysées',desc:'',cost:50,tags:['еда']},
+      {id:'e_12_4',time:'17:30',name:'RER B → La Plaine Stade de France',desc:'',cost:5,tags:['транспорт']},
+      {id:'e_12_5',time:'21:00',name:'The Weeknd — After Hours Til Dawn Tour',desc:'Stade de France · ~2ч',cost:null,tags:['концерт']},
+    ]},
+  { id:'day_13', date:'13 июля (пн) — Лувр + Фейерверк + Бал', subtitle:'Лувр с 12:30 · фейерверк ~23:00 · бал после!', badge:'Фейерверк!', badgeCls:'b-red', classes:'', footer:'💰 еда ~€80 · Лувр✓ · бал бесплатно!',
+    events:[
+      {id:'e_13_1',time:'12:30',name:'Лувр',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_13_2',time:'13:00',name:'Обед: Matsuri Sushi',desc:'103 Rue La Boétie · 12:00–15:00!',cost:30,tags:['еда']},
+      {id:'e_13_3',time:'14:30',name:'Galeries Lafayette + Jellycat + Uniqlo',desc:'',cost:null,tags:['шопинг']},
+      {id:'e_13_4',time:'19:30',name:'Ужин: Bouillon Chartier',desc:'7 Rue du Faubourg Montmartre · без брони',cost:40,tags:['еда']},
+      {id:'e_13_5',time:'~23:00',name:'Фейерверк с Эйфелевой башни!',desc:'⚠️ Перенесён с 14/07!',cost:null,tags:['событие']},
+      {id:'e_13_6',time:'~23:45',name:'Бал пожарных — Caserne Montmartre',desc:'12 Rue Carpeaux · до 4:00!',cost:0,tags:['событие']},
+    ]},
+  { id:'day_14', date:'14 июля (вт) — Парад + Sephora + Нотр-Дам', subtitle:'Магазины закрыты кроме Sephora', badge:'14 juillet', badgeCls:'b-pink', classes:'', footer:'💰 еда ~€95 · Нотр-Дам бесплатно',
+    events:[
+      {id:'e_14_1',time:'09:00',name:'Военный парад на Champs-Élysées',desc:'Парад в 10:00',cost:null,tags:['событие']},
+      {id:'e_14_2',time:'12:00',name:'Обед: Ladurée Champs-Élysées',desc:'',cost:50,tags:['еда']},
+      {id:'e_14_3',time:'13:30',name:'Sephora флагман',desc:'70 Av. · до 00:00!',cost:null,tags:['шопинг']},
+      {id:'e_14_4',time:'16:30',name:'Нотр-Дам де Пари',desc:'Открыта! Бесплатно',cost:0,tags:['место']},
+    ]},
+  { id:'day_15', date:'15 июля (ср) — Орсе + Dumonet + шопинг', subtitle:'Импрессионисты · бистро · Zara H&M Adidas!', badge:'Шопинг!', badgeCls:'b-amber', classes:'', footer:'💰 еда ~€90 · Орсе✓',
+    events:[
+      {id:'e_15_1',time:'10:00',name:'Музей Орсе',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_15_2',time:'13:00',name:'Обед: Chez Dumonet',desc:'117 Rue du Cherche-Midi · бронировать!',cost:50,tags:['еда']},
+      {id:'e_15_3',time:'14:30',name:'Trocadéro + вид на башню',desc:'',cost:null,tags:['Эмили']},
+      {id:'e_15_4',time:'15:30',name:'Шопинг: Champs-Élysées',desc:'Zara · H&M (до 00:00!) · Adidas · Nike',cost:null,tags:['шопинг']},
+      {id:'e_15_5',time:'18:30',name:'French Abroad + La Bonne Brosse',desc:'',cost:null,tags:['шопинг']},
+      {id:'e_15_6',time:'20:30',name:'Ужин: McDo на Champs-Élysées',desc:'',cost:20,tags:['еда']},
+    ]},
+  { id:'day_16', date:'16 июля (чт) — Нормандия: Этрета', subtitle:'Будний · каучуковые головы!', badge:'Пригород', badgeCls:'b-blue', classes:'', footer:'💰 еда ~€75 · сады €30 · транспорт✓',
+    events:[
+      {id:'e_16_1',time:'07:30',name:'Поезд Gare St-Lazare → Le Havre',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_16_2',time:'~10:00',name:'Автобус 24: Le Havre → Étretat',desc:'~€2 pp',cost:4,tags:['транспорт']},
+      {id:'e_16_3',time:'11:00',name:'Les Jardins d\'Étretat',desc:'€15 pp · билеты откроются позже',cost:30,tags:['парк']},
+      {id:'e_16_4',time:'13:30',name:'Обед: Le Galion',desc:'Морепродукты · вид на скалы',cost:35,tags:['еда']},
+      {id:'e_16_5',time:'15:00',name:'Скалы Фалез д\'Аваль + пляж',desc:'',cost:null,tags:['природа']},
+      {id:'e_16_6',time:'~18:00',name:'Поезд Le Havre → Gare St-Lazare',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_16_7',time:'21:00',name:'Ужин: Café de la Paix',desc:'с 1862г',cost:40,tags:['еда']},
+    ]},
+  { id:'day_17', date:'17 июля (пт) — Марэ + Круиз', subtitle:'Предпоследний день · ночной круиз!', badge:'Круиз!', badgeCls:'b-purple', classes:'', footer:'💰 еда ~€120 · круиз✓',
+    events:[
+      {id:'e_17_1',time:'09:30',name:'Музей Карнавале',desc:'Бесплатно!',cost:0,tags:['музей']},
+      {id:'e_17_2',time:'10:30',name:'Шопинг: Merci + Fleux + Birkenstock',desc:'',cost:null,tags:['шопинг']},
+      {id:'e_17_3',time:'12:00',name:'Le Bone Appart — собачий кафе',desc:'puppuccino €1',cost:10,tags:['еда']},
+      {id:'e_17_4',time:'12:30',name:'Обед: Le Relais de l\'Entrecôte',desc:'Последний стейк!',cost:45,tags:['еда']},
+      {id:'e_17_5',time:'14:30',name:'Люксембургский сад — Fontaine Médicis',desc:'',cost:null,tags:['Эмили']},
+      {id:'e_17_6',time:'16:30',name:'La Grande Épicerie de Paris',desc:'масло, сыр, вино домой',cost:null,tags:['гастро']},
+      {id:'e_17_7',time:'18:30',name:'Ужин: Septime или Frenchie',desc:'Бронировать сейчас!',cost:120,tags:['еда']},
+      {id:'e_17_8',time:'22:00',name:'Ночной круиз — Bateaux Parisiens',desc:'~1ч',cost:null,tags:['оплачено ✓']},
+    ]},
+  { id:'day_18', date:'18 июля (сб) — Вылет домой', subtitle:'CDG 17:40 → Анкара → ВКО', badge:'Вылет!', badgeCls:'b-blue', classes:'fl wk', footer:'💰 еда ~€20 · 🚇 €22',
+    events:[
+      {id:'e_18_1',time:'11:30',name:'Прощальный завтрак: Pierre Hermé',desc:'39 Av. de l\'Opéra',cost:20,tags:['еда']},
+      {id:'e_18_2',time:'13:30',name:'RER B → CDG',desc:'€11 pp · за 3ч до рейса',cost:22,tags:['транспорт']},
+      {id:'e_18_3',time:'17:40',name:'VF516 CDG→ESB + VF587 ESB→ВКО',desc:'Прибытие Москва 19 июля ~01:05',cost:null,tags:['рейс']},
+    ]},
+];
+
+let daysData = [];
+let openDays = new Set();
+
+function loadDays(){
+  try {
+    const saved = localStorage.getItem(DAYS_KEY);
+    daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+  } catch(e){
+    daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+  }
+}
+
+function saveDays(){
+  localStorage.setItem(DAYS_KEY, JSON.stringify(daysData));
+}
+
+function renderDays(){
+  const container = document.getElementById('days-container');
+  container.innerHTML = daysData.map((day, di) => {
+    const isOpen = openDays.has(di);
+    const total = day.events.reduce((s, ev) => s + (ev.cost != null ? ev.cost : 0), 0);
+    const totalStr = total > 0 ? '~€' + total : '—';
+
+    const eventsHtml = day.events.map((ev, ei) => {
+      const tagsHtml = (ev.tags||[]).map(t => renderTagSpan(t)).join('');
+      const descContent = ev.desc ? (tagsHtml ? tagsHtml + ' ' + ev.desc : ev.desc) : tagsHtml;
+      const costStr = ev.cost == null ? '—' : ev.cost === 0 ? '€0' : '€' + ev.cost;
+      return `<div class="row">
+        <div class="rt">${ev.time||''}</div>
+        <div class="rb">
+          <div class="rn">${ev.name||''}</div>
+          ${descContent ? `<div class="rd">${descContent}</div>` : ''}
+        </div>
+        <div class="rv">${costStr}</div>
+        <button class="ev-edit-btn" onclick="openEventModal(${di},${ei})">✏️</button>
+      </div>`;
+    }).join('');
+
+    return `<div class="day ${day.classes||''}">
+      <div class="dh" data-day="${di}">
+        <div class="dh-left">
+          <div class="dt">${day.date}</div>
+          <div class="ds">${day.subtitle}</div>
+        </div>
+        <span class="badge ${day.badgeCls}">${day.badge}</span>
+        <div class="chevron" id="chev-${di}" style="transform:${isOpen?'rotate(90deg)':''}">›</div>
+      </div>
+      <div class="rows ${isOpen?'open':''}" id="rows-${di}">
+        ${eventsHtml}
+        <button class="add-event-btn" onclick="openEventModal(${di},null)">+ добавить событие</button>
+      </div>
+      <div class="ft"><span>${day.footer}</span><span class="ft-t">${totalStr}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function tglDay(idx){
+  const rows = document.getElementById('rows-' + idx);
+  const ch = document.getElementById('chev-' + idx);
+  if(!rows || !ch) return;
+  const isOpen = rows.classList.contains('open');
+  rows.classList.toggle('open');
+  ch.style.transform = isOpen ? '' : 'rotate(90deg)';
+  if(isOpen) openDays.delete(idx); else openDays.add(idx);
+}
+
+document.addEventListener('click', function(e){
+  const dh = e.target.closest('.dh[data-day]');
+  if(!dh) return;
+  // don't trigger if clicking an edit button inside a row
+  if(e.target.closest('.ev-edit-btn') || e.target.closest('.add-event-btn')) return;
+  tglDay(parseInt(dh.dataset.day));
+});
+
+// ===== EVENT EDIT MODAL =====
+let editDayIdx = null;
+let editEventIdx = null;
+let editTags = [];
+
+function openEventModal(di, ei){
+  editDayIdx = di;
+  editEventIdx = ei;
+
+  if(ei !== null){
+    const ev = daysData[di].events[ei];
+    document.getElementById('ev-modal-title').textContent = 'Редактировать событие';
+    document.getElementById('ev-time').value = extractHHMM(ev.time);
+    document.getElementById('ev-name').value = ev.name || '';
+    document.getElementById('ev-desc').value = ev.desc || '';
+    document.getElementById('ev-cost').value = ev.cost != null ? ev.cost : '';
+    editTags = [...(ev.tags || [])];
+    document.getElementById('ev-delete-btn').style.display = 'block';
+  } else {
+    document.getElementById('ev-modal-title').textContent = 'Новое событие';
+    document.getElementById('ev-time').value = '';
+    document.getElementById('ev-name').value = '';
+    document.getElementById('ev-desc').value = '';
+    document.getElementById('ev-cost').value = '';
+    editTags = [];
+    document.getElementById('ev-delete-btn').style.display = 'none';
+  }
+
+  renderTagPicker();
+  document.getElementById('event-modal').classList.add('open');
+}
+
+function renderTagPicker(){
+  const grid = document.getElementById('ev-tags-grid');
+  const builtIn = ALL_TAGS.map(t => `
+    <div class="tag-opt ${editTags.includes(t.label)?'sel':''}" onclick="toggleEditTag('${t.label}',this)">
+      <span class="tag ${t.cls}">${t.label}</span>
+    </div>`).join('');
+  const custom = customTags.map(t => `
+    <div class="tag-opt ${editTags.includes(t.label)?'sel':''}" onclick="toggleEditTag('${t.label}',this)">
+      <span class="tag" style="background:${t.bg};color:${t.color}">${t.label}</span>
+    </div>`).join('');
+  grid.innerHTML = builtIn + custom;
+}
+
+function addCustomTag(){
+  const input = document.getElementById('new-tag-input');
+  const label = input.value.trim();
+  if(!label) return;
+  if(TAG_MAP[label] || customTags.find(t => t.label === label)) {
+    if(!editTags.includes(label)) editTags.push(label);
+    input.value = '';
+    renderTagPicker();
+    return;
+  }
+  const {bg, color} = randomTagColor();
+  customTags.push({label, bg, color});
+  saveCustomTags();
+  editTags.push(label);
+  input.value = '';
+  renderTagPicker();
+}
+
+function toggleEditTag(label, el){
+  const idx = editTags.indexOf(label);
+  if(idx === -1){ editTags.push(label); el.classList.add('sel'); }
+  else { editTags.splice(idx,1); el.classList.remove('sel'); }
+}
+
+function closeEventModal(e){
+  if(e && e.target !== document.getElementById('event-modal')) return;
+  document.getElementById('event-modal').classList.remove('open');
+}
+
+function saveEvent(){
+  const name = document.getElementById('ev-name').value.trim();
+  if(!name) return;
+  const time = document.getElementById('ev-time').value.trim();
+  const desc = document.getElementById('ev-desc').value.trim();
+  const costRaw = document.getElementById('ev-cost').value;
+  const cost = costRaw !== '' ? parseFloat(costRaw) : null;
+
+  const ev = {
+    id: editEventIdx !== null ? daysData[editDayIdx].events[editEventIdx].id : 'ev_' + Date.now(),
+    time, name, desc,
+    cost: (cost != null && !isNaN(cost)) ? cost : null,
+    tags: [...editTags]
+  };
+
+  if(editEventIdx !== null){
+    daysData[editDayIdx].events[editEventIdx] = ev;
+  } else {
+    daysData[editDayIdx].events.push(ev);
+  }
+
+  sortEventsByTime(daysData[editDayIdx].events);
+  saveDays();
+  renderDays();
+  document.getElementById('event-modal').classList.remove('open');
+}
+
+function deleteEventConfirm(){
+  if(!confirm('Удалить это событие?')) return;
+  daysData[editDayIdx].events.splice(editEventIdx, 1);
+  saveDays();
+  renderDays();
+  document.getElementById('event-modal').classList.remove('open');
+}
+
+// ===== BOOKING CHECKLIST =====
+const BOOK_KEY = 'paris2026_book';
+const BOOK_ITEMS = {
+  book_septime:   { label: 'Septime / Frenchie (17 июл)',                   paid: false, rub: null     },
+  book_dumonet:   { label: 'Chez Dumonet (15 июл)',                         paid: false, rub: null     },
+  book_grolet:    { label: 'Cédric Grolet — онлайн-заказ десертов (6 июл)', paid: false, rub: null     },
+  book_catacombes:{ label: 'Катакомбы (7 июл)',                             paid: true,  rub: null, eur: 62 },
+  book_etretat:   { label: 'Сады Этрета (16 июл)',                          paid: true,  rub: null, eur: 28 },
+  book_notredame: { label: 'Нотр-Дам (14 июл)',                             paid: false, rub: null     },
+};
+let bookDone = {};
+
+function loadBook(){ try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; } applyBook(); }
+function saveBook(){ localStorage.setItem(BOOK_KEY, JSON.stringify(bookDone)); }
+function applyBook(){ Object.keys(bookDone).forEach(id => { if(bookDone[id]) markBookDone(id, false); }); }
+function toggleBook(id){ bookDone[id] = !bookDone[id]; saveBook(); if(bookDone[id]){ markBookDone(id, true); } else { unmarkBookDone(id); } }
+function markBookDone(id, addExpense){
+  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name');
+  if(icon) icon.textContent = '☑';
+  if(name) name.style.cssText = 'font-size:13px;font-weight:500;text-decoration:line-through;color:var(--text3)';
+  const cfg = BOOK_ITEMS[id]; if(!cfg) return;
+  if(addExpense && cfg.paid && cfg.eur){ const now = new Date(); const exp = { id: id+'_autopaid', cat:'museums', eur: cfg.eur, comment: cfg.label, date: now.toLocaleDateString('ru',{day:'numeric',month:'long'}), ts: now.toISOString() }; if(!expenses.find(e=>e.id===exp.id)){ expenses.unshift(exp); sbInsert(exp).catch(()=>{}); saveExpenses(); renderBudget(); } }
+}
+function unmarkBookDone(id){
+  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name');
+  if(icon) icon.textContent = '☐'; if(name) name.style.cssText = 'font-size:13px;font-weight:500';
+  const expId = id+'_autopaid'; if(expenses.find(e=>e.id===expId)){ expenses = expenses.filter(e=>e.id!==expId); sbDelete(expId).catch(()=>{}); saveExpenses(); renderBudget(); }
+}
+
+// ===== GIFTS =====
+const GIFTS_KEY = 'paris2026_gifts';
+const DEFAULT_GIFTS = [
+  {id:'gift_katya',label:'Катя',done:false},{id:'gift_olya',label:'Оля',done:false},
+  {id:'gift_tanya',label:'Таня',done:false},{id:'gift_lera',label:'Лера',done:false},
+  {id:'gift_artem',label:'Артём (сувенир)',done:false},{id:'gift_parents',label:'Родители',done:false},
+  {id:'gift_grandparents',label:'Бабушка-дедушка',done:false},{id:'gift_plaster',label:'Пластырь деду',done:false},
+];
+let giftItems = [];
+
+async function loadGifts(){
+  try { const rows = await sbFetch('/rest/v1/gifts?select=*&order=sort_order.asc'); giftItems = rows.map(r=>({id:r.id,label:r.label,done:r.done,sort_order:r.sort_order||0})); }
+  catch(e){ try { const saved = localStorage.getItem(GIFTS_KEY); giftItems = saved ? JSON.parse(saved) : DEFAULT_GIFTS.map(g=>({...g})); } catch(e2){ giftItems = DEFAULT_GIFTS.map(g=>({...g})); } }
+  renderGifts();
+}
+function saveGiftsLocal(){ localStorage.setItem(GIFTS_KEY, JSON.stringify(giftItems)); }
+function renderGifts(){
+  const el = document.getElementById('gifts-list'); if(!el) return;
+  el.innerHTML = giftItems.map((item,idx)=>`<div class="srow"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;user-select:none" onclick="toggleGift(${idx})"><span style="font-size:15px">${item.done?'☑':'☐'}</span><span style="font-size:13px;color:var(--text);${item.done?'text-decoration:line-through;color:var(--text3)':''}">${item.label}</span></div><button onclick="deleteGift(${idx})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">×</button></div>`).join('');
+}
+function toggleGift(idx){ giftItems[idx].done=!giftItems[idx].done; renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts?id=eq.'+encodeURIComponent(giftItems[idx].id),{method:'PATCH',body:JSON.stringify({done:giftItems[idx].done}),headers:{...SB_HEADERS,'Prefer':'return=minimal'}}).catch(()=>{}); }
+function deleteGift(idx){ const id=giftItems[idx].id; giftItems.splice(idx,1); renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts?id=eq.'+encodeURIComponent(id),{method:'DELETE'}).catch(()=>{}); }
+function addGiftItem(){ const input=document.getElementById('gift-new-input'); const label=input.value.trim(); if(!label) return; const newItem={id:'gift_'+Date.now(),label,done:false,sort_order:giftItems.length+1}; giftItems.push(newItem); input.value=''; renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts',{method:'POST',body:JSON.stringify(newItem),headers:{...SB_HEADERS,'Prefer':'return=minimal'}}).catch(()=>{}); }
+
+document.addEventListener('DOMContentLoaded',()=>{ const inp=document.getElementById('gift-new-input'); if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter') addGiftItem();}); });
+
 // ===== INIT =====
 async function init(){
   try {
+    loadCustomTags();
+    loadDays();
+    renderDays();
     await fetchRate();
     renderBudget();
     await Promise.all([loadExpenses(), loadGifts()]);
     renderBudget();
     loadBook();
     connectRealtime();
-  } catch(e){
-    console.warn('init error', e);
-  }
+  } catch(e){ console.warn('init error', e); }
 }
-
-// ===== BOOKING CHECKLIST =====
-const BOOK_KEY = 'paris2026_book';
-
-// items с флагом paid (→ попадают в "Оплачено" и в трекер) и суммой в рублях
-const BOOK_ITEMS = {
-  book_septime:   { label: 'Septime / Frenchie (17 июл)',                 paid: false, rub: null     },
-  book_dumonet:   { label: 'Chez Dumonet (15 июл)',                       paid: false, rub: null     },
-  book_grolet:    { label: 'Cédric Grolet — онлайн-заказ десертов (6 июл)', paid: false, rub: null  },
-  book_catacombes:{ label: 'Катакомбы (7 июл)',                           paid: true,  rub: null, eur: 62   },
-  book_etretat:   { label: 'Сады Этрета (16 июл)',                        paid: true,  rub: null, eur: 28   },
-  book_notredame: { label: 'Нотр-Дам (14 июл)',                           paid: false, rub: null     },
-};
-
-let bookDone = {};
-
-function loadBook(){
-  try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; }
-  applyBook();
-}
-
-function saveBook(){
-  localStorage.setItem(BOOK_KEY, JSON.stringify(bookDone));
-}
-
-function applyBook(){
-  Object.keys(bookDone).forEach(id => {
-    if(bookDone[id]) markBookDone(id, false);
-  });
-}
-
-function toggleBook(id){
-  bookDone[id] = !bookDone[id];
-  saveBook();
-  if(bookDone[id]){
-    markBookDone(id, true);
-  } else {
-    unmarkBookDone(id);
-  }
-}
-
-function markBookDone(id, addExpense){
-  const icon = document.getElementById(id + '_icon');
-  const name = document.getElementById(id + '_name');
-  if(icon) icon.textContent = '☑';
-  if(name) name.style.cssText = 'font-size:13px;font-weight:500;text-decoration:line-through;color:var(--text3)';
-
-  const cfg = BOOK_ITEMS[id];
-  if(!cfg) return;
-
-  // Добавить в трекер расходов (только для платных, только при первом отмечании)
-  if(addExpense && cfg.paid && cfg.eur){
-    const now = new Date();
-    const exp = {
-      id: id + '_autopaid',
-      cat: 'museums',
-      eur: cfg.eur,
-      comment: cfg.label,
-      date: now.toLocaleDateString('ru', {day:'numeric', month:'long'}),
-      ts: now.toISOString(),
-    };
-    if(!expenses.find(e => e.id === exp.id)){
-      expenses.unshift(exp);
-      sbInsert(exp).catch(()=>{});
-      saveExpenses();
-      renderBudget();
-    }
-  }
-}
-
-function unmarkBookDone(id){
-  const icon = document.getElementById(id + '_icon');
-  const name = document.getElementById(id + '_name');
-  if(icon) icon.textContent = '☐';
-  if(name) name.style.cssText = 'font-size:13px;font-weight:500';
-
-  // Убрать из трекера
-  const expId = id + '_autopaid';
-  if(expenses.find(e => e.id === expId)){
-    expenses = expenses.filter(e => e.id !== expId);
-    sbDelete(expId).catch(()=>{});
-    saveExpenses();
-    renderBudget();
-  }
-}
-
-// ===== GIFTS CHECKLIST =====
-const GIFTS_KEY = 'paris2026_gifts';
-
-const DEFAULT_GIFTS = [
-  {id:'gift_katya',        label:'Катя',             done:false},
-  {id:'gift_olya',         label:'Оля',              done:false},
-  {id:'gift_tanya',        label:'Таня',             done:false},
-  {id:'gift_lera',         label:'Лера',             done:false},
-  {id:'gift_artem',        label:'Артём (сувенир)',  done:false},
-  {id:'gift_parents',      label:'Родители',         done:false},
-  {id:'gift_grandparents', label:'Бабушка-дедушка',  done:false},
-  {id:'gift_plaster',      label:'Пластырь деду',    done:false},
-];
-
-let giftItems = [];
-
-async function loadGifts(){
-  try {
-    const rows = await sbFetch('/rest/v1/gifts?select=*&order=sort_order.asc');
-    giftItems = rows.map(r => ({ id: r.id, label: r.label, done: r.done, sort_order: r.sort_order||0 }));
-  } catch(e){
-    console.warn('gifts load failed, using localStorage', e);
-    try {
-      const saved = localStorage.getItem(GIFTS_KEY);
-      giftItems = saved ? JSON.parse(saved) : DEFAULT_GIFTS.map(g=>({...g}));
-    } catch(e2){ giftItems = DEFAULT_GIFTS.map(g=>({...g})); }
-  }
-  renderGifts();
-}
-
-function saveGiftsLocal(){
-  localStorage.setItem(GIFTS_KEY, JSON.stringify(giftItems));
-}
-
-function renderGifts(){
-  const el = document.getElementById('gifts-list');
-  if(!el) return;
-  el.innerHTML = giftItems.map((item, idx) => `
-    <div class="srow">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;user-select:none" onclick="toggleGift(${idx})">
-        <span style="font-size:15px">${item.done ? '☑' : '☐'}</span>
-        <span style="font-size:13px;color:var(--text);${item.done ? 'text-decoration:line-through;color:var(--text3)' : ''}">${item.label}</span>
-      </div>
-      <button onclick="deleteGift(${idx})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">×</button>
-    </div>
-  `).join('');
-}
-
-function toggleGift(idx){
-  giftItems[idx].done = !giftItems[idx].done;
-  renderGifts();
-  saveGiftsLocal();
-  sbFetch('/rest/v1/gifts?id=eq.' + encodeURIComponent(giftItems[idx].id), {
-    method: 'PATCH',
-    body: JSON.stringify({ done: giftItems[idx].done }),
-    headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' }
-  }).catch(e => console.warn('gift toggle sync failed', e));
-}
-
-function deleteGift(idx){
-  const id = giftItems[idx].id;
-  giftItems.splice(idx, 1);
-  renderGifts();
-  saveGiftsLocal();
-  sbFetch('/rest/v1/gifts?id=eq.' + encodeURIComponent(id), { method: 'DELETE' })
-    .catch(e => console.warn('gift delete sync failed', e));
-}
-
-function addGiftItem(){
-  const input = document.getElementById('gift-new-input');
-  const label = input.value.trim();
-  if(!label) return;
-  const newItem = { id: 'gift_' + Date.now(), label, done: false, sort_order: giftItems.length + 1 };
-  giftItems.push(newItem);
-  input.value = '';
-  renderGifts();
-  saveGiftsLocal();
-  sbFetch('/rest/v1/gifts', {
-    method: 'POST',
-    body: JSON.stringify(newItem),
-    headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' }
-  }).catch(e => console.warn('gift add sync failed', e));
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const inp = document.getElementById('gift-new-input');
-  if(inp) inp.addEventListener('keydown', e => { if(e.key === 'Enter') addGiftItem(); });
-});
 
 try { window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.ready() && window.Telegram.WebApp.expand(); } catch(e){}
 init();
