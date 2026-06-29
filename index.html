@@ -632,11 +632,12 @@ function setSyncStatus(text){ const el = document.getElementById('sync-status-ba
 
 function scrollAboveKb(el){
   const scroll = document.getElementById('scroll');
+  const STATUS_BAR = 52;
   [300, 500, 800].forEach(ms => {
     setTimeout(() => {
-      const visH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const visH = (window.visualViewport ? window.visualViewport.height : window.innerHeight) - STATUS_BAR;
       const rect = el.getBoundingClientRect();
-      const gap = rect.bottom - visH + 32;
+      const gap = rect.bottom - visH + 16;
       if(gap > 0) scroll.scrollTop += gap;
     }, ms);
   });
