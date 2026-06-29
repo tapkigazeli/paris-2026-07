@@ -473,7 +473,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- SYNC STATUS BAR -->
-<div style="position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:0.5px solid var(--border);padding:8px 14px;display:flex;align-items:center;gap:8px;z-index:40">
+<div style="position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:0.5px solid var(--border);padding:8px 14px calc(8px + env(safe-area-inset-bottom)) 14px;display:flex;align-items:center;gap:8px;z-index:40">
   <div style="font-size:12px;color:var(--text2);flex:1" id="sync-status-bar">🟡 подключение...</div>
   <button onclick="manualRefresh()" style="background:none;border:0.5px solid var(--border2);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer">↻ обновить</button>
 </div>
@@ -702,7 +702,7 @@ function showView(name, btn){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   document.getElementById('scroll').scrollTop = 0;
-  document.getElementById('fab').style.display = name==='budget' ? 'flex' : 'none';
+  document.getElementById('fab').style.display = (name==='budget' || name==='days') ? 'flex' : 'none';
 }
 
 // ===== DAYS DATA =====
