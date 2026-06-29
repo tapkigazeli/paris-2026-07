@@ -44,7 +44,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.view{display:none;padding:10px 12px 110px}
+.view{display:none;padding:10px 12px calc(130px + env(safe-area-inset-bottom))}
 .view.active{display:block}
 
 /* ===== BUDGET TAB ===== */
