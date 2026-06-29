@@ -588,7 +588,11 @@ function connectRealtime(){
           if(data.event === 'INSERT'){ const exists = expenses.find(e => e.id === rec.id); if(!exists){ expenses.unshift({ id: rec.id, cat: rec.cat, eur: parseFloat(rec.eur), comment: rec.comment||'', date: rec.date||'', ts: rec.ts }); expenses.sort((a,b) => new Date(b.ts) - new Date(a.ts)); renderBudget(); setSyncStatus('🟢 новая трата от партнёра!'); setTimeout(() => setSyncStatus('🟢 онлайн · синхронизация активна'), 3000); } }
           if(data.event === 'DELETE'){ expenses = expenses.filter(e => e.id !== rec.id); renderBudget(); }
         }
-        if(data.topic === 'realtime:public:settings'){ if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'eur_rate'){ const newRate = parseFloat(rec.value); if(newRate && newRate !== rate){ rate = newRate; document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽'; document.getElementById('rate-time').textContent = 'введён вручную'; renderBudget(); } } }
+        if(data.topic === 'realtime:public:settings'){
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'eur_rate'){ const newRate = parseFloat(rec.value); if(newRate && newRate !== rate){ rate = newRate; document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽'; document.getElementById('rate-time').textContent = 'введён вручную'; renderBudget(); } }
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'days_data'){ try { daysData = JSON.parse(rec.value); localStorage.setItem(DAYS_KEY, rec.value); renderDays(); } catch(e){} }
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'custom_tags'){ try { customTags = JSON.parse(rec.value); localStorage.setItem(CUSTOM_TAGS_KEY, rec.value); } catch(e){} }
+        }
         if(data.topic === 'realtime:public:gifts'){
           if(data.event === 'INSERT'){ if(!giftItems.find(g => g.id === rec.id)){ giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 }); giftItems.sort((a,b) => a.sort_order - b.sort_order); renderGifts(); } }
           if(data.event === 'UPDATE'){ const idx = giftItems.findIndex(g => g.id === rec.id); if(idx !== -1){ giftItems[idx].done = rec.done; renderGifts(); } }
@@ -866,17 +870,52 @@ const DEFAULT_DAYS = [
 let daysData = [];
 let openDays = new Set();
 
-function loadDays(){
+async function loadDays(){
   try {
-    const saved = localStorage.getItem(DAYS_KEY);
-    daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+    const rows = await sbFetch('/rest/v1/settings?key=eq.days_data&select=value');
+    if(rows && rows.length && rows[0].value){
+      daysData = JSON.parse(rows[0].value);
+    } else {
+      const saved = localStorage.getItem(DAYS_KEY);
+      daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+    }
   } catch(e){
-    daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+    try {
+      const saved = localStorage.getItem(DAYS_KEY);
+      daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+    } catch(e2){ daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS)); }
   }
 }
 
-function saveDays(){
-  localStorage.setItem(DAYS_KEY, JSON.stringify(daysData));
+async function saveDays(){
+  const value = JSON.stringify(daysData);
+  localStorage.setItem(DAYS_KEY, value);
+  try {
+    await sbFetch('/rest/v1/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key: 'days_data', value }),
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
+    });
+  } catch(e){}
+}
+
+async function loadCustomTagsRemote(){
+  try {
+    const rows = await sbFetch('/rest/v1/settings?key=eq.custom_tags&select=value');
+    if(rows && rows.length && rows[0].value) customTags = JSON.parse(rows[0].value);
+  } catch(e){}
+}
+
+async function saveCustomTags(){
+  const value = JSON.stringify(customTags);
+  localStorage.setItem(CUSTOM_TAGS_KEY, value);
+  try {
+    await sbFetch('/rest/v1/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key: 'custom_tags', value }),
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
+    });
+  } catch(e){}
 }
 
 function renderDays(){
@@ -1105,7 +1144,8 @@ document.addEventListener('DOMContentLoaded',()=>{ const inp=document.getElement
 async function init(){
   try {
     loadCustomTags();
-    loadDays();
+    await loadDays();
+    await loadCustomTagsRemote();
     renderDays();
     await fetchRate();
     renderBudget();
