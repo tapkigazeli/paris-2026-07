@@ -636,29 +636,39 @@ function setSyncStatus(text){ const el = document.getElementById('sync-status-ba
 
 function scrollAboveKb(el){
   const scroll = document.getElementById('scroll');
-  // Scroll element into view immediately on focus, before keyboard appears
-  // Target: element sits ~120px from top of scroll container
-  const doScroll = () => {
+
+  const ensureVisible = () => {
+    const tgH = (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.viewportHeight)
+      || (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+    const STATUS = 56;
+    const visBottom = tgH - STATUS;
+    const rect = el.getBoundingClientRect();
+    const gap = rect.bottom - visBottom + 20;
+    if(gap > 0) scroll.scrollTop += gap;
+  };
+
+  // Immediately scroll element near top of scroll container before keyboard appears
+  const scrollNearTop = () => {
     const scrollRect = scroll.getBoundingClientRect();
     const elRect = el.getBoundingClientRect();
-    const currentOffset = elRect.top - scrollRect.top;
-    const targetOffset = 120;
-    if(currentOffset > targetOffset){
-      scroll.scrollTop += (currentOffset - targetOffset);
-    }
+    const offset = elRect.top - scrollRect.top;
+    if(offset > 80) scroll.scrollTop += (offset - 80);
   };
-  doScroll();
-  setTimeout(doScroll, 100);
-  // Also handle visualViewport resize (fires when keyboard appears on some browsers)
+  scrollNearTop();
+
+  // Telegram WebApp: viewportChanged fires when keyboard appears/disappears
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if(tg && tg.onEvent){
+    const handler = () => { setTimeout(ensureVisible, 50); };
+    tg.onEvent('viewportChanged', handler);
+    el.addEventListener('blur', () => tg.offEvent('viewportChanged', handler), {once: true});
+  }
+
+  // Fallback: visualViewport resize
   if(window.visualViewport){
-    const onResize = () => {
-      const scrollRect = scroll.getBoundingClientRect();
-      const elRect = el.getBoundingClientRect();
-      const visBottom = window.visualViewport.height;
-      const gap = elRect.bottom - visBottom + 24;
-      if(gap > 0) scroll.scrollTop += gap;
-    };
-    window.visualViewport.addEventListener('resize', onResize, {once: true});
+    const onResize = () => ensureVisible();
+    window.visualViewport.addEventListener('resize', onResize);
+    el.addEventListener('blur', () => window.visualViewport.removeEventListener('resize', onResize), {once: true});
   }
 }
 
