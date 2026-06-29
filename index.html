@@ -440,7 +440,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="form-body">
       <div class="form-group">
         <label class="form-label">Время (необязательно)</label>
-        <input class="form-input" id="ev-time" type="time">
+        <div style="position:relative">
+          <input class="form-input" id="ev-time" type="time" style="width:100%;min-width:0;color:var(--text)" oninput="document.getElementById('ev-time-ph').style.display='none'">
+          <span id="ev-time-ph" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none">00:00</span>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Название</label>
@@ -993,7 +996,9 @@ function openEventModal(di, ei){
   if(ei !== null){
     const ev = daysData[di].events[ei];
     document.getElementById('ev-modal-title').textContent = 'Редактировать событие';
-    document.getElementById('ev-time').value = extractHHMM(ev.time);
+    const t = extractHHMM(ev.time);
+    document.getElementById('ev-time').value = t;
+    document.getElementById('ev-time-ph').style.display = t ? 'none' : '';
     document.getElementById('ev-name').value = ev.name || '';
     document.getElementById('ev-desc').value = ev.desc || '';
     document.getElementById('ev-cost').value = ev.cost != null ? ev.cost : '';
@@ -1002,6 +1007,7 @@ function openEventModal(di, ei){
   } else {
     document.getElementById('ev-modal-title').textContent = 'Новое событие';
     document.getElementById('ev-time').value = '';
+    document.getElementById('ev-time-ph').style.display = '';
     document.getElementById('ev-name').value = '';
     document.getElementById('ev-desc').value = '';
     document.getElementById('ev-cost').value = '';
