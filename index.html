@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Париж + Стокгольм 2026</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -435,15 +435,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="form-close" onclick="document.getElementById('event-modal').classList.remove('open')">×</button>
     </div>
     <div class="form-body">
-      <div class="form-group" id="ev-date-group" style="display:none">
-        <label class="form-label">День</label>
-        <input class="form-input" id="ev-date" type="date" min="2026-07-05" max="2026-07-18" value="2026-07-05">
-      </div>
       <div class="form-group">
-        <label class="form-label">Время (необязательно)</label>
-        <div style="position:relative;width:100%;overflow:hidden">
-          <input class="form-input" id="ev-time" type="time" style="width:100%;max-width:100%;min-width:0;display:block;color:var(--text)" oninput="document.getElementById('ev-time-ph').style.display='none'">
-          <span id="ev-time-ph" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none">00:00</span>
+        <div style="display:flex;gap:10px">
+          <div id="ev-date-group" style="display:none;flex:1;min-width:0">
+            <label class="form-label">День</label>
+            <div style="overflow:hidden">
+              <input class="form-input" id="ev-date" type="date" min="2026-07-05" max="2026-07-18" value="2026-07-05" style="width:100%;max-width:100%;min-width:0;display:block;text-align:center;-webkit-appearance:none">
+            </div>
+          </div>
+          <div id="ev-time-group" style="flex:1;min-width:0">
+            <label class="form-label">Время (необязательно)</label>
+            <div style="position:relative;overflow:hidden">
+              <input class="form-input" id="ev-time" type="time" style="width:100%;max-width:100%;min-width:0;display:block;text-align:center;-webkit-appearance:none" oninput="document.getElementById('ev-time-ph').style.display='none'">
+              <span id="ev-time-ph" style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:var(--text3);font-size:15px;pointer-events:none">00:00</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group">
@@ -1009,7 +1015,8 @@ function openEventModal(di, ei){
   editEventIdx = ei;
 
   const fromFab = di === null;
-  document.getElementById('ev-date-group').style.display = fromFab ? 'block' : 'none';
+  document.getElementById('ev-date-group').style.display = fromFab ? 'flex' : 'none';
+  document.getElementById('ev-date-group').style.flexDirection = 'column';
   if(fromFab) document.getElementById('ev-date').value = '2026-07-05';
 
   if(ei !== null){
