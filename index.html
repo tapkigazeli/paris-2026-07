@@ -1195,7 +1195,15 @@ async function loadGifts(){
 function saveGiftsLocal(){ localStorage.setItem(GIFTS_KEY, JSON.stringify(giftItems)); }
 function renderGifts(){
   const el = document.getElementById('gifts-list'); if(!el) return;
-  el.innerHTML = giftItems.map((item,idx)=>`<div class="srow"><div style="display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;user-select:none" onclick="toggleGift(${idx})"><span style="font-size:15px">${item.done?'☑':'☐'}</span><span style="font-size:13px;color:var(--text);${item.done?'text-decoration:line-through;color:var(--text3)':''}">${item.label}</span></div><button onclick="deleteGift(${idx})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">×</button></div>`).join('');
+  el.innerHTML = giftItems.map((item,idx)=>`<div class="srow"><div style="display:flex;align-items:center;gap:10px;flex:1"><span style="font-size:15px;cursor:pointer;flex-shrink:0" onclick="toggleGift(${idx})">${item.done?'☑':'☐'}</span><span contenteditable="true" style="font-size:13px;${item.done?'text-decoration:line-through;color:var(--text3)':'color:var(--text)'};outline:none;flex:1;min-width:0;cursor:text" onblur="saveGiftLabel(${idx},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}" onclick="event.stopPropagation()">${item.label}</span></div><button onclick="deleteGift(${idx})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">×</button></div>`).join('');
+}
+function saveGiftLabel(idx, el){
+  const label = el.textContent.trim();
+  if(!label){ el.textContent = giftItems[idx].label; return; }
+  if(label === giftItems[idx].label) return;
+  giftItems[idx].label = label;
+  saveGiftsLocal();
+  sbFetch('/rest/v1/gifts?id=eq.'+encodeURIComponent(giftItems[idx].id),{method:'PATCH',body:JSON.stringify({label}),headers:{...SB_HEADERS,'Prefer':'return=minimal'}}).catch(()=>{});
 }
 function toggleGift(idx){ giftItems[idx].done=!giftItems[idx].done; renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts?id=eq.'+encodeURIComponent(giftItems[idx].id),{method:'PATCH',body:JSON.stringify({done:giftItems[idx].done}),headers:{...SB_HEADERS,'Prefer':'return=minimal'}}).catch(()=>{}); }
 function deleteGift(idx){ const id=giftItems[idx].id; giftItems.splice(idx,1); renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts?id=eq.'+encodeURIComponent(id),{method:'DELETE'}).catch(()=>{}); }
