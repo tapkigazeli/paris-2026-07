@@ -435,6 +435,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="form-close" onclick="document.getElementById('event-modal').classList.remove('open')">×</button>
     </div>
     <div class="form-body">
+      <div class="form-group" id="ev-date-group" style="display:none">
+        <label class="form-label">День</label>
+        <input class="form-input" id="ev-date" type="date" min="2026-07-05" max="2026-07-18" value="2026-07-05">
+      </div>
       <div class="form-group">
         <label class="form-label">Время (необязательно)</label>
         <div style="position:relative;width:100%;overflow:hidden">
@@ -653,7 +657,14 @@ function renderExpenses(){
 }
 
 // ===== EXPENSE FORM =====
-function openForm(){ document.getElementById('form-overlay').classList.add('open'); }
+function openForm(){
+  const active = document.querySelector('.view.active');
+  if(active && active.id === 'view-days'){
+    openEventModal(null, null);
+  } else {
+    document.getElementById('form-overlay').classList.add('open');
+  }
+}
 function openFormCat(cat){
   selCategory = cat;
   document.querySelectorAll('.form-cat').forEach(el => el.classList.remove('sel'));
@@ -997,6 +1008,10 @@ function openEventModal(di, ei){
   editDayIdx = di;
   editEventIdx = ei;
 
+  const fromFab = di === null;
+  document.getElementById('ev-date-group').style.display = fromFab ? 'block' : 'none';
+  if(fromFab) document.getElementById('ev-date').value = '2026-07-05';
+
   if(ei !== null){
     const ev = daysData[di].events[ei];
     document.getElementById('ev-modal-title').textContent = 'Редактировать событие';
@@ -1072,6 +1087,15 @@ function saveEvent(){
   const desc = document.getElementById('ev-desc').value.trim();
   const costRaw = document.getElementById('ev-cost').value;
   const cost = costRaw !== '' ? parseFloat(costRaw) : null;
+
+  if(editDayIdx === null){
+    const dateVal = document.getElementById('ev-date').value;
+    if(!dateVal) return;
+    const dayNum = parseInt(dateVal.split('-')[2]);
+    editDayIdx = dayNum - 5;
+    if(editDayIdx < 0 || editDayIdx >= daysData.length) return;
+    openDays.add(editDayIdx);
+  }
 
   const ev = {
     id: editEventIdx !== null ? daysData[editDayIdx].events[editEventIdx].id : 'ev_' + Date.now(),
