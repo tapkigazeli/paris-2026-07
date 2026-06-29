@@ -635,15 +635,30 @@ function setSyncStatus(text){ const el = document.getElementById('sync-status-ba
 
 function scrollAboveKb(el){
   const scroll = document.getElementById('scroll');
-  const STATUS_BAR = 52;
-  [300, 500, 800].forEach(ms => {
-    setTimeout(() => {
-      const visH = (window.visualViewport ? window.visualViewport.height : window.innerHeight) - STATUS_BAR;
-      const rect = el.getBoundingClientRect();
-      const gap = rect.bottom - visH + 16;
+  // Scroll element into view immediately on focus, before keyboard appears
+  // Target: element sits ~120px from top of scroll container
+  const doScroll = () => {
+    const scrollRect = scroll.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const currentOffset = elRect.top - scrollRect.top;
+    const targetOffset = 120;
+    if(currentOffset > targetOffset){
+      scroll.scrollTop += (currentOffset - targetOffset);
+    }
+  };
+  doScroll();
+  setTimeout(doScroll, 100);
+  // Also handle visualViewport resize (fires when keyboard appears on some browsers)
+  if(window.visualViewport){
+    const onResize = () => {
+      const scrollRect = scroll.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const visBottom = window.visualViewport.height;
+      const gap = elRect.bottom - visBottom + 24;
       if(gap > 0) scroll.scrollTop += gap;
-    }, ms);
-  });
+    };
+    window.visualViewport.addEventListener('resize', onResize, {once: true});
+  }
 }
 
 // ===== RENDER BUDGET =====
