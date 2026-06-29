@@ -485,7 +485,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- FAB -->
-<button onclick="openForm()" style="position:fixed;bottom:44px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:50;display:flex;align-items:center;justify-content:center;line-height:1" id="fab">+</button>
+<button onclick="openForm()" style="position:fixed;bottom:calc(52px + env(safe-area-inset-bottom));right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:50;display:flex;align-items:center;justify-content:center;line-height:1" id="fab">+</button>
 
 <script>
 // ===== CONFIG =====
