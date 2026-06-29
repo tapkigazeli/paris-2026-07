@@ -83,8 +83,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ===== ADD EXPENSE FORM ===== */
 .form-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
 .form-overlay.open{display:flex}
-.form-sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 16px 40px;width:100%;max-height:85vh;overflow-y:auto}
-.form-title{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--bg);z-index:1;padding-top:4px;padding-bottom:12px;margin-top:-4px}
+.form-sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.form-title{font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;padding:20px 16px 12px}
+.form-body{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 16px 40px;flex:1}
 .form-close{background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;padding:0}
 .form-group{margin-bottom:14px}
 .form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;font-weight:500}
@@ -406,24 +407,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span>Добавить трату</span>
       <button class="form-close" onclick="closeFormDirect()">×</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Категория</label>
-      <div class="form-cats" style="grid-template-columns:1fr 1fr">
-        <div class="form-cat" onclick="selCat('food',this)">🍽️ Еда</div>
-        <div class="form-cat" onclick="selCat('transport',this)">🚇 Транспорт</div>
-        <div class="form-cat sel" onclick="selCat('shopping',this)">🛍️ Шопинг</div>
-        <div class="form-cat" onclick="selCat('museums',this)">🎨 Музеи</div>
+    <div class="form-body">
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <div class="form-cats" style="grid-template-columns:1fr 1fr">
+          <div class="form-cat" onclick="selCat('food',this)">🍽️ Еда</div>
+          <div class="form-cat" onclick="selCat('transport',this)">🚇 Транспорт</div>
+          <div class="form-cat sel" onclick="selCat('shopping',this)">🛍️ Шопинг</div>
+          <div class="form-cat" onclick="selCat('museums',this)">🎨 Музеи</div>
+        </div>
       </div>
+      <div class="form-group">
+        <label class="form-label">Сумма в евро</label>
+        <input class="form-input" id="f-amount" type="number" inputmode="decimal" placeholder="0.00" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Комментарий</label>
+        <input class="form-input" id="f-comment" type="text" placeholder="например: Zara, Champs-Élysées">
+      </div>
+      <button class="form-submit" id="f-submit" onclick="submitExpense()">Добавить</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Сумма в евро</label>
-      <input class="form-input" id="f-amount" type="number" inputmode="decimal" placeholder="0.00" min="0" step="0.01">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Комментарий</label>
-      <input class="form-input" id="f-comment" type="text" placeholder="например: Zara, Champs-Élysées">
-    </div>
-    <button class="form-submit" id="f-submit" onclick="submitExpense()">Добавить</button>
   </div>
 </div>
 
@@ -434,32 +437,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <span id="ev-modal-title">Событие</span>
       <button class="form-close" onclick="document.getElementById('event-modal').classList.remove('open')">×</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Время (необязательно)</label>
-      <input class="form-input" id="ev-time" type="time">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Название</label>
-      <input class="form-input" id="ev-name" type="text" placeholder="Название события">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Описание</label>
-      <input class="form-input" id="ev-desc" type="text" placeholder="Адрес, детали...">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Стоимость (€)</label>
-      <input class="form-input" id="ev-cost" type="number" inputmode="decimal" placeholder="оставьте пустым если бесплатно или неизвестно" min="0" step="0.5">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Тег</label>
-      <div class="tag-grid" id="ev-tags-grid"></div>
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <input class="form-input" id="new-tag-input" type="text" placeholder="Новый тег..." style="font-size:12px;padding:7px 10px" maxlength="20">
-        <button onclick="addCustomTag()" style="flex-shrink:0;padding:7px 14px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:10px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap">+ Создать</button>
+    <div class="form-body">
+      <div class="form-group">
+        <label class="form-label">Время (необязательно)</label>
+        <input class="form-input" id="ev-time" type="time">
       </div>
+      <div class="form-group">
+        <label class="form-label">Название</label>
+        <input class="form-input" id="ev-name" type="text" placeholder="Название события">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Описание</label>
+        <input class="form-input" id="ev-desc" type="text" placeholder="Адрес, детали...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Стоимость (€)</label>
+        <input class="form-input" id="ev-cost" type="number" inputmode="decimal" placeholder="оставьте пустым если бесплатно или неизвестно" min="0" step="0.5">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Тег</label>
+        <div class="tag-grid" id="ev-tags-grid"></div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input class="form-input" id="new-tag-input" type="text" placeholder="Новый тег..." style="font-size:12px;padding:7px 10px" maxlength="20">
+          <button onclick="addCustomTag()" style="flex-shrink:0;padding:7px 14px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:10px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap">+ Создать</button>
+        </div>
+      </div>
+      <button class="form-submit" onclick="saveEvent()">Сохранить</button>
+      <button class="ev-del-btn" id="ev-delete-btn" onclick="deleteEventConfirm()">Удалить событие</button>
     </div>
-    <button class="form-submit" onclick="saveEvent()">Сохранить</button>
-    <button class="ev-del-btn" id="ev-delete-btn" onclick="deleteEventConfirm()">Удалить событие</button>
   </div>
 </div>
 
