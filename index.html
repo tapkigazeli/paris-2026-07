@@ -631,16 +631,15 @@ function connectRealtime(){
 function setSyncStatus(text){ const el = document.getElementById('sync-status-bar'); if(el) el.textContent = text; }
 
 function scrollAboveKb(el){
-  if(!window.visualViewport){ el.scrollIntoView({block:'center',behavior:'smooth'}); return; }
   const scroll = document.getElementById('scroll');
-  const onResize = () => {
-    window.visualViewport.removeEventListener('resize', onResize);
-    const rect = el.getBoundingClientRect();
-    const gap = rect.bottom - window.visualViewport.height + 24;
-    if(gap > 0) scroll.scrollTop += gap;
-  };
-  window.visualViewport.addEventListener('resize', onResize);
-  setTimeout(() => window.visualViewport.removeEventListener('resize', onResize), 1500);
+  [300, 500, 800].forEach(ms => {
+    setTimeout(() => {
+      const visH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const rect = el.getBoundingClientRect();
+      const gap = rect.bottom - visH + 32;
+      if(gap > 0) scroll.scrollTop += gap;
+    }, ms);
+  });
 }
 
 // ===== RENDER BUDGET =====
