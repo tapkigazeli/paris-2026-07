@@ -601,6 +601,7 @@ function connectRealtime(){
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'eur_rate'){ const newRate = parseFloat(rec.value); if(newRate && newRate !== rate){ rate = newRate; document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽'; document.getElementById('rate-time').textContent = 'введён вручную'; renderBudget(); } }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'days_data'){ try { daysData = JSON.parse(rec.value); localStorage.setItem(DAYS_KEY, rec.value); renderDays(); } catch(e){} }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'custom_tags'){ try { customTags = JSON.parse(rec.value); localStorage.setItem(CUSTOM_TAGS_KEY, rec.value); } catch(e){} }
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'book_done'){ try { bookDone = JSON.parse(rec.value); localStorage.setItem(BOOK_KEY, rec.value); applyBook(); } catch(e){} }
         }
         if(data.topic === 'realtime:public:gifts'){
           if(data.event === 'INSERT'){ if(!giftItems.find(g => g.id === rec.id)){ giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 }); giftItems.sort((a,b) => a.sort_order - b.sort_order); renderGifts(); } }
@@ -1109,8 +1110,25 @@ const BOOK_ITEMS = {
 };
 let bookDone = {};
 
-function loadBook(){ try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; } applyBook(); }
-function saveBook(){ localStorage.setItem(BOOK_KEY, JSON.stringify(bookDone)); }
+async function loadBook(){
+  try {
+    const rows = await sbFetch('/rest/v1/settings?key=eq.book_done&select=value');
+    if(rows && rows.length && rows[0].value) bookDone = JSON.parse(rows[0].value);
+    else { try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; } }
+  } catch(e){ try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e2){ bookDone = {}; } }
+  applyBook();
+}
+async function saveBook(){
+  const value = JSON.stringify(bookDone);
+  localStorage.setItem(BOOK_KEY, value);
+  try {
+    await sbFetch('/rest/v1/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key: 'book_done', value }),
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
+    });
+  } catch(e){}
+}
 function applyBook(){ Object.keys(bookDone).forEach(id => { if(bookDone[id]) markBookDone(id, false); }); }
 function toggleBook(id){ bookDone[id] = !bookDone[id]; saveBook(); if(bookDone[id]){ markBookDone(id, true); } else { unmarkBookDone(id); } }
 function markBookDone(id, addExpense){
@@ -1163,7 +1181,7 @@ async function init(){
     renderBudget();
     await Promise.all([loadExpenses(), loadGifts()]);
     renderBudget();
-    loadBook();
+    await loadBook();
     connectRealtime();
   } catch(e){ console.warn('init error', e); }
 }
