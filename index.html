@@ -40,45 +40,94 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* TABS */
 .tabs{display:flex;overflow-x:auto;padding:8px 10px;gap:6px;border-bottom:0.5px solid var(--border);background:var(--bg);flex-shrink:0;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex-shrink:0;padding:6px 14px;border:0.5px solid var(--border2);border-radius:20px;font-size:12px;font-weight:500;background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap}
-.tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tab{flex-shrink:0;padding:7px 15px;border:0.5px solid var(--border2);border-radius:20px;font-size:12.5px;font-weight:500;background:var(--bg2);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s ease}
+.tab.active{background:linear-gradient(135deg,#e8a868,#d97f96);color:#fff;border-color:transparent;box-shadow:0 3px 10px -4px rgba(217,127,150,.6);font-weight:600}
+@media(prefers-color-scheme:dark){.tab.active{background:linear-gradient(135deg,#c98a4e,#b5677e);box-shadow:0 3px 10px -4px rgba(0,0,0,.5)}}
 
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .view{display:none;padding:10px 12px calc(130px + env(safe-area-inset-bottom))}
 .view.active{display:block}
 
 /* ===== BUDGET TAB ===== */
-.rate-bar{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:12px;gap:8px}
-.rate-info{font-size:12px;color:var(--text2)}
-.rate-val{font-size:16px;font-weight:600;color:var(--text)}
+:root{
+  --bgt-sage:#5f8a66;--bgt-sage-bg:#e9f2ea;
+  --bgt-bordeaux:#933a55;--bgt-bordeaux-bg:#fbeaef;
+  --bgt-caramel:#b97a3d;--bgt-caramel-bg:#faefe0;
+  --bgt-softblue:#4f7a9e;--bgt-softblue-bg:#eaf2f7;
+  --bgt-cream:#fffaf2;--bgt-cream2:#fdf3e4;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bgt-sage:#8fc298;--bgt-sage-bg:#1b2e1d;
+  --bgt-bordeaux:#e993ac;--bgt-bordeaux-bg:#33151d;
+  --bgt-caramel:#e3a467;--bgt-caramel-bg:#332210;
+  --bgt-softblue:#86b3d8;--bgt-softblue-bg:#13222e;
+  --bgt-cream:#241f17;--bgt-cream2:#2a2117;
+}}
+
+.budget-hero{position:relative;border-radius:22px;padding:18px 18px 16px;margin-bottom:14px;overflow:hidden;
+  background:linear-gradient(135deg,#fde7c8 0%,#fbd2c4 45%,#f6c6d6 100%);
+  box-shadow:0 8px 24px -10px rgba(180,110,90,.35)}
+@media(prefers-color-scheme:dark){.budget-hero{background:linear-gradient(135deg,#3a2f22 0%,#3a2227 50%,#2e2433 100%);box-shadow:0 8px 24px -10px rgba(0,0,0,.5)}}
+.hero-decor{position:absolute;top:12px;right:14px;font-size:15px;letter-spacing:3px;opacity:.85}
+.hero-eyebrow{font-size:11px;font-weight:600;color:#8a5a3c;text-transform:uppercase;letter-spacing:.6px;opacity:.85}
+@media(prefers-color-scheme:dark){.hero-eyebrow{color:#e3b98a}}
+.hero-title{font-size:20px;font-weight:700;color:#3a2417;margin-top:3px}
+@media(prefers-color-scheme:dark){.hero-title{color:#f5e9da}}
+.hero-dates{font-size:12px;color:#7a5640;margin-top:2px;font-weight:500}
+@media(prefers-color-scheme:dark){.hero-dates{color:#cbb19a}}
+.hero-stats{display:flex;align-items:center;margin-top:16px;background:rgba(255,255,255,.55);border-radius:14px;padding:10px 6px;backdrop-filter:blur(6px)}
+@media(prefers-color-scheme:dark){.hero-stats{background:rgba(0,0,0,.22)}}
+.hero-stat{flex:1;text-align:center}
+.hero-stat-val{font-size:15px;font-weight:700;color:#3a2417}
+@media(prefers-color-scheme:dark){.hero-stat-val{color:#f5e9da}}
+.hero-stat-lbl{font-size:10px;color:#8a6248;margin-top:2px;font-weight:500}
+@media(prefers-color-scheme:dark){.hero-stat-lbl{color:#cbb19a}}
+.hero-stat-divider{width:1px;height:26px;background:rgba(120,80,60,.18)}
+.hero-progress{height:6px;background:rgba(120,80,60,.16);border-radius:3px;overflow:hidden;margin-top:12px}
+.hero-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#c46a3e,#cf6f8e);transition:width .5s ease}
+
+.rate-bar{display:flex;align-items:center;background:transparent;border-radius:14px;padding:6px 4px 14px;margin-bottom:4px;gap:10px;border:none;border-bottom:1px dashed var(--border)}
+.rate-icon-bubble{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:var(--bgt-softblue-bg)}
+.rate-info{font-size:11px;color:var(--text2);font-weight:500}
+.rate-val{font-size:16px;font-weight:700;color:var(--text)}
 .rate-upd{font-size:10px;color:var(--text3);margin-top:1px}
 .rate-refresh{background:none;border:0.5px solid var(--border2);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text2);cursor:pointer}
+.section-divider{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:14px 2px 8px}
 
-.cat-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.cat-card{background:var(--bg2);border-radius:12px;padding:12px 14px;border:0.5px solid var(--border)}
-.cat-card.over{border-color:var(--danger);background:var(--danger-bg)}
-.cat-card.warn-cat{border-color:var(--warn)}
-.cat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.cat-name{font-size:14px;font-weight:600;color:var(--text)}
+.cat-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.cat-card{background:var(--bg2);border-radius:16px;padding:14px;border:0.5px solid var(--border);
+  box-shadow:0 2px 10px -6px rgba(0,0,0,.08);transition:transform .15s ease;cursor:pointer}
+.cat-card:active{transform:scale(.98)}
+.cat-card.over{border-color:var(--bgt-bordeaux);background:var(--bgt-bordeaux-bg)}
+.cat-card.warn-cat{border-color:var(--bgt-caramel);background:var(--bgt-caramel-bg)}
+.cat-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cat-icon-bubble{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--cat-bg,var(--bg3))}
+.cat-info{flex:1;min-width:0}
+.cat-name{font-size:14px;font-weight:700;color:var(--text)}
+.cat-sub{font-size:11px;color:var(--text3);margin-top:1px}
 .cat-emoji{font-size:18px}
 .cat-nums{text-align:right}
 .cat-spent{font-size:13px;font-weight:600;color:var(--text)}
 .cat-limit{font-size:11px;color:var(--text3);margin-top:1px}
-.cat-left{font-size:12px;margin-top:2px}
-.cat-left.ok{color:var(--green)}
-.cat-left.low{color:var(--warn)}
-.cat-left.over{color:var(--danger)}
-.progress{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.progress-fill{height:100%;border-radius:3px;transition:width .4s ease;background:var(--accent)}
-.progress-fill.warn-fill{background:var(--warn)}
-.progress-fill.over-fill{background:var(--danger)}
+.progress{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:9px}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s ease;background:var(--cat-color,var(--accent))}
+.progress-fill.warn-fill{background:var(--bgt-caramel)}
+.progress-fill.over-fill{background:var(--bgt-bordeaux)}
+.cat-bottom-row{display:flex;justify-content:space-between;align-items:baseline}
+.cat-left{font-size:13.5px;font-weight:700}
+.cat-left.ok{color:var(--bgt-sage)}
+.cat-left.low{color:var(--bgt-caramel)}
+.cat-left.over{color:var(--bgt-bordeaux)}
+.cat-rub{font-size:11px;color:var(--text3)}
 .cat-add{width:100%;padding:8px;background:var(--bg);border:0.5px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text2);cursor:pointer;text-align:center}
 
-.total-card{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:14px}
-.total-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
+.total-card{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-radius:16px;padding:16px;margin-bottom:14px;border:0.5px solid var(--border)}
+.total-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
 .total-row:last-child{border-bottom:none;font-weight:600;font-size:14px;padding-top:9px}
 .total-row .lbl{color:var(--text2)}
 .total-row .val{color:var(--text);font-weight:500}
+.total-progress{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;margin:10px 0 2px}
+.total-progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--bgt-sage),var(--bgt-softblue));transition:width .4s ease}
 
 /* ===== ADD EXPENSE FORM ===== */
 .form-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:flex-end;justify-content:center}
@@ -99,19 +148,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .form-submit:disabled{opacity:.4}
 
 /* ===== EXPENSE LIST ===== */
-.exp-section{margin-bottom:6px}
-.exp-day{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding:8px 0 4px}
-.exp-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border)}
-.exp-item:last-child{border-bottom:none}
-.exp-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.exp-section{margin-bottom:2px}
+.exp-day{display:flex;justify-content:space-between;align-items:baseline;padding:12px 2px 7px}
+.exp-day-date{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.exp-day-count{font-size:10.5px;color:var(--text3);font-weight:500;margin-left:6px;text-transform:none;letter-spacing:0}
+.exp-day-sum{font-size:12.5px;font-weight:700;color:var(--text)}
+.exp-item{display:flex;align-items:center;gap:9px;padding:8px 10px 8px 9px;background:var(--bg2);border-radius:13px;margin-bottom:5px;
+  border:0.5px solid var(--border);border-left:3px solid var(--cat-color,var(--border2));
+  box-shadow:0 2px 8px -4px rgba(0,0,0,.16)}
+.exp-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .exp-body{flex:1;min-width:0}
-.exp-name{font-size:13px;font-weight:500;color:var(--text)}
-.exp-meta{font-size:11px;color:var(--text3);margin-top:1px}
+.exp-name{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp-meta{font-size:10px;color:var(--text3);margin-top:1px}
 .exp-amt{text-align:right;flex-shrink:0}
-.exp-eur{font-size:13px;font-weight:600;color:var(--text)}
-.exp-rub{font-size:11px;color:var(--text3);margin-top:1px}
-.exp-del{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;font-size:16px;flex-shrink:0}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
+.exp-eur{font-size:13px;font-weight:700;color:var(--text)}
+.exp-rub{font-size:10px;color:var(--text3);margin-top:1px}
+.exp-del{background:var(--bg3);border:none;color:var(--text3);cursor:pointer;width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;margin-left:2px;transition:all .15s ease}
+.exp-del:active{background:var(--bgt-bordeaux-bg);color:var(--bgt-bordeaux)}
+.empty-state{text-align:center;padding:34px 20px;color:var(--text3);font-size:26px}
+.empty-state div{font-size:13px}
 
 /* DAYS TAB */
 .paid-banner{background:var(--accent-bg);border:0.5px solid var(--accent);border-radius:10px;padding:10px 12px;margin-bottom:10px}
@@ -195,8 +250,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ===== BUDGET VIEW ===== -->
 <div id="view-budget" class="view active">
 
+  <div class="budget-hero">
+    <div class="hero-decor">🥐 🗼 ☕️</div>
+    <div class="hero-eyebrow">Поездка</div>
+    <div class="hero-title">Парижские каникулы</div>
+    <div class="hero-dates">5–18 июля · Париж · Стокгольм</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val" id="hero-spent">€0</div><div class="hero-stat-lbl">потрачено</div></div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-val" id="hero-left">€0</div><div class="hero-stat-lbl">осталось</div></div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat"><div class="hero-stat-val" id="hero-limit">€0</div><div class="hero-stat-lbl">лимит</div></div>
+    </div>
+    <div class="hero-progress"><div class="hero-progress-fill" id="hero-progress-fill" style="width:0%"></div></div>
+  </div>
+
   <div class="rate-bar">
-    <div>
+    <div class="rate-icon-bubble">💱</div>
+    <div style="flex:1;min-width:0">
       <div class="rate-info">Курс евро</div>
       <div style="display:flex;align-items:center;gap:8px">
         <div class="rate-val" id="rate-display">93.50 ₽</div>
@@ -214,10 +285,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <div class="section-divider">Бюджет по категориям</div>
   <div class="cat-cards" id="cat-cards"></div>
-  <div class="total-card" id="total-card"></div>
 
-  <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">История трат</div>
+  <div style="border-top:1px dashed var(--border);padding-top:16px;margin-top:14px;font-size:13px;font-weight:600;color:var(--text2)">🧾 История трат</div>
   <div id="exp-list"></div>
 
 
@@ -648,7 +719,13 @@ function scrollAboveKb(el){
 }
 
 // ===== RENDER BUDGET =====
-function catColor(cat){ const m = {food:'var(--accent-bg)',transport:'var(--blue-bg)',shopping:'var(--purple-bg)',museums:'var(--amber-bg)'}; return m[cat]||'var(--bg3)'; }
+const CAT_THEME = {
+  food:      { color:'var(--bgt-caramel)',  bg:'var(--bgt-caramel-bg)' },
+  transport: { color:'var(--bgt-softblue)', bg:'var(--bgt-softblue-bg)' },
+  shopping:  { color:'var(--bgt-bordeaux)', bg:'var(--bgt-bordeaux-bg)' },
+  museums:   { color:'var(--bgt-sage)',     bg:'var(--bgt-sage-bg)' },
+};
+function catColor(cat){ return (CAT_THEME[cat]||{}).bg || 'var(--bg3)'; }
 
 function renderBudget(){
   if(!rate) rate = 93.5;
@@ -657,24 +734,52 @@ function renderBudget(){
   let html = '';
   Object.entries(LIMITS).forEach(([key, cfg])=>{
     const spent = totals[key]||0; const limit = cfg.limit; const left = limit - spent; const pct = Math.min(spent/limit*100,100); const over = spent > limit; const warn = !over && pct > 75;
-    html += `<div class="cat-card${over?' over':warn?' warn-cat':''}"><div class="cat-top"><div><div class="cat-name">${cfg.emoji} ${cfg.label}</div></div><div class="cat-nums"><div class="cat-spent">€${spent.toFixed(0)} <span style="font-weight:400;font-size:11px;color:var(--text3)">/ €${limit}</span></div><div class="cat-limit">${(spent*rate).toFixed(0)} ₽ потрачено</div><div class="cat-left ${over?'over':left<limit*0.25?'low':'ok'}">${over?'перерасход €'+Math.abs(left).toFixed(0):'осталось €'+left.toFixed(0)}</div></div></div><div class="progress"><div class="progress-fill${over?' over-fill':warn?' warn-fill':''}" style="width:${pct}%"></div></div><button class="cat-add" onclick="openFormCat('${key}')">+ добавить трату</button></div>`;
+    const theme = CAT_THEME[key] || {color:'var(--accent)', bg:'var(--bg3)'};
+    html += `<div class="cat-card${over?' over':warn?' warn-cat':''}" style="--cat-color:${theme.color};--cat-bg:${theme.bg}" onclick="openFormCat('${key}')">
+      <div class="cat-top">
+        <div class="cat-icon-bubble">${cfg.emoji}</div>
+        <div class="cat-info"><div class="cat-name">${cfg.label}</div><div class="cat-sub">€${spent.toFixed(0)} из €${limit}</div></div>
+      </div>
+      <div class="progress"><div class="progress-fill${over?' over-fill':warn?' warn-fill':''}" style="width:${pct}%"></div></div>
+      <div class="cat-bottom-row">
+        <span class="cat-left ${over?'over':left<limit*0.25?'low':'ok'}">${over?'перерасход €'+Math.abs(left).toFixed(0):'осталось €'+left.toFixed(0)}</span>
+        <span class="cat-rub">${(spent*rate).toFixed(0)} ₽ потрачено</span>
+      </div>
+    </div>`;
   });
   document.getElementById('cat-cards').innerHTML = html;
   const totalSpent = Object.values(totals).reduce((a,b)=>a+b,0);
   const totalLimit = Object.values(LIMITS).reduce((a,c)=>a+c.limit,0);
-  document.getElementById('total-card').innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Итого по поездке</div><div class="total-row"><span class="lbl">Потрачено (трекер)</span><span class="val">€${totalSpent.toFixed(0)} · ${(totalSpent*rate).toFixed(0)} ₽</span></div><div class="total-row"><span class="lbl">Лимит на категории</span><span class="val">€${totalLimit}</span></div><div class="total-row"><span class="lbl">Курс EUR/RUB</span><span class="val">${rate.toFixed(2)} ₽</span></div>`;
+  const totalLeft = totalLimit - totalSpent;
+  const totalPct = Math.min(totalSpent/totalLimit*100, 100);
+  const heroSpent = document.getElementById('hero-spent');
+  if(heroSpent){
+    heroSpent.textContent = '€'+totalSpent.toFixed(0);
+    document.getElementById('hero-left').textContent = '€'+Math.max(totalLeft,0).toFixed(0);
+    document.getElementById('hero-limit').textContent = '€'+totalLimit.toFixed(0);
+    document.getElementById('hero-progress-fill').style.width = totalPct+'%';
+  }
   renderExpenses();
+}
+
+function expWord(n){
+  const n10 = n%10, n100 = n%100;
+  if(n100>=11 && n100<=14) return 'трат';
+  if(n10===1) return 'трата';
+  if(n10>=2 && n10<=4) return 'траты';
+  return 'трат';
 }
 
 function renderExpenses(){
   const el = document.getElementById('exp-list');
-  if(!expenses.length){ el.innerHTML = '<div class="empty-state">Трат пока нет.<br>Нажми + чтобы добавить</div>'; return; }
+  if(!expenses.length){ el.innerHTML = '<div class="empty-state">✈️🧳<br><div style="margin-top:8px;font-weight:600;color:var(--text2)">Трат пока нет</div><div style="margin-top:2px">Нажми «+», чтобы добавить первую</div></div>'; return; }
   const byDate = {};
   expenses.forEach(e => { const d = e.date||'Сегодня'; if(!byDate[d]) byDate[d]=[]; byDate[d].push(e); });
   let html = '';
   Object.entries(byDate).forEach(([date, exps])=>{
-    html += `<div class="exp-day">${date}</div>`;
-    exps.forEach(e=>{ const cfg = LIMITS[e.cat]||{emoji:'💳',label:e.cat}; html += `<div class="exp-item"><div class="exp-icon" style="background:${catColor(e.cat)}">${cfg.emoji}</div><div class="exp-body"><div class="exp-name">${e.comment||cfg.label}</div><div class="exp-meta">${cfg.label} · ${new Date(e.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="exp-amt"><div class="exp-eur">€${e.eur.toFixed(2)}</div><div class="exp-rub">${(e.eur*rate).toFixed(0)} ₽</div></div><button class="exp-del" onclick="deleteExp('${e.id}')">×</button></div>`; });
+    const dayTotal = exps.reduce((a,e)=>a+e.eur,0);
+    html += `<div class="exp-day"><span><span class="exp-day-date">${date}</span><span class="exp-day-count">${exps.length} ${expWord(exps.length)}</span></span><span class="exp-day-sum">€${dayTotal.toFixed(0)}</span></div>`;
+    exps.forEach(e=>{ const cfg = LIMITS[e.cat]||{emoji:'💳',label:e.cat}; const theme = CAT_THEME[e.cat]||{color:'var(--border2)',bg:'var(--bg3)'}; html += `<div class="exp-item" style="--cat-color:${theme.color}"><div class="exp-icon" style="background:${theme.bg}">${cfg.emoji}</div><div class="exp-body"><div class="exp-name">${e.comment||cfg.label}</div><div class="exp-meta">${cfg.label} · ${new Date(e.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div></div><div class="exp-amt"><div class="exp-eur">€${e.eur.toFixed(2)}</div><div class="exp-rub">${(e.eur*rate).toFixed(0)} ₽</div></div><button class="exp-del" onclick="deleteExp('${e.id}')" aria-label="Удалить трату">🗑</button></div>`; });
   });
   el.innerHTML = html;
 }
@@ -715,7 +820,18 @@ async function submitExpense(){
   closeFormDirect();
 }
 
-async function deleteExp(id){ expenses = expenses.filter(e=>e.id!==id); await sbDelete(id); await saveExpenses(); renderBudget(); }
+function confirmAction(message){
+  return new Promise(resolve => {
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if(tg && tg.showConfirm){ tg.showConfirm(message, ok => resolve(!!ok)); }
+    else { resolve(confirm(message)); }
+  });
+}
+
+async function deleteExp(id){
+  if(!(await confirmAction('Вы точно хотите удалить трату?'))) return;
+  expenses = expenses.filter(e=>e.id!==id); await sbDelete(id); await saveExpenses(); renderBudget();
+}
 async function manualRefresh(){ setSyncStatus('🟡 загружаю...'); await loadExpenses(); renderBudget(); setSyncStatus('🟢 обновлено · ' + new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})); }
 
 // ===== VIEW SWITCH =====
