@@ -172,7 +172,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .empty-state div{font-size:13px}
 
 /* DAYS TAB */
-#view-days,#view-book,#view-budget{background:var(--bg2)}
+#view-days,#view-book,#view-budget,#view-flights{background:var(--bg2)}
 .paid-banner{background:var(--accent-bg);border:0.5px solid var(--accent);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .paid-banner h3{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
@@ -229,6 +229,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   box-shadow:0 3px 10px -4px rgba(0,0,0,.1)}
 .section h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:6px;letter-spacing:-.1px}
 .section h3 .section-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--bgt-text2,var(--text2));background:var(--bg2);padding:3px 9px;border-radius:999px}
+.section h3.collapsible{cursor:pointer;user-select:none;-webkit-user-select:none;margin-bottom:0}
+.section-chevron{flex-shrink:0;margin-left:auto;color:var(--text3);font-size:15px;line-height:1;transition:transform .2s;transform:rotate(90deg)}
+.section.collapsed .section-chevron{transform:rotate(0deg)}
+.section-body{overflow:hidden;max-height:9999px;transition:max-height .3s ease,margin-top .3s ease;margin-top:9px}
+.section.collapsed .section-body{max-height:0;margin-top:0}
 .srow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:12px;gap:10px}
 .srow:last-child{border-bottom:none}
 .srow .sub{font-size:11px;color:var(--bgt-text2,var(--text2));margin-top:2px;line-height:1.4}
@@ -285,14 +290,52 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .warn-dismiss{background:var(--bg);border:none;color:var(--red);opacity:.85;cursor:pointer;font-size:16px;font-weight:700;line-height:1;
   flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .warn-dismiss:active{opacity:1;background:var(--red-bg)}
-.flight-card{background:var(--blue-bg);border-radius:8px;padding:10px 12px;margin-bottom:6px}
-.flight-card.warn-f{background:var(--warn-bg)}
-.flight-num{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:3px}
-.flight-card.warn-f .flight-num{color:var(--warn)}
-.flight-route{font-size:11px;color:var(--blue);display:flex;justify-content:space-between}
-.flight-card.warn-f .flight-route{color:var(--warn)}
+.flight-card{background:var(--bg);border:1px solid var(--border2);border-left:3px solid var(--bgt-softblue);
+  border-radius:12px;padding:9px 12px;margin-bottom:7px}
+.flight-card:last-child{margin-bottom:0}
+.flight-card.warn-f{background:var(--bgt-caramel-bg);border-left-color:var(--bgt-caramel)}
+.flight-card.fc-out{background:var(--pink-bg);border-left-color:var(--pink)}
+.flight-card.fc-ret{background:var(--purple-bg);border-left-color:var(--purple)}
+.flight-num{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px}
+.flight-route{font-size:11px;color:var(--bgt-text2,var(--text2));display:flex;justify-content:space-between;font-weight:500}
 .gift-label{font-size:13px;color:var(--text);transition:color .2s}
-.gift-done .gift-label{color:var(--text3);text-decoration:line-through}
+.gift-label.done{color:var(--text3);text-decoration:line-through}
+
+/* ===== ROUTE STEP CARDS (Как добраться) ===== */
+.route-card{border-radius:13px;padding:11px 12px;margin-bottom:8px}
+.route-card:last-child{margin-bottom:0}
+.route-card.r-sage{background:var(--bgt-sage-bg)}
+.route-card.r-softblue{background:var(--bgt-softblue-bg)}
+.route-card.r-bordeaux{background:var(--bgt-bordeaux-bg)}
+.route-card.r-caramel{background:var(--bgt-caramel-bg)}
+.route-title{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:8px}
+.route-steps{display:flex;flex-direction:column;gap:6px}
+.route-step{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;color:var(--bgt-text2,var(--text2));line-height:1.4}
+.route-step b{color:var(--text);font-weight:700}
+.rs-icon{flex-shrink:0;width:18px;text-align:center;font-size:12px}
+.rs-body{flex:1;min-width:0}
+.rs-sub{color:var(--text3);font-size:10.5px;margin-top:2px}
+.route-map-link{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:12px;font-weight:700;text-decoration:none}
+.route-card.r-sage .route-map-link{color:var(--bgt-sage)}
+.route-card.r-softblue .route-map-link{color:var(--bgt-softblue)}
+.route-card.r-bordeaux .route-map-link{color:var(--bgt-bordeaux)}
+.route-card.r-caramel .route-map-link{color:var(--bgt-caramel)}
+
+/* ===== GIFTS LIST ===== */
+.gift-check{width:19px;height:19px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:11px;font-weight:700;color:transparent;background:var(--bg);cursor:pointer;transition:all .15s}
+.gift-check.done{background:var(--bgt-sage);border-color:var(--bgt-sage);color:#fff}
+.gift-del{background:none;border:none;color:var(--text3);font-size:15px;cursor:pointer;padding:2px 4px;flex-shrink:0;opacity:.25;transition:opacity .15s}
+.gift-del:active{opacity:1}
+.gift-add-row{display:flex;gap:8px;margin-top:10px}
+.gift-add-btn{width:34px;height:34px;border-radius:50%;background:var(--bgt-sage);border:none;color:#fff;font-size:18px;cursor:pointer;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1}
+.gift-add-btn:active{opacity:.8}
+
+/* ===== FLIGHT STATUS ROW ===== */
+.live-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:var(--bgt-bordeaux);
+  background:var(--bgt-bordeaux-bg);padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--bgt-bordeaux)}
 
 /* ===== EVENT EDIT ===== */
 .ev-edit-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 6px;font-size:14px;flex-shrink:0;opacity:0.5;line-height:1;margin-top:-2px;margin-left:2px;transition:opacity .15s;font-weight:700;letter-spacing:1px}
@@ -354,10 +397,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <body>
 
 <div class="tabs">
-  <button class="tab active" onclick="showView('budget',this)">💰 Бюджет</button>
-  <button class="tab" onclick="showView('days',this)">📅 По дням</button>
-  <button class="tab" onclick="showView('book',this)">🗺️ Места</button>
-  <button class="tab" onclick="showView('flights',this)">📌 Важное</button>
+  <button class="tab active" data-view="budget" onclick="showView('budget',this)">💰 Бюджет</button>
+  <button class="tab" data-view="days" onclick="showView('days',this)">📅 По дням</button>
+  <button class="tab" data-view="book" onclick="showView('book',this)">🗺️ Места</button>
+  <button class="tab" data-view="flights" onclick="showView('flights',this)">📌 Важное</button>
 </div>
 
 <div class="scroll" id="scroll">
@@ -418,7 +461,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ===== BOOK VIEW ===== -->
 <div id="view-book" class="view">
 
-<div class="section">
+<div class="section" data-section-id="sec-book">
   <h3>📋 Забронировать<span class="section-count" id="book-summary">0 из 6</span></h3>
   <div id="book-list">
     <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_septime')">
@@ -478,7 +521,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<div class="section"><h3>🍽️ Где можно поесть</h3>
+<div class="section" data-section-id="sec-food"><h3>🍽️ Где можно поесть</h3>
 <div class="srow"><div class="place-body"><div class="place-name">Crêperie de Pont-Aven</div><div class="sub">Блины по-бретонски</div><span class="place-chip pc-caramel">Блины</span></div><a href="https://maps.google.com/?q=Creperie+de+Pont-Aven+Paris" target="_blank" class="map-chip">Карты →</a></div>
 <div class="srow"><div class="place-body"><div class="place-name">Crêperie Plougastel</div><div class="sub">Блины</div><span class="place-chip pc-caramel">Блины</span></div><a href="https://maps.google.com/?q=Creperie+Plougastel+Paris" target="_blank" class="map-chip">Карты →</a></div>
 <div class="srow"><div class="place-body"><div class="place-name">L'As Du Fallafel ⭐</div><div class="sub">Культовое место — лучший фалафель Парижа · Le Marais</div><span class="place-chip pc-sage">Фалафель</span></div><a href="https://maps.google.com/?q=L'As+du+Fallafel+34+Rue+des+Rosiers+Paris" target="_blank" class="map-chip">Карты →</a></div>
@@ -498,104 +541,111 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ===== IMPORTANT VIEW ===== -->
 <div id="view-flights" class="view">
 
-<div class="flight-card"><div class="flight-num">VF278 · AJet — ВКО → SAW</div><div class="flight-route"><span>5 июля · 05:50 МСК</span><span>→ ~09:05 Стамбул</span></div></div>
-<div class="flight-card"><div class="flight-num">VF9 · AJet — SAW → CDG</div><div class="flight-route"><span>5 июля · ~12:00 Стамбул</span><span>→ 16:25 Париж CDG</span></div></div>
-<div class="flight-card warn-f"><div class="flight-num">TO7448 · Transavia — ORY → ARN ⚠️</div><div class="flight-route"><span>9 июля · 13:00 Орли (ORY!)</span><span>→ ~15:40 Стокгольм</span></div></div>
-<div class="flight-card warn-f"><div class="flight-num">TO7451 · Transavia — ARN → ORY ⚡</div><div class="flight-route"><span>11 июля · 06:40 Стокгольм</span><span>→ ~09:20 Париж Орли</span></div></div>
-<div class="flight-card"><div class="flight-num">VF516 · AJet — CDG → ESB</div><div class="flight-route"><span>18 июля · 17:40 CDG</span><span>→ ~21:25 Анкара</span></div></div>
-<div class="flight-card"><div class="flight-num">VF587 · AJet — ESB → ВКО</div><div class="flight-route"><span>18 июля · ~22:50 Анкара</span><span>→ ~01:05 МСК (19 июля)</span></div></div>
+<div class="section" data-section-id="sec-flights">
+  <h3>✈️ Рейсы</h3>
+  <div class="flight-card fc-out"><div class="flight-num">VF278 · AJet — ВКО → SAW</div><div class="flight-route"><span>5 июля · 05:50 МСК</span><span>→ ~09:05 Стамбул</span></div></div>
+  <div class="flight-card fc-out"><div class="flight-num">VF9 · AJet — SAW → CDG</div><div class="flight-route"><span>5 июля · ~12:00 Стамбул</span><span>→ 16:25 Париж CDG</span></div></div>
+  <div class="flight-card warn-f"><div class="flight-num">TO7448 · Transavia — ORY → ARN ⚠️</div><div class="flight-route"><span>9 июля · 13:00 Орли (ORY!)</span><span>→ ~15:40 Стокгольм</span></div></div>
+  <div class="flight-card warn-f"><div class="flight-num">TO7451 · Transavia — ARN → ORY ⚡</div><div class="flight-route"><span>11 июля · 06:40 Стокгольм</span><span>→ ~09:20 Париж Орли</span></div></div>
+  <div class="flight-card fc-ret"><div class="flight-num">VF516 · AJet — CDG → ESB</div><div class="flight-route"><span>18 июля · 17:40 CDG</span><span>→ ~21:25 Анкара</span></div></div>
+  <div class="flight-card fc-ret"><div class="flight-num">VF587 · AJet — ESB → ВКО</div><div class="flight-route"><span>18 июля · ~22:50 Анкара</span><span>→ ~01:05 МСК (19 июля)</span></div></div>
+</div>
 
-<div class="section" style="margin-top:10px">
-  <h3>Статусы рейсов</h3>
-  <div class="srow"><div><div style="font-weight:600">FlightRadar24</div><div class="sub">Живые данные: задержки, гейт, позиция самолёта</div></div><a href="https://www.flightradar24.com" target="_blank" class="map-chip">Открыть →</a></div>
+<div class="section" data-section-id="sec-flightstatus">
+  <h3>📡 Статусы рейсов</h3>
+  <div class="srow"><div><div style="font-weight:600">FlightRadar24<span class="live-badge"><span class="live-dot"></span>live</span></div><div class="sub">Живые данные: задержки, гейт, позиция самолёта</div></div><a href="https://www.flightradar24.com" target="_blank" class="map-chip">Открыть →</a></div>
   <div class="srow"><div><div style="font-weight:600">Аэропорт Орли (ORY)</div><div class="sub">9 и 11 июля · официальное табло вылетов</div></div><a href="https://www.parisaeroport.fr/orly/vols/departs" target="_blank" class="map-chip">Табло →</a></div>
   <div class="srow"><div><div style="font-weight:600">Аэропорт CDG</div><div class="sub">5 и 18 июля · официальное табло</div></div><a href="https://www.parisaeroport.fr/cdg/vols/departs" target="_blank" class="map-chip">Табло →</a></div>
   <div class="srow"><div><div style="font-weight:600">Аэропорт Внуково (ВКО)</div><div class="sub">5 и 19 июля · официальное табло</div></div><a href="https://www.vnukovo.ru/flight-information/departures/" target="_blank" class="map-chip">Табло →</a></div>
   <div class="srow"><div><div style="font-weight:600">Аэропорт Арланда (ARN)</div><div class="sub">10–11 июля · официальное табло</div></div><a href="https://www.swedavia.com/arlanda/flight-info/" target="_blank" class="map-chip">Табло →</a></div>
 </div>
 
-<div class="section">
-  <h3>Отели</h3>
+<div class="section" data-section-id="sec-hotels">
+  <h3>🏨 Отели</h3>
   <div class="srow"><div><div style="font-weight:600">Париж</div><div class="sub">14 Rue Cadet, 9 arr. · 5–18 июля</div></div><a href="https://maps.google.com/?q=14+Rue+Cadet+Paris+9" target="_blank" class="map-chip">Карты →</a></div>
   <div class="srow"><div><div style="font-weight:600">Стокгольм — Scandic Go</div><div class="sub">Upplandsgatan 4 · 9–11 июля · 9 мин до T-Centralen</div></div><a href="https://maps.google.com/?q=Scandic+Go+Stockholm+Upplandsgatan+4" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
-<div class="section">
-  <h3>Супермаркеты рядом с квартирой</h3>
+<div class="section" data-section-id="sec-groceries">
+  <h3>🛒 Супермаркеты рядом с квартирой</h3>
   <div class="srow"><div><div style="font-weight:600">Monop' 🛒</div><div class="sub">16 Rue du Faubourg Montmartre · 4 мин · 8:00–23:50 ежедневно</div></div><a href="https://maps.google.com/?q=Monop+16+Rue+du+Faubourg+Montmartre+Paris" target="_blank" class="map-chip">Карты →</a></div>
   <div class="srow"><div><div style="font-weight:600">Les Vergers Cadet 🍎</div><div class="sub">2b Rue Cadet · 2 мин · фрукты и овощи · вт–вс 7:00–20:00</div></div><a href="https://maps.google.com/?q=Les+Vergers+Cadet+2+Rue+Cadet+Paris" target="_blank" class="map-chip">Карты →</a></div>
   <div class="srow"><div><div style="font-weight:600">NOUS épicerie 🌿</div><div class="sub">44 Rue du Faubourg Poissonnière · 7 мин · пн 14:00–20:45, вт–сб 10:00–20:45</div></div><a href="https://maps.google.com/?q=NOUS+epicerie+44+Rue+du+Faubourg+Poissonni%C3%A8re+Paris" target="_blank" class="map-chip">Карты →</a></div>
   <div class="srow"><div><div style="font-weight:600">Heratchian Frères 🧀</div><div class="sub">6 Rue Lamartine · 5 мин · деликатесный · вт–пт 9:00–18:00, сб до 18:45</div></div><a href="https://maps.google.com/?q=Heratchian+Freres+6+Rue+Lamartine+Paris" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
-<div class="section">
-  <h3>Прачечная</h3>
+<div class="section" data-section-id="sec-laundry">
+  <h3>🧺 Прачечная</h3>
   <div class="srow"><div><div style="font-weight:600">E.L.A 👕</div><div class="sub">7 Rue Maubeuge · 5 мин от отеля · 7:00–22:00 ежедневно</div></div><a href="https://maps.google.com/?q=7+Rue+Maubeuge+Paris" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
-<div class="section">
-  <h3>Как добраться на концерты</h3>
-  <div style="background:var(--green-bg);border-radius:8px;padding:10px 11px;margin-bottom:8px">
-    <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px">Bad Bunny — 10 июля · Strawberry Arena, Стокгольм</div>
-    <div style="font-size:11px;color:var(--text2);line-height:1.6">
-      🏨 Scandic Go (Upplandsgatan 4)<br>
-      🚇 Пешком 9 мин → <b>T-Centralen</b><br>
-      🔵 T-bana синяя линия (направление Hjulsta/Akalla) → <b>Solna centrum</b> (~15 мин)<br>
-      🏟️ Стадион в 5 мин пешком от станции<br>
-      ⏰ Выйти в 17:15 · ворота открываются 18:00
+<div class="section" data-section-id="sec-concerts">
+  <h3>🎫 Как добраться на концерты</h3>
+  <div class="route-card r-sage">
+    <div class="route-title">Bad Bunny — 10 июля · Strawberry Arena, Стокгольм</div>
+    <div class="route-steps">
+      <div class="route-step"><span class="rs-icon">🏨</span><span>Scandic Go (Upplandsgatan 4)</span></div>
+      <div class="route-step"><span class="rs-icon">🚇</span><span>Пешком 9 мин → <b>T-Centralen</b></span></div>
+      <div class="route-step"><span class="rs-icon">🔵</span><span>T-bana синяя линия (направление Hjulsta/Akalla) → <b>Solna centrum</b> (~15 мин)</span></div>
+      <div class="route-step"><span class="rs-icon">🏟️</span><span>Стадион в 5 мин пешком от станции</span></div>
+      <div class="route-step"><span class="rs-icon">⏰</span><span>Выйти в <b>17:15</b> · ворота открываются <b>18:00</b></span></div>
     </div>
-    <a href="https://www.google.com/maps/dir/?api=1&origin=Upplandsgatan+4,+Stockholm&destination=Strawberry+Arena,+Solna&travelmode=transit" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--green);font-size:13px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=Upplandsgatan+4,+Stockholm&destination=Strawberry+Arena,+Solna&travelmode=transit" target="_blank" class="route-map-link">🗺️ Маршрут на картах →</a>
   </div>
-  <div style="background:var(--purple-bg);border-radius:8px;padding:10px 11px">
-    <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px">The Weeknd — 12 июля · Stade de France, Сен-Дени</div>
-    <div style="font-size:11px;color:var(--text2);line-height:1.6">
-      🏨 14 Rue Cadet, Paris 9e<br>
-      🚇 Метро до <b>Gare du Nord</b> (линия 4, 5 мин) или пешком 15 мин<br>
-      🔴 RER B направление Aéroport CDG → <b>La Plaine – Stade de France</b> (~8 мин)<br>
-      🏟️ Стадион в 10 мин пешком от станции<br>
-      ⏰ Выйти в 17:30 · ворота открываются 19:00<br>
-      🚇 Обратно: RER B или RER D, последние поезда ~01:00
+  <div class="route-card r-bordeaux">
+    <div class="route-title">The Weeknd — 12 июля · Stade de France, Сен-Дени</div>
+    <div class="route-steps">
+      <div class="route-step"><span class="rs-icon">🏨</span><span>14 Rue Cadet, Paris 9e</span></div>
+      <div class="route-step"><span class="rs-icon">🚇</span><span>Метро до <b>Gare du Nord</b> (линия 4, 5 мин) или пешком 15 мин</span></div>
+      <div class="route-step"><span class="rs-icon">🔴</span><span>RER B направление Aéroport CDG → <b>La Plaine – Stade de France</b> (~8 мин)</span></div>
+      <div class="route-step"><span class="rs-icon">🏟️</span><span>Стадион в 10 мин пешком от станции</span></div>
+      <div class="route-step"><span class="rs-icon">⏰</span><span>Выйти в <b>17:30</b> · ворота открываются <b>19:00</b></span></div>
+      <div class="route-step"><span class="rs-icon">🚇</span><span>Обратно: RER B или RER D, последние поезда ~01:00</span></div>
     </div>
-    <a href="https://www.google.com/maps/dir/?api=1&origin=14+Rue+Cadet,+Paris&destination=Stade+de+France,+Saint-Denis&travelmode=transit" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--purple);font-size:13px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
-  </div>
-</div>
-
-<div class="section">
-  <h3>Как добраться до Этреты</h3>
-  <div style="background:var(--blue-bg);border-radius:8px;padding:10px 11px;margin-bottom:8px">
-    <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">🚆 Туда · 16 июля</div>
-    <div style="font-size:11px;color:var(--text2);line-height:1.7">
-      🏨 14 Rue Cadet, Paris 9e<br>
-      🚇 Метро/пешком → <b>Gare Saint-Lazare</b><br>
-      🚆 <b>NOMAD RÉSA no. 3105</b> · 2 класс · Вагон 3<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;Место 34 (окно) + Место 33 (коридор)<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;Отправление <b>08:40</b> → Bréauté <b>10:32</b> · 1ч 52мин<br>
-      🚶 Пересадка в Bréauté <b>18 минут</b><br>
-      🚌 <b>CAR NOMAD no. 88051</b> · Отправление <b>10:50</b><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;Bréauté → <b>Étretat 11:26</b> · 36 мин
-    </div>
-    <a href="https://www.google.com/maps/dir/?api=1&origin=14+Rue+Cadet,+Paris&destination=Etretat,+Normandie,+France&travelmode=transit" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--blue);font-size:13px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
-  </div>
-  <div style="background:var(--purple-bg);border-radius:8px;padding:10px 11px">
-    <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px">🚌 Обратно · 16 июля</div>
-    <div style="font-size:11px;color:var(--text2);line-height:1.7">
-      🚌 <b>CAR NOMAD no. 88052</b> · Отправление Étretat <b>17:22</b><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;→ Bréauté <b>17:58</b> · 36 мин<br>
-      🚶 Пересадка в Bréauté <b>23 минуты</b><br>
-      🚆 Отправление <b>18:21</b> → Paris Saint-Lazare <b>20:23</b> · 2ч 02мин<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;Вагон 4 · Место 72 (коридор) + Место 71 (окно)<br>
-      🚇 От Saint-Lazare метро → отель ~15 мин
-    </div>
-    <a href="https://www.google.com/maps/dir/?api=1&origin=Etretat,+Normandie,+France&destination=14+Rue+Cadet,+Paris&travelmode=transit" target="_blank" style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;color:var(--blue);font-size:13px;font-weight:600;text-decoration:none">🗺️ Маршрут на картах →</a>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=14+Rue+Cadet,+Paris&destination=Stade+de+France,+Saint-Denis&travelmode=transit" target="_blank" class="route-map-link">🗺️ Маршрут на картах →</a>
   </div>
 </div>
 
-<div class="section" style="margin-top:10px">
-  <h3>🎁 Купить финтифлюшки</h3>
+<div class="section" data-section-id="sec-etretat">
+  <h3>🚆 Как добраться до Этреты</h3>
+  <div class="route-card r-softblue">
+    <div class="route-title">🚆 Туда · 16 июля</div>
+    <div class="route-steps">
+      <div class="route-step"><span class="rs-icon">🏨</span><span>14 Rue Cadet, Paris 9e</span></div>
+      <div class="route-step"><span class="rs-icon">🚇</span><span>Метро/пешком → <b>Gare Saint-Lazare</b></span></div>
+      <div class="route-step"><span class="rs-icon">🚆</span><div class="rs-body"><b>NOMAD RÉSA no. 3105</b> · 2 класс · Вагон 3
+        <div class="rs-sub">Место 34 (окно) + Место 33 (коридор)</div>
+        <div class="rs-sub">Отправление <b>08:40</b> → Bréauté <b>10:32</b> · 1ч 52мин</div>
+      </div></div>
+      <div class="route-step"><span class="rs-icon">🚶</span><span>Пересадка в Bréauté <b>18 минут</b></span></div>
+      <div class="route-step"><span class="rs-icon">🚌</span><div class="rs-body"><b>CAR NOMAD no. 88051</b> · Отправление <b>10:50</b>
+        <div class="rs-sub">Bréauté → <b>Étretat 11:26</b> · 36 мин</div>
+      </div></div>
+    </div>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=14+Rue+Cadet,+Paris&destination=Etretat,+Normandie,+France&travelmode=transit" target="_blank" class="route-map-link">🗺️ Маршрут на картах →</a>
+  </div>
+  <div class="route-card r-caramel">
+    <div class="route-title">🚌 Обратно · 16 июля</div>
+    <div class="route-steps">
+      <div class="route-step"><span class="rs-icon">🚌</span><div class="rs-body"><b>CAR NOMAD no. 88052</b> · Отправление Étretat <b>17:22</b>
+        <div class="rs-sub">→ Bréauté <b>17:58</b> · 36 мин</div>
+      </div></div>
+      <div class="route-step"><span class="rs-icon">🚶</span><span>Пересадка в Bréauté <b>23 минуты</b></span></div>
+      <div class="route-step"><span class="rs-icon">🚆</span><div class="rs-body">Отправление <b>18:21</b> → Paris Saint-Lazare <b>20:23</b> · 2ч 02мин
+        <div class="rs-sub">Вагон 4 · Место 72 (коридор) + Место 71 (окно)</div>
+      </div></div>
+      <div class="route-step"><span class="rs-icon">🚇</span><span>От Saint-Lazare метро → отель ~15 мин</span></div>
+    </div>
+    <a href="https://www.google.com/maps/dir/?api=1&origin=Etretat,+Normandie,+France&destination=14+Rue+Cadet,+Paris&travelmode=transit" target="_blank" class="route-map-link">🗺️ Маршрут на картах →</a>
+  </div>
+</div>
+
+<div class="section" data-no-collapse="true">
+  <h3>🎁 Подарки</h3>
   <div id="gifts-list"></div>
-  <div style="display:flex;gap:8px;margin-top:8px">
-    <input id="gift-new-input" type="text" placeholder="Кому купить..." class="form-input" style="flex:1;padding:8px 10px;font-size:13px">
-    <button onclick="addGiftItem()" style="padding:8px 14px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-size:20px;line-height:1;cursor:pointer;flex-shrink:0">+</button>
+  <div class="gift-add-row">
+    <input id="gift-new-input" type="text" placeholder="Кому купить..." class="form-input ev-input-compact" style="flex:1">
+    <button onclick="addGiftItem()" class="gift-add-btn">+</button>
   </div>
 </div>
 
@@ -983,12 +1033,72 @@ async function manualRefresh(){ setSyncStatus('🟡 загружаю...'); await
 
 // ===== VIEW SWITCH =====
 function showView(name, btn){
+  if(!btn) btn = document.querySelector('.tab[data-view="'+name+'"]');
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
+  if(btn) btn.classList.add('active');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   document.getElementById('scroll').scrollTop = 0;
   document.getElementById('fab').style.display = (name==='budget' || name==='days') ? 'flex' : 'none';
+  currentTab = name;
+  persistUIState();
+}
+
+// ===== UI STATE PERSISTENCE (active tab, collapsed sections, open days) =====
+const UI_STATE_KEY = 'paris2026_ui_state_v1';
+let currentTab = 'budget';
+let collapsedSections = new Set();
+
+function loadUIState(){
+  try {
+    const raw = JSON.parse(localStorage.getItem(UI_STATE_KEY) || '{}');
+    if(raw.activeTab) currentTab = raw.activeTab;
+    if(Array.isArray(raw.collapsedSections)) collapsedSections = new Set(raw.collapsedSections);
+    if(Array.isArray(raw.openDays)) openDays = new Set(raw.openDays);
+  } catch(e){}
+}
+
+function persistUIState(){
+  try {
+    localStorage.setItem(UI_STATE_KEY, JSON.stringify({
+      activeTab: currentTab,
+      collapsedSections: [...collapsedSections],
+      openDays: [...openDays]
+    }));
+  } catch(e){}
+}
+
+function toggleSection(id){
+  const sec = document.querySelector('.section[data-section-id="'+id+'"]');
+  if(!sec) return;
+  sec.classList.toggle('collapsed');
+  if(sec.classList.contains('collapsed')) collapsedSections.add(id); else collapsedSections.delete(id);
+  persistUIState();
+}
+
+function initCollapsibleSections(){
+  document.querySelectorAll('#view-book .section, #view-flights .section').forEach(sec => {
+    if(sec.dataset.noCollapse === 'true') return;
+    const id = sec.dataset.sectionId;
+    const h3 = sec.querySelector('h3');
+    if(!id || !h3 || h3.classList.contains('collapsible')) return;
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    let node = h3.nextSibling;
+    while(node){
+      const next = node.nextSibling;
+      body.appendChild(node);
+      node = next;
+    }
+    sec.appendChild(body);
+    const chevron = document.createElement('span');
+    chevron.className = 'section-chevron';
+    chevron.textContent = '›';
+    h3.appendChild(chevron);
+    h3.classList.add('collapsible');
+    h3.addEventListener('click', () => toggleSection(id));
+    if(collapsedSections.has(id)) sec.classList.add('collapsed');
+  });
 }
 
 // ===== DAYS DATA =====
@@ -1323,6 +1433,7 @@ function tglDay(idx){
   rows.classList.toggle('open');
   ch.style.transform = isOpen ? '' : 'rotate(90deg)';
   if(isOpen) openDays.delete(idx); else openDays.add(idx);
+  persistUIState();
 }
 
 document.addEventListener('click', function(e){
@@ -1657,7 +1768,7 @@ async function loadGifts(){
 function saveGiftsLocal(){ localStorage.setItem(GIFTS_KEY, JSON.stringify(giftItems)); }
 function renderGifts(){
   const el = document.getElementById('gifts-list'); if(!el) return;
-  el.innerHTML = giftItems.map((item,idx)=>`<div class="srow"><div style="display:flex;align-items:center;gap:10px;flex:1"><span style="font-size:15px;cursor:pointer;flex-shrink:0" onclick="toggleGift(${idx})">${item.done?'☑':'☐'}</span><span contenteditable="true" style="font-size:13px;${item.done?'text-decoration:line-through;color:var(--text3)':'color:var(--text)'};outline:none;flex:1;min-width:0;cursor:text" onblur="saveGiftLabel(${idx},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}" onclick="event.stopPropagation()" onfocus="scrollAboveKb(this)">${item.label}</span></div><button onclick="deleteGift(${idx})" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">×</button></div>`).join('');
+  el.innerHTML = giftItems.map((item,idx)=>`<div class="srow" style="padding:7px 0"><div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0"><span class="gift-check${item.done?' done':''}" onclick="toggleGift(${idx})">✓</span><span contenteditable="true" class="gift-label${item.done?' done':''}" style="outline:none;flex:1;min-width:0;cursor:text" onblur="saveGiftLabel(${idx},this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}" onclick="event.stopPropagation()" onfocus="scrollAboveKb(this)">${item.label}</span></div><button class="gift-del" onclick="deleteGift(${idx})">×</button></div>`).join('');
 }
 function saveGiftLabel(idx, el){
   const label = el.textContent.trim();
@@ -1677,6 +1788,7 @@ document.addEventListener('DOMContentLoaded',()=>{ const sub=document.getElement
 // ===== INIT =====
 async function init(){
   try {
+    loadUIState();
     loadCustomTags();
     await loadDays();
     await loadCustomTagsRemote();
@@ -1689,6 +1801,8 @@ async function init(){
     await loadBookCustomRemote();
     renderBookCustom();
     await loadBook();
+    initCollapsibleSections();
+    showView(currentTab);
     connectRealtime();
   } catch(e){ console.warn('init error', e); }
 }
