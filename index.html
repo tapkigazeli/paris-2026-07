@@ -171,7 +171,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .empty-state div{font-size:13px}
 
 /* DAYS TAB */
-#view-days{background:var(--bg2)}
+#view-days,#view-book{background:var(--bg2)}
 .paid-banner{background:var(--accent-bg);border:0.5px solid var(--accent);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .paid-banner h3{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
@@ -224,15 +224,56 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ft{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px 10px;background:transparent;font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);font-weight:500}
 .ft span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ft-t{font-size:11.5px;font-weight:600;color:var(--bgt-sage);flex-shrink:0}
-.section{background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:10px}
-.section h3{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
-.srow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px;gap:8px}
+.section{background:var(--bg);border:1px solid var(--border2);border-radius:16px;padding:14px;margin-bottom:12px;
+  box-shadow:0 3px 10px -4px rgba(0,0,0,.1)}
+.section h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:9px;display:flex;align-items:center;gap:6px;letter-spacing:-.1px}
+.section h3 .section-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--bgt-text2,var(--text2));background:var(--bg2);padding:3px 9px;border-radius:999px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:12px;gap:10px}
 .srow:last-child{border-bottom:none}
-.srow .sub{font-size:10px;color:var(--text3);margin-top:2px}
-.amt-paid{color:var(--accent);font-weight:600;white-space:nowrap;flex-shrink:0}
+.srow .sub{font-size:11px;color:var(--bgt-text2,var(--text2));margin-top:2px;line-height:1.4}
+.amt-paid{color:var(--bgt-sage);font-weight:600;white-space:nowrap;flex-shrink:0}
 .amt-open{color:var(--warn);white-space:nowrap;flex-shrink:0}
-.urg{color:#c04060;font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
-.ok{color:var(--accent);font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
+.urg{color:var(--bgt-bordeaux);font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
+.ok{color:var(--bgt-sage);font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
+.map-chip{flex-shrink:0;white-space:nowrap;font-size:11px;font-weight:600;color:var(--bgt-softblue);background:var(--bgt-softblue-bg);
+  padding:5px 11px;border-radius:999px;text-decoration:none}
+.map-chip:active{opacity:.75}
+
+.book-row{cursor:pointer}
+.book-check{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:12px;font-weight:700;color:transparent;background:var(--bg);transition:all .15s}
+.book-check.done{background:var(--bgt-sage);border-color:var(--bgt-sage);color:#fff}
+.book-row-body{flex:1;min-width:0}
+.book-row-name{font-size:13px;font-weight:600;color:var(--text);transition:color .15s}
+.book-row-name.done{color:var(--bgt-text2,var(--text2));font-weight:500}
+.book-chip{display:none;flex-shrink:0;font-size:10px;font-weight:700;color:var(--bgt-sage);background:var(--bgt-sage-bg);padding:3px 9px;border-radius:999px}
+.book-chip.show{display:inline-block}
+.book-del{background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:0 2px;flex-shrink:0;opacity:.4}
+.book-del:active{opacity:1}
+.book-add-row{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:0.5px dashed var(--border)}
+.book-add-row input{font-size:13px;padding:8px 11px}
+.book-add-row .ev-tag-add-btn{align-self:flex-end;padding:7px 16px}
+.sub-link{color:var(--bgt-softblue);font-weight:600;text-decoration:none}
+.sub-link:active{opacity:.7}
+
+.place-body{flex:1;min-width:0}
+.place-name{font-size:13px;font-weight:600;color:var(--text)}
+.place-chip{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.1px}
+.pc-caramel{background:var(--bgt-caramel-bg);color:var(--bgt-caramel)}
+.pc-sage{background:var(--bgt-sage-bg);color:var(--bgt-sage)}
+.pc-softblue{background:var(--bgt-softblue-bg);color:var(--bgt-softblue)}
+.pc-bordeaux{background:var(--bgt-bordeaux-bg);color:var(--bgt-bordeaux)}
+.pc-amber{background:var(--amber-bg);color:var(--amber)}
+.pc-pink{background:var(--pink-bg);color:var(--pink)}
+.pc-purple{background:var(--purple-bg);color:var(--purple)}
+
+.sync-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border2);
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom)) 14px;display:flex;align-items:center;gap:10px;z-index:40;
+  box-shadow:0 -2px 10px -4px rgba(0,0,0,.08)}
+.sync-status{font-size:11.5px;color:var(--bgt-text2,var(--text2));flex:1;font-weight:500}
+.sync-refresh{background:var(--bg2);border:1px solid var(--border2);border-radius:999px;padding:5px 12px;font-size:11px;
+  font-weight:600;color:var(--text2);cursor:pointer}
+.sync-refresh:active{background:var(--bg3)}
 .warn-box{background:var(--red-bg);border-radius:11px;border-left:2.5px solid var(--red);
   padding:8px 11px;margin-bottom:12px}
 .warn-title{font-size:11.5px;font-weight:700;color:var(--red);margin-bottom:4px;display:flex;align-items:center;gap:5px}
@@ -377,60 +418,78 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="view-book" class="view">
 
 <div class="section">
-  <h3>📋 Забронировать</h3>
+  <h3>📋 Забронировать<span class="section-count" id="book-summary">0 из 6</span></h3>
   <div id="book-list">
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_septime')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_septime_icon" style="font-size:15px">☐</span>
-        <div><div id="book_septime_name" style="font-size:13px;font-weight:500">Septime / Frenchie (17 июл)</div><div class="sub">septime-resto.fr · за 2–3 недели!</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_septime')">
+      <span class="book-check" id="book_septime_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_septime_name">Septime / Frenchie (17 июл)</div>
+        <div class="sub"><a href="https://septime-resto.fr" target="_blank" class="sub-link">septime-resto.fr</a> · за 2–3 недели!</div>
       </div>
+      <span class="book-chip" id="book_septime_chip">Готово</span>
     </div>
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_dumonet')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_dumonet_icon" style="font-size:15px">☐</span>
-        <div><div id="book_dumonet_name" style="font-size:13px;font-weight:500">Chez Dumonet (15 июл)</div><div class="sub">TheFork или по телефону</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_dumonet')">
+      <span class="book-check" id="book_dumonet_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_dumonet_name">Chez Dumonet (15 июл)</div>
+        <div class="sub"><a href="https://www.thefork.fr" target="_blank" class="sub-link">TheFork</a> или по телефону</div>
       </div>
+      <span class="book-chip" id="book_dumonet_chip">Готово</span>
     </div>
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_grolet')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_grolet_icon" style="font-size:15px">☐</span>
-        <div><div id="book_grolet_name" style="font-size:13px;font-weight:500">Cédric Grolet — онлайн-заказ десертов (6 июл)</div><div class="sub">cedricgrolet.com · заказ заранее · забрать у Пале-Рояль</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_grolet')">
+      <span class="book-check" id="book_grolet_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_grolet_name">Cédric Grolet — онлайн-заказ десертов (6 июл)</div>
+        <div class="sub"><a href="https://cedricgrolet.com" target="_blank" class="sub-link">cedricgrolet.com</a> · заказ заранее · забрать у Пале-Рояль</div>
       </div>
+      <span class="book-chip" id="book_grolet_chip">Готово</span>
     </div>
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_catacombes')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_catacombes_icon" style="font-size:15px">☐</span>
-        <div><div id="book_catacombes_name" style="font-size:13px;font-weight:500">Катакомбы (7 июл)</div><div class="sub">catacombes.paris.fr · €62</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_catacombes')">
+      <span class="book-check" id="book_catacombes_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_catacombes_name">Катакомбы (7 июл)</div>
+        <div class="sub"><a href="https://catacombes.paris.fr" target="_blank" class="sub-link">catacombes.paris.fr</a> · €62</div>
       </div>
+      <span class="book-chip" id="book_catacombes_chip">Готово</span>
     </div>
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_etretat')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_etretat_icon" style="font-size:15px">☐</span>
-        <div><div id="book_etretat_name" style="font-size:13px;font-weight:500">Сады Этрета (16 июл)</div><div class="sub">lesjardinsdetretat.fr · €28</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_etretat')">
+      <span class="book-check" id="book_etretat_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_etretat_name">Сады Этрета (16 июл)</div>
+        <div class="sub"><a href="https://lesjardinsdetretat.fr" target="_blank" class="sub-link">lesjardinsdetretat.fr</a> · €28</div>
       </div>
+      <span class="book-chip" id="book_etretat_chip">Готово</span>
     </div>
-    <div class="srow" style="cursor:pointer" onclick="toggleBook('book_notredame')">
-      <div style="display:flex;align-items:center;gap:10px;flex:1">
-        <span id="book_notredame_icon" style="font-size:15px">☐</span>
-        <div><div id="book_notredame_name" style="font-size:13px;font-weight:500">Нотр-Дам (14 июл)</div><div class="sub">notredamedeparis.fr · бесплатно</div></div>
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('book_notredame')">
+      <span class="book-check" id="book_notredame_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="book_notredame_name">Нотр-Дам (14 июл)</div>
+        <div class="sub"><a href="https://www.notredamedeparis.fr" target="_blank" class="sub-link">notredamedeparis.fr</a> · бесплатно</div>
       </div>
+      <span class="book-chip" id="book_notredame_chip">Готово</span>
     </div>
+    <div id="book-list-custom"></div>
+  </div>
+  <div class="book-add-row">
+    <input class="form-input ev-input-compact" id="book-new-name" type="text" placeholder="Название" maxlength="60">
+    <input class="form-input ev-input-compact" id="book-new-sub" type="text" placeholder="Детали (сайт, цена...)" maxlength="80">
+    <button onclick="addBookItem()" class="ev-tag-add-btn">+ Добавить</button>
   </div>
 </div>
 
 <div class="section"><h3>🍽️ Где можно поесть</h3>
-<div class="srow"><div><div style="font-weight:600">Crêperie de Pont-Aven</div><div class="sub">Блины по-бретонски</div></div><a href="https://maps.google.com/?q=Creperie+de+Pont-Aven+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Crêperie Plougastel</div><div class="sub">Блины</div></div><a href="https://maps.google.com/?q=Creperie+Plougastel+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">L'As Du Fallafel ⭐</div><div class="sub">Культовое место — лучший фалафель Парижа · Le Marais</div></div><a href="https://maps.google.com/?q=L'As+du+Fallafel+34+Rue+des+Rosiers+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Dong Huong</div><div class="sub">Вьетнамка · Belleville</div></div><a href="https://maps.google.com/?q=Dong+Huong+14+Rue+Louis+Bonnet+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Brasserie des Deux Palais</div><div class="sub">Классическое французское кафе · Île de la Cité</div></div><a href="https://maps.google.com/?q=Brasserie+des+Deux+Palais+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">La Pâtisserie Cyril Lignac</div><div class="sub">Круассаны 🥐</div></div><a href="https://maps.google.com/?q=La+Patisserie+Cyril+Lignac+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Mamiche</div><div class="sub">Круассаны 🥐</div></div><a href="https://maps.google.com/?q=Mamiche+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Au Pied de Cochon ⭐</div><div class="sub">Луковый суп!! · Les Halles · круглосуточно</div></div><a href="https://maps.google.com/?q=Au+Pied+de+Cochon+6+Rue+Coquillière+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Ladurée Champs-Élysées</div><div class="sub">Самые культовые макаруны 🍬</div></div><a href="https://maps.google.com/?q=Laduree+Champs+Elysees+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Кофейня Louis Vuitton</div><div class="sub">Le Café V · внутри флагмана на Champs-Élysées</div></div><a href="https://maps.google.com/?q=Louis+Vuitton+101+Avenue+des+Champs-Elysees+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">KB CoffeeShop</div><div class="sub">Спешелти кофе ☕</div></div><a href="https://maps.google.com/?q=KB+CoffeeShop+53+Avenue+Trudaine+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-<div class="srow"><div><div style="font-weight:600">Motors Coffee</div><div class="sub">Спешелти кофе ☕</div></div><a href="https://maps.google.com/?q=Motors+Coffee+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Crêperie de Pont-Aven</div><div class="sub">Блины по-бретонски</div><span class="place-chip pc-caramel">Блины</span></div><a href="https://maps.google.com/?q=Creperie+de+Pont-Aven+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Crêperie Plougastel</div><div class="sub">Блины</div><span class="place-chip pc-caramel">Блины</span></div><a href="https://maps.google.com/?q=Creperie+Plougastel+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">L'As Du Fallafel ⭐</div><div class="sub">Культовое место — лучший фалафель Парижа · Le Marais</div><span class="place-chip pc-sage">Фалафель</span></div><a href="https://maps.google.com/?q=L'As+du+Fallafel+34+Rue+des+Rosiers+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Dong Huong</div><div class="sub">Вьетнамка · Belleville</div><span class="place-chip pc-softblue">Вьетнамская</span></div><a href="https://maps.google.com/?q=Dong+Huong+14+Rue+Louis+Bonnet+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Brasserie des Deux Palais</div><div class="sub">Классическое французское кафе · Île de la Cité</div><span class="place-chip pc-bordeaux">Кафе</span></div><a href="https://maps.google.com/?q=Brasserie+des+Deux+Palais+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">La Pâtisserie Cyril Lignac</div><div class="sub">Круассаны 🥐</div><span class="place-chip pc-amber">Круассаны</span></div><a href="https://maps.google.com/?q=La+Patisserie+Cyril+Lignac+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Mamiche</div><div class="sub">Круассаны 🥐</div><span class="place-chip pc-amber">Круассаны</span></div><a href="https://maps.google.com/?q=Mamiche+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Au Pied de Cochon ⭐</div><div class="sub">Луковый суп!! · Les Halles · круглосуточно</div><span class="place-chip pc-pink">Бистро</span></div><a href="https://maps.google.com/?q=Au+Pied+de+Cochon+6+Rue+Coquillière+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Ladurée Champs-Élysées</div><div class="sub">Самые культовые макаруны 🍬</div><span class="place-chip pc-purple">Макаруны</span></div><a href="https://maps.google.com/?q=Laduree+Champs+Elysees+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Кофейня Louis Vuitton</div><div class="sub">Le Café V · внутри флагмана на Champs-Élysées</div><span class="place-chip pc-sage">Кофе</span></div><a href="https://maps.google.com/?q=Louis+Vuitton+101+Avenue+des+Champs-Elysees+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">KB CoffeeShop</div><div class="sub">Спешелти кофе ☕</div><span class="place-chip pc-sage">Кофе</span></div><a href="https://maps.google.com/?q=KB+CoffeeShop+53+Avenue+Trudaine+Paris" target="_blank" class="map-chip">Карты →</a></div>
+<div class="srow"><div class="place-body"><div class="place-name">Motors Coffee</div><div class="sub">Спешелти кофе ☕</div><span class="place-chip pc-sage">Кофе</span></div><a href="https://maps.google.com/?q=Motors+Coffee+Paris" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
 </div>
@@ -447,30 +506,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="section" style="margin-top:10px">
   <h3>Статусы рейсов</h3>
-  <div class="srow"><div><div style="font-weight:600">FlightRadar24</div><div class="sub">Живые данные: задержки, гейт, позиция самолёта</div></div><a href="https://www.flightradar24.com" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Открыть →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Аэропорт Орли (ORY)</div><div class="sub">9 и 11 июля · официальное табло вылетов</div></div><a href="https://www.parisaeroport.fr/orly/vols/departs" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Табло →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Аэропорт CDG</div><div class="sub">5 и 18 июля · официальное табло</div></div><a href="https://www.parisaeroport.fr/cdg/vols/departs" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Табло →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Аэропорт Внуково (ВКО)</div><div class="sub">5 и 19 июля · официальное табло</div></div><a href="https://www.vnukovo.ru/flight-information/departures/" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Табло →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Аэропорт Арланда (ARN)</div><div class="sub">10–11 июля · официальное табло</div></div><a href="https://www.swedavia.com/arlanda/flight-info/" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Табло →</a></div>
+  <div class="srow"><div><div style="font-weight:600">FlightRadar24</div><div class="sub">Живые данные: задержки, гейт, позиция самолёта</div></div><a href="https://www.flightradar24.com" target="_blank" class="map-chip">Открыть →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Аэропорт Орли (ORY)</div><div class="sub">9 и 11 июля · официальное табло вылетов</div></div><a href="https://www.parisaeroport.fr/orly/vols/departs" target="_blank" class="map-chip">Табло →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Аэропорт CDG</div><div class="sub">5 и 18 июля · официальное табло</div></div><a href="https://www.parisaeroport.fr/cdg/vols/departs" target="_blank" class="map-chip">Табло →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Аэропорт Внуково (ВКО)</div><div class="sub">5 и 19 июля · официальное табло</div></div><a href="https://www.vnukovo.ru/flight-information/departures/" target="_blank" class="map-chip">Табло →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Аэропорт Арланда (ARN)</div><div class="sub">10–11 июля · официальное табло</div></div><a href="https://www.swedavia.com/arlanda/flight-info/" target="_blank" class="map-chip">Табло →</a></div>
 </div>
 
 <div class="section">
   <h3>Отели</h3>
-  <div class="srow"><div><div style="font-weight:600">Париж</div><div class="sub">14 Rue Cadet, 9 arr. · 5–18 июля</div></div><a href="https://maps.google.com/?q=14+Rue+Cadet+Paris+9" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Стокгольм — Scandic Go</div><div class="sub">Upplandsgatan 4 · 9–11 июля · 9 мин до T-Centralen</div></div><a href="https://maps.google.com/?q=Scandic+Go+Stockholm+Upplandsgatan+4" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Париж</div><div class="sub">14 Rue Cadet, 9 arr. · 5–18 июля</div></div><a href="https://maps.google.com/?q=14+Rue+Cadet+Paris+9" target="_blank" class="map-chip">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Стокгольм — Scandic Go</div><div class="sub">Upplandsgatan 4 · 9–11 июля · 9 мин до T-Centralen</div></div><a href="https://maps.google.com/?q=Scandic+Go+Stockholm+Upplandsgatan+4" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
 <div class="section">
   <h3>Супермаркеты рядом с квартирой</h3>
-  <div class="srow"><div><div style="font-weight:600">Monop' 🛒</div><div class="sub">16 Rue du Faubourg Montmartre · 4 мин · 8:00–23:50 ежедневно</div></div><a href="https://maps.google.com/?q=Monop+16+Rue+du+Faubourg+Montmartre+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Les Vergers Cadet 🍎</div><div class="sub">2b Rue Cadet · 2 мин · фрукты и овощи · вт–вс 7:00–20:00</div></div><a href="https://maps.google.com/?q=Les+Vergers+Cadet+2+Rue+Cadet+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-  <div class="srow"><div><div style="font-weight:600">NOUS épicerie 🌿</div><div class="sub">44 Rue du Faubourg Poissonnière · 7 мин · пн 14:00–20:45, вт–сб 10:00–20:45</div></div><a href="https://maps.google.com/?q=NOUS+epicerie+44+Rue+du+Faubourg+Poissonni%C3%A8re+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
-  <div class="srow"><div><div style="font-weight:600">Heratchian Frères 🧀</div><div class="sub">6 Rue Lamartine · 5 мин · деликатесный · вт–пт 9:00–18:00, сб до 18:45</div></div><a href="https://maps.google.com/?q=Heratchian+Freres+6+Rue+Lamartine+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Monop' 🛒</div><div class="sub">16 Rue du Faubourg Montmartre · 4 мин · 8:00–23:50 ежедневно</div></div><a href="https://maps.google.com/?q=Monop+16+Rue+du+Faubourg+Montmartre+Paris" target="_blank" class="map-chip">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Les Vergers Cadet 🍎</div><div class="sub">2b Rue Cadet · 2 мин · фрукты и овощи · вт–вс 7:00–20:00</div></div><a href="https://maps.google.com/?q=Les+Vergers+Cadet+2+Rue+Cadet+Paris" target="_blank" class="map-chip">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">NOUS épicerie 🌿</div><div class="sub">44 Rue du Faubourg Poissonnière · 7 мин · пн 14:00–20:45, вт–сб 10:00–20:45</div></div><a href="https://maps.google.com/?q=NOUS+epicerie+44+Rue+du+Faubourg+Poissonni%C3%A8re+Paris" target="_blank" class="map-chip">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">Heratchian Frères 🧀</div><div class="sub">6 Rue Lamartine · 5 мин · деликатесный · вт–пт 9:00–18:00, сб до 18:45</div></div><a href="https://maps.google.com/?q=Heratchian+Freres+6+Rue+Lamartine+Paris" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
 <div class="section">
   <h3>Прачечная</h3>
-  <div class="srow"><div><div style="font-weight:600">E.L.A 👕</div><div class="sub">7 Rue Maubeuge · 5 мин от отеля · 7:00–22:00 ежедневно</div></div><a href="https://maps.google.com/?q=7+Rue+Maubeuge+Paris" target="_blank" style="color:var(--blue);font-size:11px;white-space:nowrap;flex-shrink:0">Карты →</a></div>
+  <div class="srow"><div><div style="font-weight:600">E.L.A 👕</div><div class="sub">7 Rue Maubeuge · 5 мин от отеля · 7:00–22:00 ежедневно</div></div><a href="https://maps.google.com/?q=7+Rue+Maubeuge+Paris" target="_blank" class="map-chip">Карты →</a></div>
 </div>
 
 <div class="section">
@@ -640,9 +699,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- SYNC STATUS BAR -->
-<div style="position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:0.5px solid var(--border);padding:8px 14px calc(8px + env(safe-area-inset-bottom)) 14px;display:flex;align-items:center;gap:8px;z-index:40">
-  <div style="font-size:12px;color:var(--text2);flex:1" id="sync-status-bar">🟡 подключение...</div>
-  <button onclick="manualRefresh()" style="background:none;border:0.5px solid var(--border2);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--text2);cursor:pointer">↻ обновить</button>
+<div class="sync-bar">
+  <div class="sync-status" id="sync-status-bar">🟡 подключение...</div>
+  <button onclick="manualRefresh()" class="sync-refresh">↻ обновить</button>
 </div>
 
 <!-- FAB -->
@@ -775,6 +834,7 @@ function connectRealtime(){
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'days_data'){ try { daysData = JSON.parse(rec.value); localStorage.setItem(DAYS_KEY, rec.value); renderDays(); } catch(e){} }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'custom_tags'){ try { customTags = JSON.parse(rec.value); localStorage.setItem(CUSTOM_TAGS_KEY, rec.value); } catch(e){} }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'book_done'){ try { bookDone = JSON.parse(rec.value); localStorage.setItem(BOOK_KEY, rec.value); applyBook(); } catch(e){} }
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'book_custom'){ try { customBookItems = JSON.parse(rec.value); localStorage.setItem(BOOK_CUSTOM_KEY, rec.value); renderBookCustom(); } catch(e){} }
         }
         if(data.topic === 'realtime:public:gifts'){
           if(data.event === 'INSERT'){ if(!giftItems.find(g => g.id === rec.id)){ giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 }); giftItems.sort((a,b) => a.sort_order - b.sort_order); renderGifts(); } }
@@ -1480,18 +1540,101 @@ async function saveBook(){
     });
   } catch(e){}
 }
-function applyBook(){ Object.keys(bookDone).forEach(id => { if(bookDone[id]) markBookDone(id, false); }); }
-function toggleBook(id){ bookDone[id] = !bookDone[id]; saveBook(); if(bookDone[id]){ markBookDone(id, true); } else { unmarkBookDone(id); } }
+function allBookIds(){ return [...Object.keys(BOOK_ITEMS), ...customBookItems.map(i=>i.id)]; }
+function applyBook(){ allBookIds().forEach(id => { if(bookDone[id]) markBookDone(id, false); else unmarkBookDone(id, true); }); updateBookSummary(); }
+function toggleBook(id){ bookDone[id] = !bookDone[id]; saveBook(); if(bookDone[id]){ markBookDone(id, true); } else { unmarkBookDone(id); } updateBookSummary(); }
+function updateBookSummary(){
+  const el = document.getElementById('book-summary');
+  if(!el) return;
+  const ids = allBookIds();
+  const total = ids.length;
+  const done = ids.filter(id => bookDone[id]).length;
+  el.textContent = `${done} из ${total}`;
+}
+
+// Custom (user-added) booking items: [{id, label, sub}]
+const BOOK_CUSTOM_KEY = 'paris2026_book_custom_v1';
+let customBookItems = [];
+
+function loadBookCustom(){ try { customBookItems = JSON.parse(localStorage.getItem(BOOK_CUSTOM_KEY)||'[]'); } catch(e){ customBookItems = []; } }
+
+async function loadBookCustomRemote(){
+  try {
+    const rows = await sbFetch('/rest/v1/settings?key=eq.book_custom&select=value');
+    if(rows && rows.length && rows[0].value) customBookItems = JSON.parse(rows[0].value);
+  } catch(e){}
+}
+
+async function saveBookCustom(){
+  const value = JSON.stringify(customBookItems);
+  localStorage.setItem(BOOK_CUSTOM_KEY, value);
+  try {
+    await sbFetch('/rest/v1/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key: 'book_custom', value }),
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
+    });
+  } catch(e){}
+}
+
+function linkifySub(text){
+  if(!text) return '';
+  return text.replace(/\b((?:[a-z0-9-]+\.)+(?:fr|com|net|org|ru|paris|io|co))\b/gi,
+    m => `<a href="https://${m}" target="_blank" class="sub-link">${m}</a>`);
+}
+
+function renderBookCustom(){
+  const el = document.getElementById('book-list-custom');
+  if(!el) return;
+  el.innerHTML = customBookItems.map(item => `
+    <div class="srow book-row" onclick="if(event.target.tagName!=='A') toggleBook('${item.id}')">
+      <span class="book-check" id="${item.id}_icon">✓</span>
+      <div class="book-row-body">
+        <div class="book-row-name" id="${item.id}_name">${item.label}</div>
+        ${item.sub ? `<div class="sub">${linkifySub(item.sub)}</div>` : ''}
+      </div>
+      <span class="book-chip" id="${item.id}_chip">Готово</span>
+      <button class="book-del" onclick="event.stopPropagation();deleteBookItem('${item.id}')">×</button>
+    </div>`).join('');
+  applyBook();
+}
+
+function addBookItem(){
+  const nameInput = document.getElementById('book-new-name');
+  const subInput = document.getElementById('book-new-sub');
+  const label = nameInput.value.trim();
+  if(!label) return;
+  const sub = subInput.value.trim();
+  const id = 'book_custom_' + Date.now();
+  customBookItems.push({ id, label, sub });
+  saveBookCustom();
+  nameInput.value = ''; subInput.value = '';
+  renderBookCustom();
+}
+
+async function deleteBookItem(id){
+  if(!(await confirmAction('Удалить этот пункт?'))) return;
+  customBookItems = customBookItems.filter(i => i.id !== id);
+  delete bookDone[id];
+  saveBookCustom();
+  saveBook();
+  renderBookCustom();
+  updateBookSummary();
+}
 function markBookDone(id, addExpense){
-  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name');
-  if(icon) icon.textContent = '☑';
-  if(name) name.style.cssText = 'font-size:13px;font-weight:500;text-decoration:line-through;color:var(--text3)';
+  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name'); const chip = document.getElementById(id+'_chip');
+  if(icon) icon.classList.add('done');
+  if(name) name.classList.add('done');
+  if(chip) chip.classList.add('show');
   const cfg = BOOK_ITEMS[id]; if(!cfg) return;
   if(addExpense && cfg.paid && cfg.eur){ const now = new Date(); const exp = { id: id+'_autopaid', cat:'museums', eur: cfg.eur, comment: cfg.label, date: now.toLocaleDateString('ru',{day:'numeric',month:'long'}), ts: now.toISOString() }; if(!expenses.find(e=>e.id===exp.id)){ expenses.unshift(exp); sbInsert(exp).catch(()=>{}); saveExpenses(); renderBudget(); } }
 }
-function unmarkBookDone(id){
-  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name');
-  if(icon) icon.textContent = '☐'; if(name) name.style.cssText = 'font-size:13px;font-weight:500';
+function unmarkBookDone(id, skipExpenseSync){
+  const icon = document.getElementById(id+'_icon'); const name = document.getElementById(id+'_name'); const chip = document.getElementById(id+'_chip');
+  if(icon) icon.classList.remove('done');
+  if(name) name.classList.remove('done');
+  if(chip) chip.classList.remove('show');
+  if(skipExpenseSync) return;
   const expId = id+'_autopaid'; if(expenses.find(e=>e.id===expId)){ expenses = expenses.filter(e=>e.id!==expId); sbDelete(expId).catch(()=>{}); saveExpenses(); renderBudget(); }
 }
 
@@ -1528,6 +1671,7 @@ function deleteGift(idx){ const id=giftItems[idx].id; giftItems.splice(idx,1); r
 function addGiftItem(){ const input=document.getElementById('gift-new-input'); const label=input.value.trim(); if(!label) return; const newItem={id:'gift_'+Date.now(),label,done:false,sort_order:giftItems.length+1}; giftItems.push(newItem); input.value=''; renderGifts(); saveGiftsLocal(); sbFetch('/rest/v1/gifts',{method:'POST',body:JSON.stringify(newItem),headers:{...SB_HEADERS,'Prefer':'return=minimal'}}).catch(()=>{}); }
 
 document.addEventListener('DOMContentLoaded',()=>{ const inp=document.getElementById('gift-new-input'); if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter') addGiftItem();}); });
+document.addEventListener('DOMContentLoaded',()=>{ const sub=document.getElementById('book-new-sub'); if(sub) sub.addEventListener('keydown',e=>{if(e.key==='Enter') addBookItem();}); });
 
 // ===== INIT =====
 async function init(){
@@ -1540,6 +1684,9 @@ async function init(){
     renderBudget();
     await Promise.all([loadExpenses(), loadGifts()]);
     renderBudget();
+    loadBookCustom();
+    await loadBookCustomRemote();
+    renderBookCustom();
     await loadBook();
     connectRealtime();
   } catch(e){ console.warn('init error', e); }
