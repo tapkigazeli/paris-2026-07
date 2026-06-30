@@ -773,18 +773,26 @@ let expenses = [];
 let selCategory = 'shopping';
 
 // ===== RATE =====
-async function fetchRate(){
-  try {
-    const rows = await sbFetch('/rest/v1/settings?key=eq.eur_rate&select=value');
-    if(rows && rows[0]) rate = parseFloat(rows[0].value) || 93.5;
-  } catch(e){
-    try {
-      const cached = JSON.parse(localStorage.getItem('paris_eur_rate')||'null');
-      if(cached && cached.rate) rate = cached.rate;
-    } catch(e2){}
-  }
+function renderRate(){
   document.getElementById('rate-display').textContent = rate.toFixed(2) + ' ₽';
   document.getElementById('rate-time').textContent = rate === 93.5 ? 'нажмите ✏️ чтобы изменить' : 'введён вручную';
+}
+function loadRateLocal(){
+  try {
+    const cached = JSON.parse(localStorage.getItem('paris_eur_rate')||'null');
+    if(cached && cached.rate) rate = cached.rate;
+  } catch(e){}
+  renderRate();
+}
+async function fetchRateRemote(){
+  try {
+    const rows = await sbFetch('/rest/v1/settings?key=eq.eur_rate&select=value');
+    if(rows && rows[0]){
+      rate = parseFloat(rows[0].value) || rate;
+      renderRate();
+      renderBudget();
+    }
+  } catch(e){}
 }
 
 function editRate(){
@@ -830,13 +838,16 @@ async function sbFetch(path, opts={}){
 }
 
 // ===== STORAGE =====
-async function loadExpenses(){
+function loadExpensesLocal(){
+  try { expenses = JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); } catch(e){ expenses = []; }
+}
+async function loadExpensesRemote(){
   try {
     const rows = await sbFetch('/rest/v1/expenses?select=*&order=ts.desc');
     expenses = rows.map(r => ({ id: r.id, cat: r.cat, eur: parseFloat(r.eur), comment: r.comment||'', date: r.date||'', ts: r.ts }));
-  } catch(e){
-    try { expenses = JSON.parse(localStorage.getItem(STORE_KEY)||'[]'); } catch(e2){ expenses = []; }
-  }
+    localStorage.setItem(STORE_KEY, JSON.stringify(expenses));
+    renderBudget();
+  } catch(e){}
 }
 
 async function saveExpenses(){ localStorage.setItem(STORE_KEY, JSON.stringify(expenses)); }
@@ -1029,7 +1040,7 @@ async function deleteExp(id){
   if(!(await confirmAction('Вы точно хотите удалить трату?'))) return;
   expenses = expenses.filter(e=>e.id!==id); await sbDelete(id); await saveExpenses(); renderBudget();
 }
-async function manualRefresh(){ setSyncStatus('🟡 загружаю...'); await loadExpenses(); renderBudget(); setSyncStatus('🟢 обновлено · ' + new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})); }
+async function manualRefresh(){ setSyncStatus('🟡 загружаю...'); await syncFromSupabase(); setSyncStatus('🟢 обновлено · ' + new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})); }
 
 // ===== VIEW SWITCH =====
 function showView(name, btn){
@@ -1325,22 +1336,23 @@ const DEFAULT_DAYS = [
 let daysData = [];
 let openDays = new Set();
 
-async function loadDays(){
+function loadDaysLocal(){
+  try {
+    const saved = localStorage.getItem(DAYS_KEY);
+    daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+  } catch(e){ daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS)); }
+  migrateImportantFlags();
+}
+async function loadDaysRemote(){
   try {
     const rows = await sbFetch('/rest/v1/settings?key=eq.days_data&select=value');
     if(rows && rows.length && rows[0].value){
       daysData = JSON.parse(rows[0].value);
-    } else {
-      const saved = localStorage.getItem(DAYS_KEY);
-      daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
+      localStorage.setItem(DAYS_KEY, rows[0].value);
+      migrateImportantFlags();
+      renderDays();
     }
-  } catch(e){
-    try {
-      const saved = localStorage.getItem(DAYS_KEY);
-      daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
-    } catch(e2){ daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS)); }
-  }
-  migrateImportantFlags();
+  } catch(e){}
 }
 
 const SEED_IMPORTANT_IDS = ['e_09_1', 'e_13_2', 'e_13_5'];
@@ -1372,7 +1384,11 @@ async function saveDays(){
 async function loadCustomTagsRemote(){
   try {
     const rows = await sbFetch('/rest/v1/settings?key=eq.custom_tags&select=value');
-    if(rows && rows.length && rows[0].value) customTags = JSON.parse(rows[0].value);
+    if(rows && rows.length && rows[0].value){
+      customTags = JSON.parse(rows[0].value);
+      localStorage.setItem(CUSTOM_TAGS_KEY, rows[0].value);
+      renderDays();
+    }
   } catch(e){}
 }
 
@@ -1670,13 +1686,19 @@ const BOOK_ITEMS = {
 };
 let bookDone = {};
 
-async function loadBook(){
+function loadBookLocal(){
+  try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; }
+  applyBook();
+}
+async function loadBookRemote(){
   try {
     const rows = await sbFetch('/rest/v1/settings?key=eq.book_done&select=value');
-    if(rows && rows.length && rows[0].value) bookDone = JSON.parse(rows[0].value);
-    else { try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e){ bookDone = {}; } }
-  } catch(e){ try { bookDone = JSON.parse(localStorage.getItem(BOOK_KEY)||'{}'); } catch(e2){ bookDone = {}; } }
-  applyBook();
+    if(rows && rows.length && rows[0].value){
+      bookDone = JSON.parse(rows[0].value);
+      localStorage.setItem(BOOK_KEY, rows[0].value);
+      applyBook();
+    }
+  } catch(e){}
 }
 async function saveBook(){
   const value = JSON.stringify(bookDone);
@@ -1710,7 +1732,11 @@ function loadBookCustom(){ try { customBookItems = JSON.parse(localStorage.getIt
 async function loadBookCustomRemote(){
   try {
     const rows = await sbFetch('/rest/v1/settings?key=eq.book_custom&select=value');
-    if(rows && rows.length && rows[0].value) customBookItems = JSON.parse(rows[0].value);
+    if(rows && rows.length && rows[0].value){
+      customBookItems = JSON.parse(rows[0].value);
+      localStorage.setItem(BOOK_CUSTOM_KEY, rows[0].value);
+      renderBookCustom();
+    }
   } catch(e){}
 }
 
@@ -1797,10 +1823,18 @@ const DEFAULT_GIFTS = [
 ];
 let giftItems = [];
 
-async function loadGifts(){
-  try { const rows = await sbFetch('/rest/v1/gifts?select=*&order=sort_order.asc'); giftItems = rows.map(r=>({id:r.id,label:r.label,done:r.done,sort_order:r.sort_order||0})); }
-  catch(e){ try { const saved = localStorage.getItem(GIFTS_KEY); giftItems = saved ? JSON.parse(saved) : DEFAULT_GIFTS.map(g=>({...g})); } catch(e2){ giftItems = DEFAULT_GIFTS.map(g=>({...g})); } }
+function loadGiftsLocal(){
+  try { const saved = localStorage.getItem(GIFTS_KEY); giftItems = saved ? JSON.parse(saved) : DEFAULT_GIFTS.map(g=>({...g})); }
+  catch(e){ giftItems = DEFAULT_GIFTS.map(g=>({...g})); }
   renderGifts();
+}
+async function loadGiftsRemote(){
+  try {
+    const rows = await sbFetch('/rest/v1/gifts?select=*&order=sort_order.asc');
+    giftItems = rows.map(r=>({id:r.id,label:r.label,done:r.done,sort_order:r.sort_order||0}));
+    saveGiftsLocal();
+    renderGifts();
+  } catch(e){}
 }
 function saveGiftsLocal(){ localStorage.setItem(GIFTS_KEY, JSON.stringify(giftItems)); }
 function renderGifts(){
@@ -1826,22 +1860,44 @@ document.addEventListener('DOMContentLoaded',()=>{ const sub=document.getElement
 async function init(){
   try {
     await loadUIState();
+
+    // 1) Render instantly from local cache — no waiting on the network.
     loadCustomTags();
-    await loadDays();
-    await loadCustomTagsRemote();
-    renderDays();
-    await fetchRate();
-    renderBudget();
-    await Promise.all([loadExpenses(), loadGifts()]);
-    renderBudget();
+    loadDaysLocal();
+    loadRateLocal();
+    loadExpensesLocal();
+    loadGiftsLocal();
     loadBookCustom();
-    await loadBookCustomRemote();
+    loadBookLocal();
+
+    renderDays();
+    renderBudget();
     renderBookCustom();
-    await loadBook();
     initCollapsibleSections();
     showView(currentTab);
+    setSyncStatus('🟡 офлайн-данные · синхронизация...');
+
+    // 2) Sync with Supabase in the background; each piece re-renders itself when fresh data arrives.
+    syncFromSupabase();
     connectRealtime();
   } catch(e){ console.warn('init error', e); }
+}
+
+async function syncFromSupabase(){
+  try {
+    await Promise.all([
+      loadDaysRemote(),
+      loadCustomTagsRemote(),
+      fetchRateRemote(),
+      loadExpensesRemote(),
+      loadGiftsRemote(),
+      loadBookCustomRemote(),
+      loadBookRemote()
+    ]);
+    setSyncStatus('🟢 онлайн · синхронизация активна');
+  } catch(e){
+    setSyncStatus('🟡 офлайн · работаем локально');
+  }
 }
 
 try { window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.ready() && window.Telegram.WebApp.expand(); } catch(e){}
