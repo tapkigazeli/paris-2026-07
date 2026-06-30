@@ -183,6 +183,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   box-shadow:0 3px 10px -4px rgba(0,0,0,.14)}
 .day.fl{border-left:1.5px solid var(--bgt-softblue)}
 .day.wk{border-left:1.5px solid var(--bgt-bordeaux)}
+.day.day-today{border:1.5px solid var(--bgt-sage);box-shadow:0 4px 16px -6px rgba(95,138,102,.35)}
+.today-pill{display:inline-block;margin-right:7px;font-size:9.5px;font-weight:800;letter-spacing:.3px;color:#fff;
+  background:var(--bgt-sage);padding:2px 8px;border-radius:999px;vertical-align:middle;text-transform:uppercase}
+.row.row-next{position:relative}
+.row.row-next .row-dot{background:var(--bgt-sage);width:8px;height:8px;margin-top:6px}
+.row.row-next .rn{color:var(--bgt-sage)}
+.row.row-next::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--bgt-sage)}
+
+.past-days-toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 6px;margin-top:2px;
+  color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;user-select:none}
+.past-days-body{overflow:hidden;max-height:9999px;transition:max-height .3s ease}
+.past-days-body.collapsed{max-height:0}
+.past-days-body .day{opacity:.7}
 .dh{padding:13px 14px;background:transparent;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .dh-left{flex:1;min-width:0}
 .dt{font-size:15px;font-weight:800;color:var(--text);line-height:1.3;letter-spacing:-.2px}
@@ -1185,6 +1198,7 @@ function showView(name, btn){
 // ===== UI STATE PERSISTENCE (active tab, collapsed sections, open days) =====
 const UI_STATE_KEY = 'paris2026_ui_state_v1';
 let currentTab = 'budget';
+let pastDaysCollapsed = true;
 let collapsedSections = new Set();
 
 function tgCloudStorage(){
@@ -1197,6 +1211,7 @@ function applyUIStateRaw(raw){
     if(state.activeTab) currentTab = state.activeTab;
     if(Array.isArray(state.collapsedSections)) collapsedSections = new Set(state.collapsedSections);
     if(Array.isArray(state.openDays)) openDays = new Set(state.openDays);
+    if(typeof state.pastDaysCollapsed === 'boolean') pastDaysCollapsed = state.pastDaysCollapsed;
   } catch(e){}
 }
 
@@ -1221,7 +1236,8 @@ function persistUIState(){
   const value = JSON.stringify({
     activeTab: currentTab,
     collapsedSections: [...collapsedSections],
-    openDays: [...openDays]
+    openDays: [...openDays],
+    pastDaysCollapsed: pastDaysCollapsed
   });
   try { localStorage.setItem(UI_STATE_KEY, value); } catch(e){}
   const cs = tgCloudStorage();
@@ -1585,53 +1601,124 @@ function renderMuseumsList(){
   }).join('');
 }
 
-function renderDays(){
-  const container = document.getElementById('days-container');
-  container.innerHTML = daysData.map((day, di) => {
-    const isOpen = openDays.has(di);
-    const total = day.events.reduce((s, ev) => s + (ev.cost != null ? ev.cost : 0), 0);
-    const totalStr = total > 0 ? '~€' + total : '—';
+function dayDateObj(di){ return new Date(2026, 6, 5 + di); }
 
-    const eventsHtml = day.events.map((ev, ei) => {
-      const tagsHtml = (ev.tags||[]).map(t => renderTagSpan(t)).join('');
-      const descContent = ev.desc ? (tagsHtml ? tagsHtml + ' ' + ev.desc : ev.desc) : tagsHtml;
-      const hasCost = ev.cost != null;
-      const costStr = !hasCost ? '·' : ev.cost === 0 ? '€0' : '€' + ev.cost;
-      return `<div class="row">
-        <div class="rt">${ev.time||''}</div>
-        <div class="row-spine"><span class="row-dot"></span></div>
-        <div class="rb">
-          <div class="rn">${ev.name||''}</div>
-          ${descContent ? `<div class="rd">${descContent}</div>` : ''}
-        </div>
-        <div class="rv${hasCost?' has-cost':''}">${costStr}</div>
-        <button class="ev-edit-btn" onclick="openRowMenu(${di},${ei},this)">⋯</button>
-      </div>`;
-    }).join('');
-
-    return `<div class="day ${day.classes||''}">
-      <div class="dh" data-day="${di}">
-        <div class="dh-left">
-          <div class="dt">${day.date}</div>
-          <div class="ds">${day.subtitle}</div>
-        </div>
-        <span class="badge ${day.badgeCls}">${day.badge}</span>
-        <div class="chevron" id="chev-${di}" style="transform:${isOpen?'rotate(90deg)':''}">›</div>
-      </div>
-      <div class="rows ${isOpen?'open':''}" id="rows-${di}">
-        <div class="timeline">
-          ${eventsHtml}
-        </div>
-        <button class="add-event-btn" onclick="openEventModal(${di},null)">+ добавить событие</button>
-      </div>
-      <div class="ft"><span>${day.footer}</span><span class="ft-t">${totalStr}</span></div>
-    </div>`;
-  }).join('');
-  renderImportantNotes();
-  renderMuseumsList();
+function todayDayIndex(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  for(let i=0;i<daysData.length;i++){
+    if(dayDateObj(i).getTime() === today.getTime()) return i;
+  }
+  return -1;
 }
 
-function dayDateObj(di){ return new Date(2026, 6, 5 + di); }
+function dayCardHtml(di, todayIdx){
+  const day = daysData[di];
+  const isOpen = openDays.has(di);
+  const total = day.events.reduce((s, ev) => s + (ev.cost != null ? ev.cost : 0), 0);
+  const totalStr = total > 0 ? '~€' + total : '—';
+  const isToday = di === todayIdx;
+
+  // highlight the next event today (first one not yet started)
+  let nextEventIdx = -1;
+  if(isToday){
+    const nowMin = new Date().getHours()*60 + new Date().getMinutes();
+    nextEventIdx = day.events.findIndex(ev => timeToMinutes(ev.time) >= nowMin);
+  }
+
+  const eventsHtml = day.events.map((ev, ei) => {
+    const tagsHtml = (ev.tags||[]).map(t => renderTagSpan(t)).join('');
+    const descContent = ev.desc ? (tagsHtml ? tagsHtml + ' ' + ev.desc : ev.desc) : tagsHtml;
+    const hasCost = ev.cost != null;
+    const costStr = !hasCost ? '·' : ev.cost === 0 ? '€0' : '€' + ev.cost;
+    return `<div class="row${ei===nextEventIdx?' row-next':''}">
+      <div class="rt">${ev.time||''}</div>
+      <div class="row-spine"><span class="row-dot"></span></div>
+      <div class="rb">
+        <div class="rn">${ev.name||''}</div>
+        ${descContent ? `<div class="rd">${descContent}</div>` : ''}
+      </div>
+      <div class="rv${hasCost?' has-cost':''}">${costStr}</div>
+      <button class="ev-edit-btn" onclick="openRowMenu(${di},${ei},this)">⋯</button>
+    </div>`;
+  }).join('');
+
+  return `<div class="day ${day.classes||''}${isToday?' day-today':''}" ${isToday?'id="day-today-card"':''}>
+    <div class="dh" data-day="${di}">
+      <div class="dh-left">
+        <div class="dt">${isToday?'<span class="today-pill">Сегодня</span>':''}${day.date}</div>
+        <div class="ds">${day.subtitle}</div>
+      </div>
+      <span class="badge ${day.badgeCls}">${day.badge}</span>
+      <div class="chevron" id="chev-${di}" style="transform:${isOpen?'rotate(90deg)':''}">›</div>
+    </div>
+    <div class="rows ${isOpen?'open':''}" id="rows-${di}">
+      <div class="timeline">
+        ${eventsHtml}
+      </div>
+      <button class="add-event-btn" onclick="openEventModal(${di},null)">+ добавить событие</button>
+    </div>
+    <div class="ft"><span>${day.footer}</span><span class="ft-t">${totalStr}</span></div>
+  </div>`;
+}
+
+let scrolledToToday = false;
+
+function renderDays(){
+  const container = document.getElementById('days-container');
+  const todayIdx = todayDayIndex();
+  if(todayIdx !== -1) openDays.add(todayIdx);
+
+  const pastIdx = [], currentIdx = [];
+  daysData.forEach((day, di) => { (dayDateObj(di) < new Date(new Date().setHours(0,0,0,0)) ? pastIdx : currentIdx).push(di); });
+
+  let html = currentIdx.map(di => dayCardHtml(di, todayIdx)).join('');
+
+  if(pastIdx.length){
+    const collapsed = pastDaysCollapsed;
+    html += `<div class="past-days-toggle" onclick="togglePastDays()">
+      <span>Прошедшие дни (${pastIdx.length})</span>
+      <span class="section-chevron" id="past-days-chevron" style="transform:rotate(${collapsed?0:90}deg)">›</span>
+    </div>
+    <div class="past-days-body${collapsed?' collapsed':''}" id="past-days-body">
+      ${pastIdx.map(di => dayCardHtml(di, todayIdx)).join('')}
+    </div>`;
+  }
+
+  container.innerHTML = html;
+  renderImportantNotes();
+  renderMuseumsList();
+
+  if(todayIdx !== -1 && !scrolledToToday){
+    scrolledToToday = true;
+    setTimeout(() => {
+      const card = document.getElementById('day-today-card');
+      if(card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  }
+}
+
+
+function togglePastDays(){
+  const body = document.getElementById('past-days-body');
+  const chevron = document.getElementById('past-days-chevron');
+  if(!body) return;
+  const collapsing = !body.classList.contains('collapsed');
+  if(collapsing){
+    body.style.maxHeight = body.scrollHeight + 'px';
+    void body.offsetHeight;
+    body.style.maxHeight = '0px';
+  } else {
+    body.style.maxHeight = '0px';
+    void body.offsetHeight;
+    body.style.maxHeight = body.scrollHeight + 'px';
+    const onEnd = () => { body.style.maxHeight = ''; body.removeEventListener('transitionend', onEnd); };
+    body.addEventListener('transitionend', onEnd);
+  }
+  body.classList.toggle('collapsed', collapsing);
+  if(chevron) chevron.style.transform = 'rotate(' + (collapsing?0:90) + 'deg)';
+  pastDaysCollapsed = collapsing;
+  persistUIState();
+}
 
 function renderImportantNotes(){
   const el = document.getElementById('important-notes');
