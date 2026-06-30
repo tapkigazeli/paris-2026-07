@@ -264,6 +264,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .place-body{flex:1;min-width:0}
 .place-name{font-size:13px;font-weight:600;color:var(--text)}
+.museum-when{font-size:10.5px;font-weight:700;color:var(--bgt-softblue);margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
 .place-chip{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.1px}
 .pc-caramel{background:var(--bgt-caramel-bg);color:var(--bgt-caramel)}
 .pc-sage{background:var(--bgt-sage-bg);color:var(--bgt-sage)}
@@ -525,6 +526,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <input class="form-input ev-input-compact" id="book-new-sub" type="text" placeholder="Детали (сайт, цена...)" maxlength="80">
     <button onclick="addBookItem()" class="ev-tag-add-btn">+ Добавить</button>
   </div>
+</div>
+
+<div class="section" data-section-id="sec-museums">
+  <h3>🏛️ Культурная программа</h3>
+  <div id="museums-list"></div>
 </div>
 
 <div class="section" data-section-id="sec-food"><h3>🍽️ Где можно поесть</h3>
@@ -1375,8 +1381,8 @@ const DEFAULT_DAYS = [
   { id:'day_10', date:'10 июля (пт) — ABBA + Муми + Bad Bunny', subtitle:'Djurgården + Strawberry Arena · ранний вылет завтра!', badge:'Концерт!', badgeCls:'b-green', classes:'', footer:'💰 еда ~€35 · ABBA €56 + Муми €36',
     events:[
       {id:'e_10_1',time:'09:30',name:'Паром → Djurgården',desc:'',cost:8,tags:['транспорт']},
-      {id:'e_10_2',time:'10:00',name:'ABBA The Museum',desc:'€28 pp · только безнал!',cost:56,tags:['музей']},
-      {id:'e_10_3',time:'12:30',name:'Junibacken — Муми-тролли',desc:'3 мин от ABBA · €18 pp',cost:36,tags:['музей']},
+      {id:'e_10_2',time:'10:00',name:'ABBA The Museum',desc:'€28 pp · только безнал!',cost:56,tags:[]},
+      {id:'e_10_3',time:'12:30',name:'Junibacken — Муми-тролли',desc:'3 мин от ABBA · €18 pp',cost:36,tags:[]},
       {id:'e_10_4',time:'14:00',name:'Обед: Östermalms Saluhall',desc:'',cost:35,tags:['еда']},
       {id:'e_10_5',time:'19:00',name:'Bad Bunny — DeBÍ TiRAR MáS FOToS Tour',desc:'Strawberry Arena · конец ~22:00',cost:null,tags:['концерт']},
       {id:'e_10_6',time:'~22:30',name:'Метро → отель · будильник 04:15!',desc:'',cost:null,tags:[]},
@@ -1394,7 +1400,7 @@ const DEFAULT_DAYS = [
     ]},
   { id:'day_12', date:'12 июля (вс) — Оранжери + Арка + The Weeknd', subtitle:'Версаль отменён · концерт вечером!', badge:'The Weeknd!', badgeCls:'b-green', classes:'wk', footer:'💰 еда ~€50 · Оранжери✓ + Арка €32 + концерт',
     events:[
-      {id:'e_12_1',time:'11:00',name:'Musée de l\'Orangerie',desc:'«Кувшинки» Моне · ~1.5ч',cost:null,tags:['оплачено ✓']},
+      {id:'e_12_1',time:'11:00',name:'Musée de l\'Orangerie',desc:'«Кувшинки» Моне · ~1.5ч',cost:null,tags:['оплачено ✓','музей']},
       {id:'e_12_2',time:'13:00',name:'Прогулка + Триумфальная арка',desc:'Смотровая ~€16 pp',cost:32,tags:['место']},
       {id:'e_12_3',time:'14:30',name:'Обед: Ladurée Champs-Élysées',desc:'',cost:50,tags:['еда']},
       {id:'e_12_4',time:'17:30',name:'RER B → La Plaine Stade de France',desc:'',cost:5,tags:['транспорт']},
@@ -1402,7 +1408,7 @@ const DEFAULT_DAYS = [
     ]},
   { id:'day_13', date:'13 июля (пн) — Лувр + Фейерверк + Бал', subtitle:'Лувр с 12:30 · фейерверк ~23:00 · бал после!', badge:'Фейерверк!', badgeCls:'b-red', classes:'', footer:'💰 еда ~€80 · Лувр✓ · бал бесплатно!',
     events:[
-      {id:'e_13_1',time:'12:30',name:'Лувр',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_13_1',time:'12:30',name:'Лувр',desc:'',cost:null,tags:['оплачено ✓','музей']},
       {id:'e_13_2',time:'13:00',name:'Обед: Matsuri Sushi',desc:'103 Rue La Boétie · 12:00–15:00!',cost:30,tags:['еда'],important:true},
       {id:'e_13_3',time:'14:30',name:'Galeries Lafayette + Jellycat + Uniqlo',desc:'',cost:null,tags:['шопинг']},
       {id:'e_13_4',time:'19:30',name:'Ужин: Bouillon Chartier',desc:'7 Rue du Faubourg Montmartre · без брони',cost:40,tags:['еда']},
@@ -1414,11 +1420,11 @@ const DEFAULT_DAYS = [
       {id:'e_14_1',time:'09:00',name:'Военный парад на Champs-Élysées',desc:'Парад в 10:00',cost:null,tags:['событие']},
       {id:'e_14_2',time:'12:00',name:'Обед: Ladurée Champs-Élysées',desc:'',cost:50,tags:['еда']},
       {id:'e_14_3',time:'13:30',name:'Sephora флагман',desc:'70 Av. · до 00:00!',cost:null,tags:['шопинг']},
-      {id:'e_14_4',time:'16:30',name:'Нотр-Дам де Пари',desc:'Открыта! Бесплатно',cost:0,tags:['место']},
+      {id:'e_14_4',time:'16:30',name:'Нотр-Дам де Пари',desc:'Открыта! Бесплатно',cost:0,tags:['место','музей']},
     ]},
   { id:'day_15', date:'15 июля (ср) — Орсе + Dumonet + шопинг', subtitle:'Импрессионисты · бистро · Zara H&M Adidas!', badge:'Шопинг!', badgeCls:'b-amber', classes:'', footer:'💰 еда ~€90 · Орсе✓',
     events:[
-      {id:'e_15_1',time:'10:00',name:'Музей Орсе',desc:'',cost:null,tags:['оплачено ✓']},
+      {id:'e_15_1',time:'10:00',name:'Музей Орсе',desc:'',cost:null,tags:['оплачено ✓','музей']},
       {id:'e_15_2',time:'13:00',name:'Обед: Chez Dumonet',desc:'117 Rue du Cherche-Midi · бронировать!',cost:50,tags:['еда']},
       {id:'e_15_3',time:'14:30',name:'Trocadéro + вид на башню',desc:'',cost:null,tags:['Эмили']},
       {id:'e_15_4',time:'15:30',name:'Шопинг: Champs-Élysées',desc:'Zara · H&M (до 00:00!) · Adidas · Nike',cost:null,tags:['шопинг']},
@@ -1477,12 +1483,22 @@ async function loadDaysRemote(){
 }
 
 const SEED_IMPORTANT_IDS = ['e_09_1', 'e_13_2', 'e_13_5'];
+const SEED_MUSEUM_IDS = ['e_12_1', 'e_13_1', 'e_15_1', 'e_14_4'];
+const SEED_MUSEUM_REMOVE_IDS = ['e_10_2', 'e_10_3'];
 function migrateImportantFlags(){
   let changed = false;
   daysData.forEach(day => {
     (day.events||[]).forEach(ev => {
       if(SEED_IMPORTANT_IDS.includes(ev.id) && ev.important === undefined){
         ev.important = true;
+        changed = true;
+      }
+      if(SEED_MUSEUM_IDS.includes(ev.id) && !(ev.tags||[]).includes('музей')){
+        ev.tags = [...(ev.tags||[]), 'музей'];
+        changed = true;
+      }
+      if(SEED_MUSEUM_REMOVE_IDS.includes(ev.id) && (ev.tags||[]).includes('музей')){
+        ev.tags = ev.tags.filter(t => t !== 'музей');
         changed = true;
       }
     });
@@ -1523,6 +1539,50 @@ async function saveCustomTags(){
       headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
     });
   } catch(e){}
+}
+
+// ===== MUSEUMS LIST (derived from days schedule, shown on "Места") =====
+const MUSEUM_INFO = {
+  'Катакомбы Парижа':        { address:'1 Av. du Colonel Henri Rol-Tanguy, 75014 Paris', mapsQuery:'Catacombes de Paris', note:'Билет куплен ✓', noteCls:'pc-sage', timeOverride:'12:30' },
+  'Musée de l\'Orangerie':   { address:'Jardin des Tuileries, 75001 Paris', mapsQuery:'Musee de l\'Orangerie Paris', note:'Билет куплен ✓', noteCls:'pc-sage' },
+  'Лувр':                    { address:'Rue de Rivoli, 75001 Paris', mapsQuery:'Louvre Museum Paris', note:'Билет куплен ✓', noteCls:'pc-sage' },
+  'Музей Орсе':              { address:'1 Rue de la Légion d\'Honneur, 75007 Paris', mapsQuery:'Musee d\'Orsay Paris', note:'Билет куплен ✓', noteCls:'pc-sage' },
+  'Музей Карнавале':         { address:'23 Rue de Sévigné, 75003 Paris', mapsQuery:'Musee Carnavalet Paris', note:'Бесплатный вход', noteCls:'pc-sage', timeOverride:'В течение дня' },
+  'Нотр-Дам де Пари':        { address:'6 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris', mapsQuery:'Notre-Dame de Paris', note:'Бесплатный вход', noteCls:'pc-sage' },
+};
+
+function renderMuseumsList(){
+  const el = document.getElementById('museums-list');
+  if(!el) return;
+  const items = [];
+  daysData.forEach((day, di) => {
+    (day.events||[]).forEach(ev => {
+      if((ev.tags||[]).includes('музей')) items.push({ di, time: ev.time||'', name: ev.name||'' });
+    });
+  });
+  items.sort((a,b) => a.di - b.di || timeToMinutes(a.time) - timeToMinutes(b.time));
+
+  if(!items.length){
+    el.innerHTML = '<div class="empty-state" style="padding:18px 10px"><div>🏛️</div><div style="margin-top:6px">Музеи появятся здесь, как только добавишь событие с тегом «музей» в расписание дней</div></div>';
+    return;
+  }
+
+  el.innerHTML = items.map(it => {
+    const info = MUSEUM_INFO[it.name] || {};
+    const dateLabel = (5 + it.di) + ' июля';
+    const timeLabel = info.timeOverride || it.time;
+    const mapsHref = 'https://maps.google.com/?q=' + encodeURIComponent(info.mapsQuery || (it.name + ' Paris'));
+    const noteChip = info.note ? `<span class="place-chip ${info.noteCls||'pc-caramel'}">${info.note}</span>` : '';
+    return `<div class="srow">
+      <div class="place-body">
+        <div class="museum-when">${dateLabel}${timeLabel ? ' · ' + timeLabel : ''}</div>
+        <div class="place-name">${it.name}</div>
+        ${info.address ? `<div class="sub">${info.address}</div>` : ''}
+        ${noteChip}
+      </div>
+      <a href="${mapsHref}" target="_blank" class="map-chip">Карты →</a>
+    </div>`;
+  }).join('');
 }
 
 function renderDays(){
@@ -1568,6 +1628,7 @@ function renderDays(){
     </div>`;
   }).join('');
   renderImportantNotes();
+  renderMuseumsList();
 }
 
 function dayDateObj(di){ return new Date(2026, 6, 5 + di); }
