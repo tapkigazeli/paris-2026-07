@@ -1049,30 +1049,67 @@ const UI_STATE_KEY = 'paris2026_ui_state_v1';
 let currentTab = 'budget';
 let collapsedSections = new Set();
 
-function loadUIState(){
+function tgCloudStorage(){
+  return (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.CloudStorage) || null;
+}
+
+function applyUIStateRaw(raw){
   try {
-    const raw = JSON.parse(localStorage.getItem(UI_STATE_KEY) || '{}');
-    if(raw.activeTab) currentTab = raw.activeTab;
-    if(Array.isArray(raw.collapsedSections)) collapsedSections = new Set(raw.collapsedSections);
-    if(Array.isArray(raw.openDays)) openDays = new Set(raw.openDays);
+    const state = JSON.parse(raw || '{}');
+    if(state.activeTab) currentTab = state.activeTab;
+    if(Array.isArray(state.collapsedSections)) collapsedSections = new Set(state.collapsedSections);
+    if(Array.isArray(state.openDays)) openDays = new Set(state.openDays);
   } catch(e){}
 }
 
+function loadUIState(){
+  return new Promise(resolve => {
+    let localRaw = null;
+    try { localRaw = localStorage.getItem(UI_STATE_KEY); } catch(e){}
+    const cs = tgCloudStorage();
+    if(cs){
+      cs.getItem(UI_STATE_KEY, (err, value) => {
+        applyUIStateRaw((!err && value) ? value : localRaw);
+        resolve();
+      });
+    } else {
+      applyUIStateRaw(localRaw);
+      resolve();
+    }
+  });
+}
+
 function persistUIState(){
-  try {
-    localStorage.setItem(UI_STATE_KEY, JSON.stringify({
-      activeTab: currentTab,
-      collapsedSections: [...collapsedSections],
-      openDays: [...openDays]
-    }));
-  } catch(e){}
+  const value = JSON.stringify({
+    activeTab: currentTab,
+    collapsedSections: [...collapsedSections],
+    openDays: [...openDays]
+  });
+  try { localStorage.setItem(UI_STATE_KEY, value); } catch(e){}
+  const cs = tgCloudStorage();
+  if(cs){ try { cs.setItem(UI_STATE_KEY, value, ()=>{}); } catch(e){} }
 }
 
 function toggleSection(id){
   const sec = document.querySelector('.section[data-section-id="'+id+'"]');
   if(!sec) return;
-  sec.classList.toggle('collapsed');
-  if(sec.classList.contains('collapsed')) collapsedSections.add(id); else collapsedSections.delete(id);
+  const body = sec.querySelector('.section-body');
+  const collapsing = !sec.classList.contains('collapsed');
+  if(body){
+    if(collapsing){
+      body.style.maxHeight = body.scrollHeight + 'px';
+      void body.offsetHeight;
+      body.style.maxHeight = '0px';
+    } else {
+      body.style.maxHeight = '0px';
+      void body.offsetHeight;
+      body.style.maxHeight = body.scrollHeight + 'px';
+      const onEnd = () => { body.style.maxHeight = ''; body.removeEventListener('transitionend', onEnd); };
+      body.addEventListener('transitionend', onEnd);
+    }
+  }
+  sec.classList.toggle('collapsed', collapsing);
+  if(collapsing) collapsedSections.add(id); else collapsedSections.delete(id);
   persistUIState();
 }
 
@@ -1788,7 +1825,7 @@ document.addEventListener('DOMContentLoaded',()=>{ const sub=document.getElement
 // ===== INIT =====
 async function init(){
   try {
-    loadUIState();
+    await loadUIState();
     loadCustomTags();
     await loadDays();
     await loadCustomTagsRemote();
