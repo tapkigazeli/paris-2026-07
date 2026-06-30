@@ -298,6 +298,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .flight-card.fc-ret{background:var(--purple-bg);border-left-color:var(--purple)}
 .flight-num{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px}
 .flight-route{font-size:11px;color:var(--bgt-text2,var(--text2));display:flex;justify-content:space-between;font-weight:500}
+.flight-status{display:none;margin-left:6px;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:999px;vertical-align:middle}
+.flight-status.show{display:inline-block}
+.flight-status.fs-ok{background:var(--bgt-sage-bg);color:var(--bgt-sage)}
+.flight-status.fs-warn{background:var(--bgt-caramel-bg);color:var(--bgt-caramel)}
+.flight-status.fs-bad{background:var(--red-bg);color:var(--red)}
+.flight-status.fs-muted{background:var(--bg2);color:var(--text3)}
 .gift-label{font-size:13px;color:var(--text);transition:color .2s}
 .gift-label.done{color:var(--text3);text-decoration:line-through}
 
@@ -543,12 +549,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="section" data-section-id="sec-flights">
   <h3>✈️ Рейсы</h3>
-  <div class="flight-card fc-out"><div class="flight-num">VF278 · AJet — ВКО → SAW</div><div class="flight-route"><span>5 июля · 05:50 МСК</span><span>→ ~09:05 Стамбул</span></div></div>
-  <div class="flight-card fc-out"><div class="flight-num">VF9 · AJet — SAW → CDG</div><div class="flight-route"><span>5 июля · ~12:00 Стамбул</span><span>→ 16:25 Париж CDG</span></div></div>
-  <div class="flight-card warn-f"><div class="flight-num">TO7448 · Transavia — ORY → ARN ⚠️</div><div class="flight-route"><span>9 июля · 13:00 Орли (ORY!)</span><span>→ ~15:40 Стокгольм</span></div></div>
-  <div class="flight-card warn-f"><div class="flight-num">TO7451 · Transavia — ARN → ORY ⚡</div><div class="flight-route"><span>11 июля · 06:40 Стокгольм</span><span>→ ~09:20 Париж Орли</span></div></div>
-  <div class="flight-card fc-ret"><div class="flight-num">VF516 · AJet — CDG → ESB</div><div class="flight-route"><span>18 июля · 17:40 CDG</span><span>→ ~21:25 Анкара</span></div></div>
-  <div class="flight-card fc-ret"><div class="flight-num">VF587 · AJet — ESB → ВКО</div><div class="flight-route"><span>18 июля · ~22:50 Анкара</span><span>→ ~01:05 МСК (19 июля)</span></div></div>
+  <div class="flight-card fc-out"><div class="flight-num">VF278 · AJet — ВКО → SAW<span class="flight-status" id="fs_VF278"></span></div><div class="flight-route"><span>5 июля · 05:50 МСК</span><span>→ ~09:05 Стамбул</span></div></div>
+  <div class="flight-card fc-out"><div class="flight-num">VF9 · AJet — SAW → CDG<span class="flight-status" id="fs_VF9"></span></div><div class="flight-route"><span>5 июля · ~12:00 Стамбул</span><span>→ 16:25 Париж CDG</span></div></div>
+  <div class="flight-card warn-f"><div class="flight-num">TO7448 · Transavia — ORY → ARN ⚠️<span class="flight-status" id="fs_TO7448"></span></div><div class="flight-route"><span>9 июля · 13:00 Орли (ORY!)</span><span>→ ~15:40 Стокгольм</span></div></div>
+  <div class="flight-card warn-f"><div class="flight-num">TO7451 · Transavia — ARN → ORY ⚡<span class="flight-status" id="fs_TO7451"></span></div><div class="flight-route"><span>11 июля · 06:40 Стокгольм</span><span>→ ~09:20 Париж Орли</span></div></div>
+  <div class="flight-card fc-ret"><div class="flight-num">VF516 · AJet — CDG → ESB<span class="flight-status" id="fs_VF516"></span></div><div class="flight-route"><span>18 июля · 17:40 CDG</span><span>→ ~21:25 Анкара</span></div></div>
+  <div class="flight-card fc-ret"><div class="flight-num">VF587 · AJet — ESB → ВКО<span class="flight-status" id="fs_VF587"></span></div><div class="flight-route"><span>18 июля · ~22:50 Анкара</span><span>→ ~01:05 МСК (19 июля)</span></div></div>
 </div>
 
 <div class="section" data-section-id="sec-flightstatus">
@@ -826,6 +832,120 @@ const SB_URL = 'https://ukcnotbbfnvlvnmfhgmh.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrY25vdGJiZm52bHZubWZoZ21oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MDk0MTgsImV4cCI6MjA5ODI4NTQxOH0.57fsqKomnbTUYMWJ7o5loMBYKByMPdvk4eRcD3Q_cpE';
 const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
 
+// ===== FLIGHT STATUS (AeroDataBox via RapidAPI) =====
+const RAPIDAPI_KEY = '5f2d58c9cdmshba90ad8a0c65643p1e5606jsnba11b5bd99af';
+const RAPIDAPI_HOST = 'aerodatabox.p.rapidapi.com';
+const TRACKED_FLIGHTS = [
+  {num:'VF278',  date:'2026-07-05'},
+  {num:'VF9',    date:'2026-07-05'},
+  {num:'TO7448', date:'2026-07-09'},
+  {num:'TO7451', date:'2026-07-11'},
+  {num:'VF516',  date:'2026-07-18'},
+  {num:'VF587',  date:'2026-07-18'},
+];
+const FLIGHT_STATUS_KEY = 'paris2026_flight_status_v1';
+const FLIGHT_STATUS_STALE_MS = 12 * 60 * 60 * 1000; // default: refetch every 12h
+const FLIGHT_STATUS_HOT_MS = 60 * 60 * 1000; // hot window: refetch every 1h
+// flight number -> date (local) from which hourly refresh kicks in
+const FLIGHT_STATUS_HOT_FROM = {
+  'VF278': '2026-07-04',
+  'VF587': '2026-07-17',
+};
+let flightStatusCache = {};
+
+function flightStaleMs(num){
+  const hotFrom = FLIGHT_STATUS_HOT_FROM[num];
+  if(hotFrom && new Date() >= new Date(hotFrom + 'T00:00:00')) return FLIGHT_STATUS_HOT_MS;
+  return FLIGHT_STATUS_STALE_MS;
+}
+
+function loadFlightStatusLocal(){
+  try { flightStatusCache = JSON.parse(localStorage.getItem(FLIGHT_STATUS_KEY)||'{}'); } catch(e){ flightStatusCache = {}; }
+  renderFlightStatuses();
+}
+
+async function loadFlightStatusRemote(){
+  try {
+    const rows = await sbFetch('/rest/v1/settings?key=eq.flight_status&select=value');
+    if(rows && rows.length && rows[0].value){
+      flightStatusCache = JSON.parse(rows[0].value);
+      localStorage.setItem(FLIGHT_STATUS_KEY, rows[0].value);
+      renderFlightStatuses();
+    }
+  } catch(e){}
+}
+
+async function saveFlightStatusRemote(){
+  const value = JSON.stringify(flightStatusCache);
+  localStorage.setItem(FLIGHT_STATUS_KEY, value);
+  try {
+    await sbFetch('/rest/v1/settings', {
+      method: 'POST',
+      body: JSON.stringify({ key: 'flight_status', value }),
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' }
+    });
+  } catch(e){}
+}
+
+function parseTime(t){ return t ? new Date(t.replace(' ', 'T')).getTime() : null; }
+
+function parseFlightStatus(raw){
+  if(!raw) return { label: 'Нет данных', cls: 'fs-muted' };
+  const status = (raw.status || '').toLowerCase();
+  const dep = raw.departure || {};
+  const sched = dep.scheduledTime && (dep.scheduledTime.utc);
+  const revised = (dep.revisedTime && dep.revisedTime.utc) || (dep.runwayTime && dep.runwayTime.utc) || (dep.predictedTime && dep.predictedTime.utc);
+  let delayMin = null;
+  const a = parseTime(sched), b = parseTime(revised);
+  if(a && b) delayMin = Math.round((b - a) / 60000);
+
+  if(status.includes('cancel')) return { label: 'Отменён', cls: 'fs-bad' };
+  if(status.includes('divert')) return { label: 'Перенаправлен', cls: 'fs-bad' };
+  if(delayMin !== null && delayMin >= 15) return { label: `Задержан +${delayMin} мин`, cls: 'fs-warn' };
+  if(status.includes('land') || status.includes('arriv')) return { label: 'Прибыл', cls: 'fs-ok' };
+  if(status.includes('enroute') || status.includes('depart') || status.includes('air')) return { label: 'В воздухе', cls: 'fs-ok' };
+  if(status.includes('expect') || status.includes('schedul') || status.includes('checkin') || status.includes('boarding') || status.includes('gateclosed')) return { label: 'По расписанию', cls: 'fs-ok' };
+  return { label: raw.status || 'Нет данных', cls: 'fs-muted' };
+}
+
+async function fetchFlightStatusRaw(num, date){
+  try {
+    const res = await fetch(`https://${RAPIDAPI_HOST}/flights/number/${num}/${date}`, {
+      headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST }
+    });
+    if(!res.ok) return null;
+    const data = await res.json();
+    return Array.isArray(data) ? data[0] : data;
+  } catch(e){ return null; }
+}
+
+async function refreshFlightStatuses(){
+  const now = Date.now();
+  const toFetch = TRACKED_FLIGHTS.filter(f => {
+    const cached = flightStatusCache[f.num];
+    return !cached || (now - (cached.fetchedAt || 0)) > flightStaleMs(f.num);
+  });
+  if(!toFetch.length) return;
+  let changed = false;
+  for(const f of toFetch){
+    const raw = await fetchFlightStatusRaw(f.num, f.date);
+    flightStatusCache[f.num] = { ...parseFlightStatus(raw), fetchedAt: now };
+    changed = true;
+  }
+  if(changed){ renderFlightStatuses(); saveFlightStatusRemote(); }
+}
+
+function renderFlightStatuses(){
+  TRACKED_FLIGHTS.forEach(f => {
+    const el = document.getElementById('fs_' + f.num);
+    if(!el) return;
+    const s = flightStatusCache[f.num];
+    if(!s){ el.classList.remove('show'); return; }
+    el.textContent = s.label;
+    el.className = 'flight-status show ' + s.cls;
+  });
+}
+
 let realtimeWs = null;
 
 async function sbFetch(path, opts={}){
@@ -897,6 +1017,7 @@ function connectRealtime(){
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'custom_tags'){ try { customTags = JSON.parse(rec.value); localStorage.setItem(CUSTOM_TAGS_KEY, rec.value); } catch(e){} }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'book_done'){ try { bookDone = JSON.parse(rec.value); localStorage.setItem(BOOK_KEY, rec.value); applyBook(); } catch(e){} }
           if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'book_custom'){ try { customBookItems = JSON.parse(rec.value); localStorage.setItem(BOOK_CUSTOM_KEY, rec.value); renderBookCustom(); } catch(e){} }
+          if((data.event === 'UPDATE' || data.event === 'INSERT') && rec.key === 'flight_status'){ try { flightStatusCache = JSON.parse(rec.value); localStorage.setItem(FLIGHT_STATUS_KEY, rec.value); renderFlightStatuses(); } catch(e){} }
         }
         if(data.topic === 'realtime:public:gifts'){
           if(data.event === 'INSERT'){ if(!giftItems.find(g => g.id === rec.id)){ giftItems.push({ id: rec.id, label: rec.label, done: rec.done, sort_order: rec.sort_order||0 }); giftItems.sort((a,b) => a.sort_order - b.sort_order); renderGifts(); } }
@@ -1869,6 +1990,7 @@ async function init(){
     loadGiftsLocal();
     loadBookCustom();
     loadBookLocal();
+    loadFlightStatusLocal();
 
     renderDays();
     renderBudget();
@@ -1892,8 +2014,10 @@ async function syncFromSupabase(){
       loadExpensesRemote(),
       loadGiftsRemote(),
       loadBookCustomRemote(),
-      loadBookRemote()
+      loadBookRemote(),
+      loadFlightStatusRemote()
     ]);
+    refreshFlightStatuses();
     setSyncStatus('🟢 онлайн · синхронизация активна');
   } catch(e){
     setSyncStatus('🟡 офлайн · работаем локально');
