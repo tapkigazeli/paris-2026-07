@@ -55,6 +55,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   --bgt-caramel:#b97a3d;--bgt-caramel-bg:#faefe0;
   --bgt-softblue:#4f7a9e;--bgt-softblue-bg:#eaf2f7;
   --bgt-cream:#fffaf2;--bgt-cream2:#fdf3e4;
+  --bgt-text2:#4a4a4a;
 }
 @media(prefers-color-scheme:dark){:root{
   --bgt-sage:#8fc298;--bgt-sage-bg:#1b2e1d;
@@ -62,6 +63,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   --bgt-caramel:#e3a467;--bgt-caramel-bg:#332210;
   --bgt-softblue:#86b3d8;--bgt-softblue-bg:#13222e;
   --bgt-cream:#241f17;--bgt-cream2:#2a2117;
+  --bgt-text2:#c9c9ce;
 }}
 
 .budget-hero{position:relative;border-radius:22px;padding:18px 18px 16px;margin-bottom:14px;overflow:hidden;
@@ -169,44 +171,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .empty-state div{font-size:13px}
 
 /* DAYS TAB */
+#view-days{background:var(--bg2)}
 .paid-banner{background:var(--accent-bg);border:0.5px solid var(--accent);border-radius:10px;padding:10px 12px;margin-bottom:10px}
 .paid-banner h3{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
 .paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
 .paid-item{font-size:11px;color:var(--accent)}
 .paid-item b{font-weight:600}
-.day{border:0.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:8px}
-.day.fl{border-left:3px solid #3a8ade}
-.day.wk{border-left:3px solid #c45070}
-.dh{padding:11px 12px;background:var(--bg2);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;-webkit-user-select:none}
+
+.day{border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-bottom:12px;background:var(--bg);
+  box-shadow:0 3px 10px -4px rgba(0,0,0,.14)}
+.day.fl{border-left:1.5px solid var(--bgt-softblue)}
+.day.wk{border-left:1.5px solid var(--bgt-bordeaux)}
+.dh{padding:13px 14px;background:transparent;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .dh-left{flex:1;min-width:0}
-.dt{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
-.ds{font-size:11px;color:var(--text2);margin-top:2px}
-.badge{flex-shrink:0;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:500}
+.dt{font-size:15px;font-weight:800;color:var(--text);line-height:1.3;letter-spacing:-.2px}
+.ds{font-size:12px;color:var(--bgt-text2,var(--text2));margin-top:3px;line-height:1.4;font-weight:500}
+.badge{flex-shrink:0;font-size:10.5px;padding:4px 11px;border-radius:999px;font-weight:800;letter-spacing:.1px}
 .b-blue{background:var(--blue-bg);color:var(--blue)}
 .b-pink{background:var(--pink-bg);color:var(--pink)}
 .b-green{background:var(--green-bg);color:var(--green)}
 .b-amber{background:var(--amber-bg);color:var(--amber)}
 .b-red{background:var(--red-bg);color:var(--red)}
 .b-purple{background:var(--purple-bg);color:var(--purple)}
-.chevron{flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:transform .2s;font-size:18px;line-height:1}
-.rows{overflow:hidden;max-height:0;transition:max-height .3s ease}
-.rows.open{max-height:9999px}
-.row{display:flex;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border);align-items:flex-start}
-.rt{font-size:10px;color:var(--text3);min-width:44px;padding-top:2px;flex-shrink:0;font-weight:500}
-.rb{flex:1;min-width:0}
-.rn{font-size:13px;font-weight:500;color:var(--text)}
-.rd{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
-.rv{font-size:11px;color:var(--text3);min-width:36px;text-align:right;padding-top:2px;flex-shrink:0}
-.tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:5px;margin-right:2px;margin-bottom:2px;font-weight:600}
-.tf{background:var(--accent-bg);color:var(--accent)}
-.ts{background:var(--blue-bg);color:var(--blue)}
-.tv{background:var(--warn-bg);color:var(--warn)}
-.te{background:var(--red-bg);color:var(--red)}
-.tfl{background:var(--blue-bg);color:var(--blue)}
-.ttr{background:var(--purple-bg);color:var(--purple)}
-.tpd{background:var(--accent-bg);color:var(--accent)}
-.ft{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg2);font-size:11px;color:var(--text2);border-top:0.5px solid var(--border)}
-.ft-t{font-size:12px;font-weight:600;color:var(--text)}
+.chevron{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--text2);transition:transform .2s,background .15s;font-size:15px;line-height:1}
+.rows{overflow:hidden;max-height:0;transition:max-height .3s ease;background:var(--bg)}
+.rows.open{max-height:9999px;border-top:1px solid var(--border)}
+.timeline{padding:2px 4px 0}
+.row{display:flex;gap:2px;padding:5px 12px;align-items:flex-start;position:relative}
+.rt{font-size:10px;color:var(--text3);min-width:34px;padding-top:3px;flex-shrink:0;font-weight:600;text-align:right}
+.row-spine{width:12px;flex-shrink:0;position:relative;display:flex;justify-content:center;align-self:stretch}
+.row-spine::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--border);transform:translateX(-50%)}
+.row:first-child .row-spine::before{top:8px}
+.row:last-child .row-spine::before{bottom:calc(100% - 8px)}
+.row-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);position:relative;z-index:1;margin-top:7px;flex-shrink:0}
+.rb{flex:1;min-width:0;padding-top:1px}
+.rn{font-size:13px;font-weight:600;color:var(--text)}
+.rd{font-size:11.5px;color:var(--bgt-text2,var(--text2));margin-top:2px;line-height:1.45}
+.rv{font-size:11.5px;color:var(--text3);min-width:auto;text-align:right;padding-top:2px;flex-shrink:0;font-weight:600}
+.rv.has-cost{color:var(--bgt-text2,var(--text2));font-weight:700}
+.tag{display:inline-block;font-size:10px;padding:3px 9px;border-radius:999px;margin-right:3px;margin-bottom:3px;font-weight:800;letter-spacing:.1px}
+.tf{background:var(--amber-bg);color:var(--amber)}
+.ts{background:var(--pink-bg);color:var(--pink)}
+.tv{background:var(--blue-bg);color:var(--blue)}
+.te{background:var(--purple-bg);color:var(--purple)}
+.tfl{background:var(--red-bg);color:var(--red)}
+.ttr{background:var(--accent-bg);color:var(--accent)}
+.tpd{background:var(--accent);color:#fff}
+.tn{background:var(--bgt-sage-bg);color:var(--bgt-sage)}
+.tph{background:var(--bgt-caramel-bg);color:var(--bgt-caramel)}
+.tpl{background:var(--bgt-softblue-bg);color:var(--bgt-softblue)}
+.tc{background:var(--bgt-bordeaux-bg);color:var(--bgt-bordeaux)}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px 10px;background:transparent;font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);font-weight:500}
+.ft span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ft-t{font-size:11.5px;font-weight:600;color:var(--bgt-sage);flex-shrink:0}
 .section{background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:10px}
 .section h3{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
 .srow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:0.5px solid var(--border);font-size:12px;gap:8px}
@@ -216,7 +233,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .amt-open{color:var(--warn);white-space:nowrap;flex-shrink:0}
 .urg{color:#c04060;font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
 .ok{color:var(--accent);font-weight:600;font-size:11px;white-space:nowrap;flex-shrink:0}
-.warn-box{background:var(--red-bg);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--red);margin-bottom:8px;line-height:1.4}
+.warn-box{background:var(--red-bg);border-radius:11px;border-left:2.5px solid var(--red);
+  padding:8px 11px;margin-bottom:12px}
+.warn-title{font-size:11.5px;font-weight:700;color:var(--red);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.warn-title::before{content:'⚠️';font-size:10px}
+.warn-item{font-size:11.5px;color:var(--text);line-height:1.45;font-weight:500;padding:5px 4px 5px 15px;position:relative;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.warn-item:not(:last-child){border-bottom:0.5px solid rgba(0,0,0,.06)}
+.warn-item::before{content:'';position:absolute;left:4px;top:50%;transform:translateY(-50%);width:3px;height:3px;border-radius:50%;background:var(--red)}
+.warn-dismiss{background:var(--bg);border:none;color:var(--red);opacity:.85;cursor:pointer;font-size:16px;font-weight:700;line-height:1;
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.warn-dismiss:active{opacity:1;background:var(--red-bg)}
 .flight-card{background:var(--blue-bg);border-radius:8px;padding:10px 12px;margin-bottom:6px}
 .flight-card.warn-f{background:var(--warn-bg)}
 .flight-num{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:3px}
@@ -227,13 +253,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .gift-done .gift-label{color:var(--text3);text-decoration:line-through}
 
 /* ===== EVENT EDIT ===== */
-.ev-edit-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 4px;font-size:12px;flex-shrink:0;opacity:0.4;line-height:1}
+.ev-edit-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 6px;font-size:14px;flex-shrink:0;opacity:0.5;line-height:1;margin-top:-2px;margin-left:2px;transition:opacity .15s;font-weight:700;letter-spacing:1px}
 .ev-edit-btn:active{opacity:1}
-.add-event-btn{width:100%;padding:10px;background:none;border:none;border-top:0.5px solid var(--border);font-size:12px;color:var(--accent);cursor:pointer;text-align:center;font-weight:500}
-.ev-del-btn{width:100%;padding:13px;background:none;border:1.5px solid var(--danger);border-radius:12px;font-size:15px;font-weight:600;color:var(--danger);cursor:pointer;margin-top:8px}
-.tag-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.tag-opt{padding:8px 10px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
-.tag-opt.sel{border-color:var(--accent);background:var(--accent-bg)}
+.row-menu-backdrop{position:fixed;inset:0;z-index:199;display:none}
+.row-menu{position:fixed;display:none;background:var(--bg);border:1px solid var(--border2);border-radius:13px;
+  box-shadow:0 10px 28px -10px rgba(0,0,0,.3);overflow:hidden;z-index:200;min-width:178px}
+.row-menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:12px 15px;background:none;border:none;font-size:13.5px;color:var(--text);cursor:pointer;font-weight:500}
+.row-menu button:not(:last-child){border-bottom:0.5px solid var(--border)}
+.row-menu button:active{background:var(--bg2)}
+.row-menu button.danger{color:var(--danger)}
+.add-event-btn{width:calc(100% - 24px);margin:4px 12px 8px;padding:5px;background:transparent;border:1px dashed var(--border);border-radius:9px;
+  font-size:11px;color:var(--bgt-sage);cursor:pointer;text-align:center;font-weight:600;transition:background .15s}
+.add-event-btn:active{background:var(--bgt-sage-bg)}
+.ev-del-btn{width:100%;padding:9px;background:none;border:none;font-size:13px;font-weight:600;color:var(--danger);cursor:pointer;opacity:.8;transition:opacity .15s}
+.ev-del-btn:active{opacity:1}
+
+/* ===== EVENT MODAL (compact redesign) ===== */
+.ev-section{margin-bottom:20px}
+.ev-section:last-of-type{margin-bottom:0}
+.ev-row{display:flex;gap:10px}
+.ev-input-compact{padding:9px 12px;font-size:14px}
+.ev-input-primary{font-size:16.5px;font-weight:600;padding:10px 12px;border:1px solid var(--border2);background:var(--bg2);margin-bottom:8px;border-radius:11px}
+.ev-input-primary:focus{border-color:var(--accent);background:var(--bg)}
+.ev-textarea{resize:none;font-size:13px;margin-top:6px;line-height:1.4;font-family:inherit}
+.ev-field-icon{position:relative}
+.ev-field-glyph{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;pointer-events:none;z-index:1;opacity:.65}
+.ev-field-icon input{padding-left:30px;text-align:left;-webkit-appearance:none;appearance:none;width:100%}
+.ev-time-ph{position:absolute;left:30px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
+.ev-cost-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.ev-cost-input{width:88px;flex-shrink:0;text-align:center}
+.form-hint{font-size:11px;color:var(--text3)}
+.ev-newtag-row{display:flex;gap:6px;margin-top:8px}
+.ev-tag-add-btn{flex-shrink:0;padding:8px 14px;background:var(--accent-bg);border:none;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--accent);cursor:pointer;white-space:nowrap}
+.ev-tag-add-btn:active{opacity:.8}
+.ev-important-toggle{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;background:var(--bg2);
+  border:1.5px solid var(--border2);border-radius:11px;font-size:12.5px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s}
+.ev-important-toggle.sel{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.ev-actions{margin-top:22px}
+.ev-submit{padding:11px;font-size:14.5px}
+.tag-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag-opt{display:inline-flex;cursor:pointer;border-radius:999px;transition:transform .1s}
+.tag-opt:active{transform:scale(.96)}
+.tag-opt .tag{transition:background .15s,color .15s,box-shadow .15s}
+.tag-opt.sel .tag{box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+.tag-opt.sel .tag.tf{background:var(--amber);color:#fff}
+.tag-opt.sel .tag.ts{background:var(--pink);color:#fff}
+.tag-opt.sel .tag.tv{background:var(--blue);color:#fff}
+.tag-opt.sel .tag.te{background:var(--purple);color:#fff}
+.tag-opt.sel .tag.tfl{background:var(--red);color:#fff}
+.tag-opt.sel .tag.ttr{background:var(--accent);color:#fff}
+.tag-opt.sel .tag.tpd{box-shadow:0 0 0 2px var(--text)}
+.tag-opt.sel .tag.tn{background:var(--bgt-sage);color:#fff}
+.tag-opt.sel .tag.tph{background:var(--bgt-caramel);color:#fff}
+.tag-opt.sel .tag.tpl{background:var(--bgt-softblue);color:#fff}
+.tag-opt.sel .tag.tc{background:var(--bgt-bordeaux);color:#fff}
 </style>
 </head>
 <body>
@@ -296,9 +369,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- ===== DAYS VIEW ===== -->
 <div id="view-days" class="view">
-  <div class="warn-box">⚠️ 9 июля: летим из Орли (ORY), не CDG!</div>
-  <div class="warn-box">⚠️ 13 июля: фейерверк перенесён с 14/07! ~23:00</div>
-  <div class="warn-box">⚠️ Matsuri (13 июл): только 12:00–15:00!</div>
+  <div id="important-notes"></div>
   <div id="days-container"></div>
 </div>
 
@@ -502,6 +573,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+<!-- ===== EVENT ROW CONTEXT MENU ===== -->
+<div class="row-menu-backdrop" id="row-menu-backdrop" onclick="closeRowMenu()"></div>
+<div class="row-menu" id="row-menu">
+  <button onclick="rowMenuEdit()">✏️ Редактировать</button>
+  <button class="danger" onclick="rowMenuDelete()">🗑 Удалить событие</button>
+</div>
+
 <!-- ===== EVENT EDIT MODAL ===== -->
 <div class="form-overlay" id="event-modal" onclick="closeEventModal(event)">
   <div class="form-sheet" onclick="event.stopPropagation()">
@@ -510,45 +588,53 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="form-close" onclick="document.getElementById('event-modal').classList.remove('open')">×</button>
     </div>
     <div class="form-body">
-      <div class="form-group">
-        <div style="display:flex;gap:10px">
+
+      <div class="ev-section">
+        <div class="ev-row">
           <div id="ev-date-group" style="display:none;flex:1;min-width:0">
-            <label class="form-label">День</label>
-            <div style="overflow:hidden">
-              <input class="form-input" id="ev-date" type="date" min="2026-07-05" max="2026-07-18" value="2026-07-05" style="width:100%;max-width:100%;min-width:0;display:block;text-align:center;-webkit-appearance:none">
+            <div class="ev-field-icon">
+              <span class="ev-field-glyph">📅</span>
+              <input class="form-input ev-input-compact" id="ev-date" type="date" min="2026-07-05" max="2026-07-18" value="2026-07-05">
             </div>
           </div>
           <div id="ev-time-group" style="flex:1;min-width:0">
-            <label class="form-label">Время (необязательно)</label>
-            <div style="position:relative;overflow:hidden">
-              <input class="form-input" id="ev-time" type="time" style="width:100%;max-width:100%;min-width:0;display:block;text-align:center;-webkit-appearance:none" oninput="document.getElementById('ev-time-ph').style.display='none'">
-              <span id="ev-time-ph" style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:var(--text3);font-size:15px;pointer-events:none">00:00</span>
+            <div class="ev-field-icon">
+              <span class="ev-field-glyph">🕐</span>
+              <input class="form-input ev-input-compact" id="ev-time" type="time" oninput="document.getElementById('ev-time-ph').style.display='none'">
+              <span id="ev-time-ph" class="ev-time-ph">00:00</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group">
+
+      <div class="ev-section">
         <label class="form-label">Название</label>
-        <input class="form-input" id="ev-name" type="text" placeholder="Название события">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Описание</label>
-        <input class="form-input" id="ev-desc" type="text" placeholder="Адрес, детали...">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Стоимость (€)</label>
-        <input class="form-input" id="ev-cost" type="number" inputmode="decimal" placeholder="оставьте пустым если бесплатно или неизвестно" min="0" step="0.5">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Тег</label>
-        <div class="tag-grid" id="ev-tags-grid"></div>
-        <div style="display:flex;gap:6px;margin-top:8px">
-          <input class="form-input" id="new-tag-input" type="text" placeholder="Новый тег..." style="font-size:12px;padding:7px 10px" maxlength="20">
-          <button onclick="addCustomTag()" style="flex-shrink:0;padding:7px 14px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:10px;font-size:12px;color:var(--text2);cursor:pointer;white-space:nowrap">+ Создать</button>
+        <input class="form-input ev-input-primary" id="ev-name" type="text" placeholder="Куда идём?">
+        <textarea class="form-input ev-input-compact ev-textarea" id="ev-desc" rows="2" placeholder="Адрес, детали..."></textarea>
+        <div class="ev-cost-row">
+          <input class="form-input ev-input-compact ev-cost-input" id="ev-cost" type="number" inputmode="decimal" placeholder="0" min="0" step="0.5">
+          <span class="form-hint">€ · оставь пустым, если бесплатно</span>
         </div>
       </div>
-      <button class="form-submit" onclick="saveEvent()">Сохранить</button>
-      <button class="ev-del-btn" id="ev-delete-btn" onclick="deleteEventConfirm()">Удалить событие</button>
+
+      <div class="ev-section">
+        <label class="form-label">Теги</label>
+        <div class="tag-grid" id="ev-tags-grid"></div>
+        <div class="ev-newtag-row">
+          <input class="form-input ev-input-compact" id="new-tag-input" type="text" placeholder="Новый тег" maxlength="20">
+          <button onclick="addCustomTag()" class="ev-tag-add-btn">Создать</button>
+        </div>
+      </div>
+
+      <div class="ev-section">
+        <button type="button" class="ev-important-toggle" id="ev-important-toggle" onclick="toggleImportant()">⚠️ Отметить как важное</button>
+      </div>
+
+      <div class="ev-actions">
+        <button class="form-submit ev-submit" onclick="saveEvent()">Сохранить</button>
+        <button class="ev-del-btn" id="ev-delete-btn" onclick="deleteEventConfirm()">Удалить событие</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -851,16 +937,16 @@ const ALL_TAGS = [
   {label:'еда',         cls:'tf'},
   {label:'шопинг',      cls:'ts'},
   {label:'гастро',      cls:'ts'},
-  {label:'прогулка',    cls:'tv'},
-  {label:'фото',        cls:'tv'},
-  {label:'музей',       cls:'tv'},
+  {label:'прогулка',    cls:'tn'},
+  {label:'природа',     cls:'tn'},
+  {label:'парк',        cls:'tn'},
+  {label:'вид',         cls:'tn'},
+  {label:'фото',        cls:'tph'},
+  {label:'музей',       cls:'te'},
   {label:'событие',     cls:'tv'},
-  {label:'место',       cls:'tv'},
-  {label:'концерт',     cls:'tv'},
-  {label:'природа',     cls:'tv'},
-  {label:'парк',        cls:'tv'},
   {label:'активность',  cls:'tv'},
-  {label:'вид',         cls:'tv'},
+  {label:'место',       cls:'tpl'},
+  {label:'концерт',     cls:'tc'},
   {label:'Эмили',       cls:'te'},
   {label:'рейс',        cls:'tfl'},
   {label:'транспорт',   cls:'ttr'},
@@ -873,7 +959,6 @@ ALL_TAGS.forEach(t => TAG_MAP[t.label] = t.cls);
 const CUSTOM_TAGS_KEY = 'paris2026_custom_tags_v1';
 let customTags = [];
 function loadCustomTags(){ try { customTags = JSON.parse(localStorage.getItem(CUSTOM_TAGS_KEY)||'[]'); } catch(e){ customTags = []; } }
-function saveCustomTags(){ localStorage.setItem(CUSTOM_TAGS_KEY, JSON.stringify(customTags)); }
 
 const TAG_HUES = [0,25,50,80,150,180,200,230,260,290,320];
 function randomTagColor(){
@@ -941,7 +1026,7 @@ const DEFAULT_DAYS = [
     ]},
   { id:'day_09', date:'9 июля (чт) — Стокгольм', subtitle:'⚠️ ORY 13:00 → ARN · летим из Орли!', badge:'Стокгольм', badgeCls:'b-blue', classes:'fl', footer:'✈️ ORY→ARN · 💰 еда ~€65 · 🚇 €54',
     events:[
-      {id:'e_09_1',time:'10:30',name:'RER B + OrlyVal → Орли (ORY)',desc:'⚠️ ORY, не CDG! €14 pp',cost:28,tags:['транспорт']},
+      {id:'e_09_1',time:'10:30',name:'RER B + OrlyVal → Орли (ORY)',desc:'⚠️ ORY, не CDG! €14 pp',cost:28,tags:['транспорт'],important:true},
       {id:'e_09_2',time:'13:00',name:'TO7448 · Transavia · ORY → ARN ~15:40',desc:'',cost:null,tags:['рейс']},
       {id:'e_09_3',time:'~16:30',name:'Arlanda Express → T-Centralen · Scandic Go',desc:'€13 pp · 9 мин пешком',cost:26,tags:['транспорт']},
       {id:'e_09_4',time:'18:30',name:'Прогулка по Гамла Стан',desc:'',cost:null,tags:['прогулка']},
@@ -978,10 +1063,10 @@ const DEFAULT_DAYS = [
   { id:'day_13', date:'13 июля (пн) — Лувр + Фейерверк + Бал', subtitle:'Лувр с 12:30 · фейерверк ~23:00 · бал после!', badge:'Фейерверк!', badgeCls:'b-red', classes:'', footer:'💰 еда ~€80 · Лувр✓ · бал бесплатно!',
     events:[
       {id:'e_13_1',time:'12:30',name:'Лувр',desc:'',cost:null,tags:['оплачено ✓']},
-      {id:'e_13_2',time:'13:00',name:'Обед: Matsuri Sushi',desc:'103 Rue La Boétie · 12:00–15:00!',cost:30,tags:['еда']},
+      {id:'e_13_2',time:'13:00',name:'Обед: Matsuri Sushi',desc:'103 Rue La Boétie · 12:00–15:00!',cost:30,tags:['еда'],important:true},
       {id:'e_13_3',time:'14:30',name:'Galeries Lafayette + Jellycat + Uniqlo',desc:'',cost:null,tags:['шопинг']},
       {id:'e_13_4',time:'19:30',name:'Ужин: Bouillon Chartier',desc:'7 Rue du Faubourg Montmartre · без брони',cost:40,tags:['еда']},
-      {id:'e_13_5',time:'~23:00',name:'Фейерверк с Эйфелевой башни!',desc:'⚠️ Перенесён с 14/07!',cost:null,tags:['событие']},
+      {id:'e_13_5',time:'~23:00',name:'Фейерверк с Эйфелевой башни!',desc:'⚠️ Перенесён с 14/07!',cost:null,tags:['событие'],important:true},
       {id:'e_13_6',time:'~23:45',name:'Бал пожарных — Caserne Montmartre',desc:'12 Rue Carpeaux · до 4:00!',cost:0,tags:['событие']},
     ]},
   { id:'day_14', date:'14 июля (вт) — Парад + Sephora + Нотр-Дам', subtitle:'Магазины закрыты кроме Sephora', badge:'14 juillet', badgeCls:'b-pink', classes:'', footer:'💰 еда ~€95 · Нотр-Дам бесплатно',
@@ -1047,6 +1132,21 @@ async function loadDays(){
       daysData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DAYS));
     } catch(e2){ daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS)); }
   }
+  migrateImportantFlags();
+}
+
+const SEED_IMPORTANT_IDS = ['e_09_1', 'e_13_2', 'e_13_5'];
+function migrateImportantFlags(){
+  let changed = false;
+  daysData.forEach(day => {
+    (day.events||[]).forEach(ev => {
+      if(SEED_IMPORTANT_IDS.includes(ev.id) && ev.important === undefined){
+        ev.important = true;
+        changed = true;
+      }
+    });
+  });
+  if(changed) saveDays();
 }
 
 async function saveDays(){
@@ -1090,15 +1190,17 @@ function renderDays(){
     const eventsHtml = day.events.map((ev, ei) => {
       const tagsHtml = (ev.tags||[]).map(t => renderTagSpan(t)).join('');
       const descContent = ev.desc ? (tagsHtml ? tagsHtml + ' ' + ev.desc : ev.desc) : tagsHtml;
-      const costStr = ev.cost == null ? '—' : ev.cost === 0 ? '€0' : '€' + ev.cost;
+      const hasCost = ev.cost != null;
+      const costStr = !hasCost ? '·' : ev.cost === 0 ? '€0' : '€' + ev.cost;
       return `<div class="row">
         <div class="rt">${ev.time||''}</div>
+        <div class="row-spine"><span class="row-dot"></span></div>
         <div class="rb">
           <div class="rn">${ev.name||''}</div>
           ${descContent ? `<div class="rd">${descContent}</div>` : ''}
         </div>
-        <div class="rv">${costStr}</div>
-        <button class="ev-edit-btn" onclick="openEventModal(${di},${ei})">✏️</button>
+        <div class="rv${hasCost?' has-cost':''}">${costStr}</div>
+        <button class="ev-edit-btn" onclick="openRowMenu(${di},${ei},this)">⋯</button>
       </div>`;
     }).join('');
 
@@ -1112,12 +1214,44 @@ function renderDays(){
         <div class="chevron" id="chev-${di}" style="transform:${isOpen?'rotate(90deg)':''}">›</div>
       </div>
       <div class="rows ${isOpen?'open':''}" id="rows-${di}">
-        ${eventsHtml}
+        <div class="timeline">
+          ${eventsHtml}
+        </div>
         <button class="add-event-btn" onclick="openEventModal(${di},null)">+ добавить событие</button>
       </div>
       <div class="ft"><span>${day.footer}</span><span class="ft-t">${totalStr}</span></div>
     </div>`;
   }).join('');
+  renderImportantNotes();
+}
+
+function dayDateObj(di){ return new Date(2026, 6, 5 + di); }
+
+function renderImportantNotes(){
+  const el = document.getElementById('important-notes');
+  if(!el) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const notes = [];
+  daysData.forEach((day, di) => {
+    const dDate = dayDateObj(di);
+    if(dDate < today) return;
+    (day.events||[]).forEach((ev, ei) => {
+      if(ev.important) notes.push({di, ei, dDate, text: `${5+di} июля: ${ev.name||''}`});
+    });
+  });
+  notes.sort((a,b) => a.dDate - b.dDate);
+  if(!notes.length){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="warn-box">
+    <div class="warn-title">Важно</div>
+    ${notes.map(n => `<div class="warn-item">${n.text}<button class="warn-dismiss" onclick="dismissImportant(${n.di},${n.ei})" aria-label="Убрать из важного">×</button></div>`).join('')}
+  </div>`;
+}
+
+function dismissImportant(di, ei){
+  if(!daysData[di] || !daysData[di].events[ei]) return;
+  daysData[di].events[ei].important = false;
+  saveDays();
+  renderImportantNotes();
 }
 
 function tglDay(idx){
@@ -1142,6 +1276,12 @@ document.addEventListener('click', function(e){
 let editDayIdx = null;
 let editEventIdx = null;
 let editTags = [];
+let editImportant = false;
+
+function toggleImportant(){
+  editImportant = !editImportant;
+  document.getElementById('ev-important-toggle').classList.toggle('sel', editImportant);
+}
 
 function openEventModal(di, ei){
   editDayIdx = di;
@@ -1162,6 +1302,7 @@ function openEventModal(di, ei){
     document.getElementById('ev-desc').value = ev.desc || '';
     document.getElementById('ev-cost').value = ev.cost != null ? ev.cost : '';
     editTags = [...(ev.tags || [])];
+    editImportant = !!ev.important;
     document.getElementById('ev-delete-btn').style.display = 'block';
   } else {
     document.getElementById('ev-modal-title').textContent = 'Новое событие';
@@ -1171,9 +1312,11 @@ function openEventModal(di, ei){
     document.getElementById('ev-desc').value = '';
     document.getElementById('ev-cost').value = '';
     editTags = [];
+    editImportant = false;
     document.getElementById('ev-delete-btn').style.display = 'none';
   }
 
+  document.getElementById('ev-important-toggle').classList.toggle('sel', editImportant);
   renderTagPicker();
   document.getElementById('event-modal').classList.add('open');
 }
@@ -1241,7 +1384,8 @@ function saveEvent(){
     id: editEventIdx !== null ? daysData[editDayIdx].events[editEventIdx].id : 'ev_' + Date.now(),
     time, name, desc,
     cost: (cost != null && !isNaN(cost)) ? cost : null,
-    tags: [...editTags]
+    tags: [...editTags],
+    important: editImportant
   };
 
   if(editEventIdx !== null){
@@ -1256,12 +1400,53 @@ function saveEvent(){
   document.getElementById('event-modal').classList.remove('open');
 }
 
-function deleteEventConfirm(){
-  if(!confirm('Удалить это событие?')) return;
+async function deleteEventConfirm(){
+  if(!(await confirmAction('Точно хочешь удалить событие?'))) return;
   daysData[editDayIdx].events.splice(editEventIdx, 1);
   saveDays();
   renderDays();
   document.getElementById('event-modal').classList.remove('open');
+}
+
+// ===== EVENT ROW CONTEXT MENU =====
+let rowMenuDi = null, rowMenuEi = null;
+
+function openRowMenu(di, ei, btn){
+  rowMenuDi = di; rowMenuEi = ei;
+  const menu = document.getElementById('row-menu');
+  const backdrop = document.getElementById('row-menu-backdrop');
+  const rect = btn.getBoundingClientRect();
+  menu.style.display = 'block';
+  backdrop.style.display = 'block';
+  const menuWidth = 178;
+  let left = rect.right - menuWidth;
+  if(left < 8) left = 8;
+  if(left + menuWidth > window.innerWidth - 8) left = window.innerWidth - menuWidth - 8;
+  menu.style.left = left + 'px';
+  const menuHeight = 94;
+  let top = rect.bottom + 6;
+  if(top + menuHeight > window.innerHeight - 8) top = rect.top - menuHeight - 6;
+  menu.style.top = top + 'px';
+}
+
+function closeRowMenu(){
+  document.getElementById('row-menu').style.display = 'none';
+  document.getElementById('row-menu-backdrop').style.display = 'none';
+}
+
+function rowMenuEdit(){
+  const di = rowMenuDi, ei = rowMenuEi;
+  closeRowMenu();
+  openEventModal(di, ei);
+}
+
+async function rowMenuDelete(){
+  const di = rowMenuDi, ei = rowMenuEi;
+  closeRowMenu();
+  if(!(await confirmAction('Точно хочешь удалить событие?'))) return;
+  daysData[di].events.splice(ei, 1);
+  saveDays();
+  renderDays();
 }
 
 // ===== BOOKING CHECKLIST =====
