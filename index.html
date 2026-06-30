@@ -938,6 +938,8 @@ async function fetchFlightStatusRaw(num, date){
   } catch(e){ return null; }
 }
 
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
 async function refreshFlightStatuses(){
   const now = Date.now();
   const toFetch = TRACKED_FLIGHTS.filter(f => {
@@ -946,8 +948,15 @@ async function refreshFlightStatuses(){
   });
   if(!toFetch.length) return;
   let changed = false;
-  for(const f of toFetch){
+  for(let i=0; i<toFetch.length; i++){
+    if(i > 0) await sleep(1200); // stay under the per-second rate limit
+    const f = toFetch[i];
     const raw = await fetchFlightStatusRaw(f.num, f.date);
+    if(raw == null){
+      // fetch failed (rate limit, transient error, etc.) — keep whatever was
+      // cached before instead of overwriting good data with "Нет данных"
+      continue;
+    }
     flightStatusCache[f.num] = { ...parseFlightStatus(raw), fetchedAt: now };
     changed = true;
   }
